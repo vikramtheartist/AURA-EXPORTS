@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5e2bf" />
+      <stop offset="25%" stop-color="#dfba73" />
+      <stop offset="50%" stop-color="#c29646" />
+      <stop offset="75%" stop-color="#e8d3a7" />
+      <stop offset="100%" stop-color="#ab8135" />
+    </linearGradient>
+  </defs>
+  <!-- Beautiful luxury gold-gradient Serif A, perfectly centered -->
+  <text x="256" y="415" font-family="Liberation Serif, Nimbus Roman, FreeSerif, serif" font-weight="bold" font-size="440" fill="url(#gold-grad)" text-anchor="middle">A</text>
+</svg>
