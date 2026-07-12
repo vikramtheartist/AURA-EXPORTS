@@ -60,7 +60,7 @@ export default function Navbar({ onNavigate, activeView = 'home' }: NavbarProps)
               alt="AURA Gold"
               onError={handleLogoError}
               referrerPolicy="no-referrer"
-              className="h-[48px] md:h-[53px] w-auto object-contain transition-transform duration-500 group-hover:scale-[1.03]"
+              className="h-[38px] md:h-[42px] w-auto object-contain transition-transform duration-500 group-hover:scale-[1.03]"
               id="logo-image-element"
             />
           ) : (
