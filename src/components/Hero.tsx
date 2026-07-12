@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
 import BlurText from './BlurText';
+import heroVideo from '../assets/images/Aura_Treasure_Still_Edited.mp4';
 
 interface HeroProps {
   onNavigate: (sectionId: string) => void;
@@ -43,7 +44,7 @@ export default function Hero({ onNavigate }: HeroProps) {
         referrerPolicy="no-referrer"
       >
         <source
-          src="/aura_treasure_still_edited.mp4"
+          src={heroVideo}
           type="video/mp4"
         />
       </video>

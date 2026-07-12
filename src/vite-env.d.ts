@@ -19,3 +19,8 @@ declare module "*.jpeg" {
   const value: string;
   return value;
 }
+
+declare module "*.mp4" {
+  const value: string;
+  return value;
+}
