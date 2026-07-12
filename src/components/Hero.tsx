@@ -1,8 +1,6 @@
-import { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
 import BlurText from './BlurText';
-import heroVideo from '../assets/images/Aura_Treasure_Still_Edited.mp4';
 
 interface HeroProps {
   onNavigate: (sectionId: string) => void;
@@ -10,21 +8,6 @@ interface HeroProps {
 
 export default function Hero({ onNavigate }: HeroProps) {
   const partners = ['Asia-Pacific', 'Americas', 'Europe', 'Middle East', 'Africa'];
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (video) {
-      video.defaultMuted = true;
-      video.muted = true;
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((error) => {
-          console.warn("Autoplay was prevented by the browser. Interaction might be required:", error);
-        });
-      }
-    }
-  }, []);
 
   return (
     <section
@@ -32,22 +15,17 @@ export default function Hero({ onNavigate }: HeroProps) {
       className="relative w-full overflow-hidden bg-black flex flex-col items-center justify-center pt-[150px]"
       style={{ height: '1000px' }}
     >
-      {/* Background Video (MP4) */}
-      <video
-        ref={videoRef}
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none opacity-85 brightness-[0.7]"
-        id="hero-bg-video"
-        referrerPolicy="no-referrer"
-      >
-        <source
-          src={heroVideo}
-          type="video/mp4"
+      {/* Background Video (Vimeo Embed) */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0 opacity-85 brightness-[0.7] select-none" id="hero-bg-container">
+        <iframe
+          src="https://player.vimeo.com/video/1209275082?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1&playsinline=1"
+          className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-full min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none scale-[1.05]"
+          allow="autoplay; fullscreen"
+          title="Hero Background Video"
+          frameBorder="0"
+          id="hero-bg-vimeo-iframe"
         />
-      </video>
+      </div>
 
       {/* Dark tint overlay */}
       <div className="absolute inset-0 bg-black/5 z-0 pointer-events-none" id="hero-tint-overlay" />
