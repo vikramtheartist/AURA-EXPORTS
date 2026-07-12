@@ -66,13 +66,19 @@ export default function BlurText({
     >
       {elements.map((el, i) => {
         const customStyle: React.CSSProperties = {};
-        if (i === 0 || i === 1 || i === 2 || i === 3) {
+        if (i === 0) {
           customStyle.fontStyle = 'normal';
-          customStyle.fontSize = '60px';
-          customStyle.color = '#E3C591';
-        }
-        if (i === 2) {
-          customStyle.fontFamily = 'Playfair Display';
+          customStyle.fontWeight = 'bold';
+          customStyle.fontSize = '62px';
+        } else if (i === 1) {
+          customStyle.fontStyle = 'normal';
+          customStyle.fontSize = '62px';
+        } else if (i === 2) {
+          customStyle.fontStyle = 'normal';
+          customStyle.fontSize = '62px';
+        } else if (i === 3) {
+          customStyle.fontStyle = 'normal';
+          customStyle.fontSize = '62px';
         }
 
         return (
