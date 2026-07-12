@@ -1,4 +1,5 @@
-import { motion } from 'motion/react';
+import { useState, useEffect, useRef } from 'react';
+import { useScroll, useTransform, motion } from 'motion/react';
 import { Leaf, ArrowUpRight } from 'lucide-react';
 
 interface StartSectionProps {
@@ -16,6 +17,16 @@ export default function StartSection({ onNavigate }: StartSectionProps) {
     'Collaborative',
     'Visionary',
   ];
+
+  const containerRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "center center"]
+  });
+
+  // Parallax glide: translate y from 120px to 0px, and fade in opacity from 0.5 to 1 relative to viewport entrance
+  const y = useTransform(scrollYProgress, [0, 1], [120, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [0.5, 1]);
 
   const containerVariants = {
     hidden: {},
@@ -37,9 +48,11 @@ export default function StartSection({ onNavigate }: StartSectionProps) {
   };
 
   return (
-    <section
+    <motion.section
+      ref={containerRef}
       id="about"
-      className="w-full bg-black text-[#fbfbeb] py-24 md:py-32 px-6 md:px-16 lg:px-24 select-none border-b border-[#dcb782]/10 relative overflow-hidden"
+      className="w-full bg-transparent text-[#fbfbeb] py-24 md:py-32 px-6 md:px-16 lg:px-24 select-none border-b border-[#dcb782]/10 relative overflow-hidden"
+      style={{ y, opacity }}
     >
       {/* Background soft ambient radial decoration */}
       <div className="absolute top-[10%] right-[-10%] w-[35vw] h-[35vw] bg-neutral-900/40 rounded-full blur-[120px] pointer-events-none" />
@@ -120,6 +133,6 @@ export default function StartSection({ onNavigate }: StartSectionProps) {
           </motion.div>
         </div>
       </motion.div>
-    </section>
+    </motion.section>
   );
 }

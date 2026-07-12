@@ -93,9 +93,9 @@ export default function App() {
           <div className="flex flex-col w-full" id="home-view-group">
             <Hero onNavigate={handleNavigate} />
             
-            <StartSection onNavigate={handleNavigate} />
-            
             <FeaturesChess onNavigate={handleNavigate} />
+            
+            <StartSection onNavigate={handleNavigate} />
             
             <FeaturesGrid />
             

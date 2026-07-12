@@ -61,7 +61,7 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
   ];
 
   return (
-    <section id="products" className="w-full bg-[#050505] py-28 px-6 md:px-12 lg:px-20 relative overflow-hidden select-none">
+    <section id="products" className="w-full bg-transparent py-28 px-6 md:px-12 lg:px-20 relative overflow-hidden select-none">
       {/* Visual background atmospheric glows */}
       <div className="absolute top-[5%] left-[-25%] w-[60vw] h-[60vw] bg-[#dcb782]/2 rounded-full blur-[220px] pointer-events-none" />
       <div className="absolute bottom-[10%] right-[-25%] w-[60vw] h-[60vw] bg-[#ab8558]/3 rounded-full blur-[220px] pointer-events-none" />
