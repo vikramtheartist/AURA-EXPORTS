@@ -18,7 +18,7 @@ export default function Hero({ onNavigate }: HeroProps) {
       {/* Background Video (Vimeo Embed) */}
       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0 opacity-85 brightness-[0.7] select-none" id="hero-bg-container">
         <iframe
-          src="https://player.vimeo.com/video/1209275082?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1&playsinline=1"
+          src="https://player.vimeo.com/video/1209283495?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1&playsinline=1"
           className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-full min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none scale-[1.05]"
           allow="autoplay; fullscreen"
           title="Hero Background Video"
