@@ -329,7 +329,7 @@ export default function Hero({ onNavigate }: HeroProps) {
         {/* Hero Central Content */}
         <div 
           className="relative w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-16 flex-1 flex flex-col justify-center items-start text-left gap-6 mt-16 md:mt-24 pointer-events-auto"
-          style={{ transform: 'translateY(-70px)' }}
+          style={{ transform: 'translateY(-90px)' }}
         >
           {/* Heading: BlurText Component */}
           <BlurText
