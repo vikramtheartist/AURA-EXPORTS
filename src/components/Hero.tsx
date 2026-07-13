@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useScroll, useTransform, useMotionValueEvent, useMotionValue, motion } from 'motion/react';
+import { useScroll, useTransform, useMotionValueEvent, useMotionValue, motion, AnimatePresence } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
 import BlurText from './BlurText';
 
@@ -16,9 +16,12 @@ export default function Hero({ onNavigate }: HeroProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [hasPassed40, setHasPassed40] = useState(false);
   const [video2Finished, setVideo2Finished] = useState(false);
+  const [video1Loaded, setVideo1Loaded] = useState(false);
+  const [video2Loaded, setVideo2Loaded] = useState(false);
 
   const lastScrollY = useRef(0);
   const video2TimeRef = useRef(0);
+  const lastPostedTimeRef = useRef(0);
   const isReversingRef = useRef(false);
 
   useEffect(() => {
@@ -26,6 +29,15 @@ export default function Hero({ onNavigate }: HeroProps) {
     const handleResize = () => setVh(window.innerHeight);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Set up fallback timeout to ensure preloader is hidden even under poor network conditions
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setVideo1Loaded(true);
+      setVideo2Loaded(true);
+    }, 4500);
+    return () => clearTimeout(timer);
   }, []);
 
   // Monitor scroll height, update viewport states, and control title-relative fade out
@@ -74,7 +86,8 @@ export default function Hero({ onNavigate }: HeroProps) {
         const targetTime = Math.max(0, video2TimeRef.current - secondsToSubtract);
         video2TimeRef.current = targetTime;
         setVideo2Finished(false); // Make sure it stays visible when reversing
-        if (iframe2?.contentWindow) {
+        if (iframe2?.contentWindow && (Math.abs(targetTime - lastPostedTimeRef.current) >= 0.04 || targetTime === 0)) {
+          lastPostedTimeRef.current = targetTime;
           iframe2.contentWindow.postMessage(JSON.stringify({ method: 'setCurrentTime', value: targetTime }), '*');
         }
       } else if (delta > 0) {
@@ -114,12 +127,28 @@ export default function Hero({ onNavigate }: HeroProps) {
       try {
         const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
         if (data) {
-          if (data.event === 'finish') {
-            setVideo2Finished(true);
-          } else if (data.event === 'timeupdate' && data.data) {
-            // Only update time tracking if we are not currently active in reverse mode
-            if (!isReversingRef.current) {
-              video2TimeRef.current = data.data.seconds;
+          const isFromIframe1 = iframe1Ref.current && event.source === iframe1Ref.current.contentWindow;
+          const isFromIframe2 = iframe2Ref.current && event.source === iframe2Ref.current.contentWindow;
+
+          // If from Iframe 1 (Primary background video)
+          if (isFromIframe1) {
+            if (data.event === 'ready' || data.method === 'ready' || data.event === 'play') {
+              setVideo1Loaded(true);
+            }
+          }
+
+          // If from Iframe 2 (Secondary scroll video)
+          if (isFromIframe2) {
+            if (data.event === 'ready' || data.method === 'ready' || data.event === 'play' || data.event === 'timeupdate') {
+              setVideo2Loaded(true);
+            }
+            if (data.event === 'finish') {
+              setVideo2Finished(true);
+            } else if (data.event === 'timeupdate' && data.data) {
+              // Only update time tracking if we are not currently active in reverse mode
+              if (!isReversingRef.current) {
+                video2TimeRef.current = data.data.seconds;
+              }
             }
           }
         }
@@ -168,6 +197,58 @@ export default function Hero({ onNavigate }: HeroProps) {
       className="relative w-full overflow-hidden bg-black flex flex-col"
       style={{ height: '130vh' }}
     >
+      <AnimatePresence>
+        {!(video1Loaded && video2Loaded) && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0, y: -20, filter: "blur(10px)" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-50 bg-[#050505] flex flex-col items-center justify-center select-none"
+            id="hero-preloader"
+          >
+            <div className="relative flex flex-col items-center">
+              {/* Elegant pulsing logo symbol/text */}
+              <motion.span 
+                initial={{ opacity: 0.3, letterSpacing: "0.15em" }}
+                animate={{ opacity: [0.3, 1, 0.3], letterSpacing: ["0.15em", "0.25em", "0.15em"] }}
+                transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                className="text-2xl font-sans text-[#dcb782] mb-6 font-light uppercase tracking-[0.25em]"
+                id="hero-loader-title"
+              >
+                AURA
+              </motion.span>
+              
+              {/* Minimalist sleek gold loading line */}
+              <div className="w-24 h-[1px] bg-[#dcb782]/20 relative overflow-hidden rounded-full" id="hero-loader-bar-bg">
+                <motion.div 
+                  className="absolute top-0 bottom-0 left-0 bg-[#dcb782] w-1/2"
+                  animate={{ 
+                    left: ["-50%", "100%"]
+                  }}
+                  transition={{ 
+                    repeat: Infinity, 
+                    duration: 1.8, 
+                    ease: "easeInOut" 
+                  }}
+                  id="hero-loader-bar-fill"
+                />
+              </div>
+
+              {/* Minimalist subtext */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.4 }}
+                transition={{ delay: 0.5, duration: 1 }}
+                className="text-[10px] text-[#fbfbeb] font-body tracking-[0.1em] uppercase mt-4 font-light animate-pulse"
+                id="hero-loader-subtitle"
+              >
+                Sourcing Precision
+              </motion.p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Background Video (Fixed/Static Wrapper) */}
       {isVisible && (
         <div 
@@ -182,7 +263,12 @@ export default function Hero({ onNavigate }: HeroProps) {
           >
             <iframe
               ref={iframe1Ref}
-              src="https://player.vimeo.com/video/1209283495?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1&playsinline=1&api=1"
+              src="https://player.vimeo.com/video/1209648490?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1&playsinline=1&api=1"
+              onLoad={() => {
+                setTimeout(() => {
+                  setVideo1Loaded(true);
+                }, 600);
+              }}
               className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-full min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none scale-[1.05] brightness-[0.7]"
               allow="autoplay; fullscreen"
               title="Hero Background Video 1"
@@ -202,7 +288,16 @@ export default function Hero({ onNavigate }: HeroProps) {
           >
             <iframe
               ref={iframe2Ref}
-              src="https://player.vimeo.com/video/1209309116?autoplay=0&loop=0&controls=0&muted=1&byline=0&title=0&portrait=0&playsinline=1&api=1"
+              src="https://player.vimeo.com/video/1209646687?autoplay=0&loop=0&controls=0&muted=1&byline=0&title=0&portrait=0&playsinline=1&api=1"
+              onLoad={() => {
+                setTimeout(() => {
+                  setVideo2Loaded(true);
+                  if (iframe2Ref.current?.contentWindow) {
+                    iframe2Ref.current.contentWindow.postMessage(JSON.stringify({ method: 'addEventListener', value: 'finish' }), '*');
+                    iframe2Ref.current.contentWindow.postMessage(JSON.stringify({ method: 'addEventListener', value: 'timeupdate' }), '*');
+                  }
+                }, 600);
+              }}
               className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-full min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none scale-[1.05] brightness-[0.7]"
               allow="autoplay; fullscreen"
               title="Hero Background Video 2"
@@ -234,7 +329,7 @@ export default function Hero({ onNavigate }: HeroProps) {
         {/* Hero Central Content */}
         <div 
           className="relative w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-16 flex-1 flex flex-col justify-center items-start text-left gap-6 mt-16 md:mt-24 pointer-events-auto"
-          style={{ transform: 'translateY(-50px)' }}
+          style={{ transform: 'translateY(-70px)' }}
         >
           {/* Heading: BlurText Component */}
           <BlurText
