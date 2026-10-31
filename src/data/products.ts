@@ -9,6 +9,7 @@ import jewelryImg from '../assets/images/product_jewelry_1780423528983.png';
 import textilesImg from '../assets/images/product_textiles_1780423544568.png';
 
 import agroHeroImg from '../assets/images/agro_products_hero.jpg';
+import apparelHeroImg from '../assets/images/apparel_textiles_hero.jpg';
 
 export const productCategories: ProductCategory[] = [
   {
@@ -92,32 +93,55 @@ export const productCategories: ProductCategory[] = [
     productCount: 4,
   },
   {
-    slug: 'textiles',
-    name: 'Sustainable Textiles',
-    shortName: 'Sustainable Textiles',
-    headline: 'Explore textile products and natural materials that bring together craftsmanship, versatility and responsible sourcing.',
+    slug: 'apparel-textiles',
+    name: 'Apparel & Textiles',
+    shortName: 'Apparel & Textiles',
+    headline: 'From Fabrics to Finished Apparel. Sourcing Without Boundaries.',
     description:
-      'Eco-responsible textile sourcing connecting global brands and institutional buyers with South India’s premier spinning, weaving, and regenerative fabric ecosystems.',
+      'From quality fabrics and textile materials to finished garments and home textiles, we connect international buyers with diverse apparel and textile sourcing opportunities.',
     sourcingPhilosophy:
-      'Leveraging Tamil Nadu’s world-renowned textile corridor (Tirupur / Coimbatore / Karur) to deliver low-impact, traceable woven and knitted materials adhering to strict environmental standards.',
-    featuredImage: textilesImg,
-    badge: 'Eco-Certified Weaves',
+      'Connecting international buyers with premier textile mills, garment assemblies, master handloom weavers and spinning clusters across Tirupur, Coimbatore, Karur, Surat and Bengaluru.',
+    featuredImage: apparelHeroImg,
+    badge: 'Comprehensive Textile & Apparel Portfolio',
     procurementLens: {
       title: 'What Buyers Can Define',
       description:
-        'Textile contracts are engineered to international manufacturing and garment-making specifications:',
+        'Textile and apparel contracts are customized to global manufacturing, retail, and commercial specifications:',
       definableFields: [
-        'Fiber Composition (GOTS-aligned organic cotton, linen/flax blends, industrial hemp, bamboo rayon, recycled polyester)',
-        'Fabric Construction (Plain weave, twill, satin, single jersey, interlock, canvas, waffle)',
-        'GSM & Fabric Weight (Engineered to buyer technical specification)',
-        'Width & Roll Format (Standard 58/60” or custom industrial cutting widths)',
-        'Finishing & Hand-Feel (Bio-wash, enzyme wash, brushed, water-repellent, mercerized)',
-        'Color & Dyeing (GOTS-compliant reactive dyes, low-impact fiber dyeing, natural botanical pigments)',
-        'Sustainability Certification Pathway (Evaluated against selected mill, fiber lot, and destination market)',
-        'Roll Packing & Moisture-Barrier Export Packaging',
+        'Category Vertical (Fabrics & Materials, Finished Apparel & Garments, Home Textiles, Handloom & Traditional, Yarns & Components, Made-ups)',
+        'Fiber Composition (100% Cotton, Linen, Polyester, Viscose, Modal, Elastane blends)',
+        'Fabric Construction (Plain weave, poplin, twill, oxford, single jersey, interlock, terry, jacquard)',
+        'Garment Specifications (Tech-pack development, sizing runs, private-label branding, trims & hardware)',
+        'Home Textile Specifications (Thread counts 200-800 TC, hospitality terry towel GSM, dimension ranges)',
+        'Yarn Parameters (Count ranges Ne 10s to 100s, ring spun, compact, open-end, multifold twists)',
+        'Finishing & Dyeing (Piece dyed, yarn dyed, Mercerized, bio-polished, reactive print, digital print)',
+        'Export Packaging (Rolls with core protectors, hanger/flat garment polybags, moisture-barrier master cartons)',
       ],
     },
-    productCount: 5,
+    productCount: 15,
+  },
+  {
+    slug: 'textiles',
+    name: 'Apparel & Textiles',
+    shortName: 'Apparel & Textiles',
+    headline: 'Connecting Textile Excellence with Global Markets.',
+    description:
+      'From quality fabrics and textile materials to finished garments and home textiles, we connect international buyers with diverse apparel and textile sourcing opportunities.',
+    sourcingPhilosophy:
+      'Leveraging premier spinning, weaving, garment manufacturing, and home furnishing corridors across India.',
+    featuredImage: apparelHeroImg,
+    badge: 'Global Textile & Apparel Portfolio',
+    procurementLens: {
+      title: 'What Buyers Can Define',
+      description: 'Comprehensive sourcing options across fabrics, apparel, home furnishings, and yarns.',
+      definableFields: [
+        'Fabric Composition & GSM',
+        'Garment Sizing & Private Label Cut-to-Pack',
+        'Home Textile Thread Counts & Finishes',
+        'Industrial Spun Yarns & Sewing Threads',
+      ],
+    },
+    productCount: 15,
   },
 ];
 

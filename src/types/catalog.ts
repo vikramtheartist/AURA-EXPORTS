@@ -14,15 +14,40 @@ export interface FreshProduceDetails {
   coldChainNotes: string;
 }
 
+export interface TextileDetails {
+  composition?: string;
+  gsm?: string;
+  width?: string;
+  weaveOrKnit?: string;
+  finish?: string;
+  sizes?: string[];
+  customization?: string[];
+}
+
 export interface CatalogProduct {
   id: string;
   name: string;
   slug: string;
   botanicalOrMaterialName?: string;
-  category: 'Agro Products' | 'Fashion & Lifestyle' | 'Sustainable Textiles';
-  categorySlug: 'agro-products' | 'fashion-lifestyle' | 'sustainable-textiles' | 'spices' | 'jewelry' | 'textiles';
+  category: 'Agro Products' | 'Fashion & Lifestyle' | 'Sustainable Textiles' | 'Apparel & Textiles';
+  categorySlug: 'agro-products' | 'fashion-lifestyle' | 'sustainable-textiles' | 'spices' | 'jewelry' | 'textiles' | 'apparel-textiles';
   subcategory: string;
-  subcategoryId: 'spices' | 'turmeric' | 'chillies' | 'fresh-produce' | 'moringa' | 'grains-pulses' | 'other-agro' | 'jewelry-artisanal' | 'textiles-sustainable';
+  subcategoryId: 
+    | 'spices' 
+    | 'turmeric' 
+    | 'chillies' 
+    | 'fresh-produce' 
+    | 'moringa' 
+    | 'grains-pulses' 
+    | 'other-agro' 
+    | 'jewelry-artisanal' 
+    | 'textiles-sustainable'
+    | 'fabrics-materials'
+    | 'apparel-garments'
+    | 'home-textiles'
+    | 'handloom-traditional'
+    | 'yarns-components'
+    | 'textile-accessories';
   tagline: string;
   description: string;
   detailedOverview: string;
@@ -38,6 +63,7 @@ export interface CatalogProduct {
   primaryApplications: string[];
   exportGateways: string[];
   freshProduceDetails?: FreshProduceDetails;
+  textileDetails?: TextileDetails;
   supportedIncoterms?: string[];
 }
 
@@ -50,4 +76,16 @@ export interface AgroCategoryItem {
   productCountText: string;
   highlights: string[];
   featuredProducts: string[];
+}
+
+export interface TextileCategoryItem {
+  id: string;
+  categoryNumber: string;
+  slug: string;
+  title: string;
+  shortDescription: string;
+  image: string;
+  productCountText: string;
+  productExamples: string[];
+  highlights: string[];
 }

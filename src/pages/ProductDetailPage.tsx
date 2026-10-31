@@ -18,16 +18,18 @@ import SEOHead from '../components/SEOHead';
 import Breadcrumbs from '../components/procurement/Breadcrumbs';
 import HowToBuyModule from '../components/procurement/HowToBuyModule';
 import { getProductBySlug, masterCatalogProducts } from '../data/agroCatalog';
+import { getTextileProductBySlug, masterTextileProducts } from '../data/textilesCatalog';
 
 export default function ProductDetailPage() {
   const { productSlug } = useParams<{ productSlug: string }>();
   const navigate = useNavigate();
 
-  // Look up product by slug or default to turmeric
-  const product = getProductBySlug(productSlug || 'turmeric') || masterCatalogProducts[0];
+  // Look up product by slug across agro and textile catalogs
+  const allProducts = [...masterCatalogProducts, ...masterTextileProducts];
+  const product = getTextileProductBySlug(productSlug || '') || getProductBySlug(productSlug || '') || allProducts[0];
 
   // Related products in same subcategory or category
-  const relatedProducts = masterCatalogProducts
+  const relatedProducts = allProducts
     .filter((p) => p.id !== product.id && (p.subcategoryId === product.subcategoryId || p.categorySlug === product.categorySlug))
     .slice(0, 3);
 
@@ -38,7 +40,7 @@ export default function ProductDetailPage() {
       <SEOHead 
         title={`${product.name} Export from India | Specifications & Sourcing | AURA Global Trade`}
         description={product.description}
-        canonical={`https://auraexport.co/products/agro-products/${product.slug}`}
+        canonical={`https://auraexport.co/products/${product.categorySlug}/${product.slug}`}
       />
 
       {/* Semantic Breadcrumbs */}
@@ -47,7 +49,7 @@ export default function ProductDetailPage() {
           { label: 'Home', href: '/' },
           { label: 'Products', href: '/products' },
           { label: product.category, href: `/products/${product.categorySlug}` },
-          { label: product.name, href: `/products/agro-products/${product.slug}` },
+          { label: product.name, href: `/products/${product.categorySlug}/${product.slug}` },
         ]}
       />
 

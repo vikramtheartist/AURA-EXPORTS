@@ -310,83 +310,83 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                         </Link>
                       </div>
 
-                      {/* Vertical 3: Sustainable Textiles */}
+                      {/* Vertical 3: Apparel & Textiles */}
                       <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-[#dcb782]/30 transition-colors group/col">
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] font-mono text-[#dcb782] tracking-wider uppercase font-bold">
                             VERTICAL 03
                           </span>
                           <span className="text-[9px] font-mono bg-white/10 text-white/70 px-2 py-0.5 rounded-full">
-                            Responsible
+                            Diversified
                           </span>
                         </div>
 
                         <Link
-                          to="/products/textiles"
+                          to="/products/apparel-textiles"
                           onClick={() => setIsProductsDropdownOpen(false)}
                           className="font-heading text-lg text-white font-medium group-hover/col:text-[#dcb782] transition-colors flex items-center justify-between"
                         >
-                          <span>Sustainable Textiles</span>
+                          <span>Apparel & Textiles</span>
                           <ArrowUpRight className="h-4 w-4 text-[#dcb782] opacity-0 group-hover/col:opacity-100 transition-opacity" />
                         </Link>
 
                         <p className="text-[11px] text-[#dfd1b9]/60 font-light leading-relaxed">
-                          Eco-responsible cottons, regenerative linen and sustainable fabrics.
+                          Fabrics, finished apparel, home furnishings, handlooms and industrial yarns.
                         </p>
 
                         <div className="h-[1px] bg-white/5 my-1" />
 
                         <div className="flex flex-col gap-1.5 text-xs text-[#dfd1b9]/80 font-light">
                           <Link 
-                            to="/products/textiles"
+                            to="/products/apparel-textiles"
                             onClick={() => setIsProductsDropdownOpen(false)}
                             className="hover:text-white transition-colors"
                           >
-                            • Certified Organic Cotton Weaves
+                            • Fabrics & Materials (Woven & Knits)
                           </Link>
                           <Link 
-                            to="/products/textiles"
+                            to="/products/apparel-textiles"
                             onClick={() => setIsProductsDropdownOpen(false)}
                             className="hover:text-white transition-colors"
                           >
-                            • Regenerative Linen & Flax
+                            • Apparel & Garments (Men, Women, Kids)
                           </Link>
                           <Link 
-                            to="/products/textiles"
+                            to="/products/apparel-textiles"
                             onClick={() => setIsProductsDropdownOpen(false)}
                             className="hover:text-white transition-colors"
                           >
-                            • Industrial Hemp & Canvas
+                            • Home Textiles (Bed Linen & Towels)
                           </Link>
                           <Link 
-                            to="/products/textiles"
+                            to="/products/apparel-textiles"
                             onClick={() => setIsProductsDropdownOpen(false)}
                             className="hover:text-white transition-colors"
                           >
-                            • Bamboo Rayon & Eco-Blends
+                            • Handloom & Traditional Textiles
                           </Link>
                           <Link 
-                            to="/products/textiles"
+                            to="/products/apparel-textiles"
                             onClick={() => setIsProductsDropdownOpen(false)}
                             className="hover:text-white transition-colors"
                           >
-                            • Circular Recycled Textiles
+                            • Yarns & Textile Components
                           </Link>
                           <Link 
-                            to="/products/textiles"
+                            to="/products/apparel-textiles"
                             onClick={() => setIsProductsDropdownOpen(false)}
                             className="hover:text-white transition-colors"
                           >
-                            • Custom Engineered Weights (GSM)
+                            • Textile Accessories & Made-ups
                           </Link>
                         </div>
 
                         <Link
-                          to="/products/textiles"
+                          to="/products/apparel-textiles"
                           onClick={() => setIsProductsDropdownOpen(false)}
                           className="text-[10px] font-mono text-[#dcb782] tracking-wider uppercase font-bold pt-2 mt-auto hover:underline"
                         >
-                          Explore Textile Sourcing →
+                          Explore Apparel & Textiles →
                         </Link>
                       </div>
 
@@ -519,19 +519,22 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                           </div>
                         </div>
 
-                        {/* Sustainable Textiles */}
+                        {/* Apparel & Textiles */}
                         <div className="pt-2 border-t border-white/5">
                           <Link
-                            to="/products/textiles"
+                            to="/products/apparel-textiles"
                             onClick={() => setIsOpen(false)}
                             className="font-body text-sm text-white font-bold block mb-1"
                           >
-                            03. Sustainable Textiles →
+                            03. Apparel & Textiles →
                           </Link>
                           <div className="pl-3 flex flex-col gap-1 text-xs text-white/70">
-                            <span>• Organic Cotton Weaves</span>
-                            <span>• Regenerative Linen & Flax</span>
-                            <span>• Industrial Hemp & Canvas</span>
+                            <Link to="/products/apparel-textiles" onClick={() => setIsOpen(false)}>• Fabrics & Materials (Cotton, Linen, Blends)</Link>
+                            <Link to="/products/apparel-textiles" onClick={() => setIsOpen(false)}>• Apparel & Garments (Men, Women, Kids)</Link>
+                            <Link to="/products/apparel-textiles" onClick={() => setIsOpen(false)}>• Home Textiles & Furnishings</Link>
+                            <Link to="/products/apparel-textiles" onClick={() => setIsOpen(false)}>• Handloom & Traditional Sarees</Link>
+                            <Link to="/products/apparel-textiles" onClick={() => setIsOpen(false)}>• Spun Yarns & Industrial Threads</Link>
+                            <Link to="/products/apparel-textiles" onClick={() => setIsOpen(false)}>• Fashion Accessories & Canvas Bags</Link>
                           </div>
                         </div>
 

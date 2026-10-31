@@ -33,14 +33,14 @@ export default function ProductsPage() {
           Premium Indian sourcing, structured for global procurement.
         </p>
         <p className="text-[#D5C8B7] font-body text-base md:text-lg max-w-3xl font-light leading-relaxed">
-          Explore AURA&apos;s sourcing categories across botanical ingredients, contemporary jewelry and sustainable textiles. Sourced through structured quality assurance, batch traceability, and verified export corridors.
+          Explore AURA&apos;s sourcing categories across agricultural commodities, contemporary jewelry & lifestyle, and comprehensive apparel & textiles. Sourced through structured quality assurance, batch traceability, and verified export corridors.
         </p>
       </header>
 
       {/* 3 Primary Category Cards (Section 6) */}
       <main className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20" id="aura-category-cards">
-          {productCategories.filter(c => c.slug !== 'spices').map((category) => (
+          {productCategories.filter(c => c.slug !== 'spices' && c.slug !== 'textiles').map((category) => (
             <article
               key={category.slug}
               className="rounded-3xl border border-white/10 bg-[#121211] p-8 flex flex-col justify-between hover:border-[#dcb782]/30 transition-all duration-300 shadow-2xl relative overflow-hidden group"

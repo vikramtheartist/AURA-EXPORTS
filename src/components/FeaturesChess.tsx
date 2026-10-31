@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { ArrowUpRight, ShieldCheck, Award, Tag } from 'lucide-react';
 import agroHeroImg from '../assets/images/agro_products_hero.jpg';
 import jewelryImg from '../assets/images/product_jewelry_1780423528983.png';
-import textilesImg from '../assets/images/product_textiles_1780423544568.png';
+import apparelHeroImg from '../assets/images/apparel_textiles_hero.jpg';
 
 interface FeaturesChessProps {
   onNavigate: (sectionId: string) => void;
@@ -53,23 +53,23 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
       isImageLeft: true,
     },
     {
-      id: 'textiles',
-      routeId: 'products/textiles',
-      label: 'RESPONSIBLE MATERIALS',
-      title: 'Sustainable Textiles',
-      keywords: 'Cotton | Natural Fibers | Fabrics | Sustainable Textiles',
+      id: 'apparel-textiles',
+      routeId: 'products/apparel-textiles',
+      label: 'DIVERSIFIED SOURCING VERTICAL',
+      title: 'Apparel & Textiles',
+      keywords: 'Fabrics | Apparel | Garments | Home Textiles | Handloom | Textile Materials',
       description1:
-        'Explore textile products and natural materials that bring together craftsmanship, versatility and responsible sourcing.',
+        'From quality fabrics and textile materials to finished garments and home textiles, we connect international buyers with diverse apparel and textile sourcing opportunities.',
       description2:
-        'Connecting institutional buyers with South India’s premier spinning and weaving corridors for traceable organic cotton, natural bast fibers, and low-impact dyed fabrics engineered to manufacturing specifications.',
-      ctaText: 'Explore Textiles',
-      image: textilesImg,
-      badge: 'Eco-Certified Weaves',
+        'Facilitating end-to-end global trade across woven cottons, commercial apparel manufacturing, hospitality linens, heritage handlooms, and industrial spinning yarns with verified mill compliance.',
+      ctaText: 'Explore Apparel & Textiles',
+      image: apparelHeroImg,
+      badge: 'Global Textile & Apparel Portfolio',
       specs: [
-        { label: 'Fiber Selection', value: 'Organic Cotton, Hemp, Linen & Bamboo' },
-        { label: 'Weave Varieties', value: 'Single Jersey, Twill, Canvas & Poplin' },
-        { label: 'Fabric Weights', value: 'GSM Engineered to Specification' },
-        { label: 'Standards', value: 'Audited Sourcing Corridors' },
+        { label: 'Category Breadth', value: '6 Major Textile & Apparel Categories' },
+        { label: 'Manufacturing Corridors', value: 'Tirupur, Coimbatore, Karur & Surat' },
+        { label: 'Product Spectrum', value: 'Raw Yarns to Finished Tailored Garments' },
+        { label: 'Export Gateways', value: 'Tuticorin, Chennai & Nhava Sheva' },
       ],
       isImageLeft: false,
     },
@@ -94,7 +94,7 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
             Connecting India&apos;s Finest Products <span className="text-[#dcb782] italic font-normal">to Global Markets.</span>
           </h2>
           <p className="text-sm md:text-base text-[#D5C8B7] font-light max-w-2xl leading-relaxed">
-            From agricultural commodities and premium spices to fashion accessories and sustainable textiles, AURA Global Trade connects diverse product categories with international sourcing opportunities.
+            From agricultural commodities and premium spices to fashion accessories and comprehensive apparel & textiles, AURA Global Trade connects diverse product categories with international sourcing opportunities.
           </p>
           <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#dcb782]/30 to-transparent mt-2" />
         </div>

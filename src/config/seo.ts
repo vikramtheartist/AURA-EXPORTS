@@ -141,17 +141,30 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
       { name: 'Contemporary Fashion Jewelry', item: `${SITE_BASE_URL}/products/jewelry` },
     ],
   },
-  textiles: {
-    title: 'Sustainable Textiles & Apparel Sourcing | AURA Global Trade',
-    description: 'Natural and recycled textile sourcing for modern brands across certified organic cotton, regenerative linen-flax blends, hemp canvas, and bamboo fabrics.',
-    canonical: `${SITE_BASE_URL}/products/textiles`,
+  apparelTextiles: {
+    title: 'Apparel & Textile Exporter | Fabrics, Garments, Home Textiles & Yarns | AURA Global Trade',
+    description: 'AURA Global Trade connects international buyers with a diverse range of apparel, fabrics, textile materials, home textiles, handlooms and spun yarns for global B2B trade.',
+    canonical: `${SITE_BASE_URL}/products/apparel-textiles`,
     ogType: 'website',
     ogImage: DEFAULT_OG_IMAGE,
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
       { name: 'Products', item: `${SITE_BASE_URL}/products` },
-      { name: 'Sustainable Textiles & Apparel', item: `${SITE_BASE_URL}/products/textiles` },
+      { name: 'Apparel & Textiles', item: `${SITE_BASE_URL}/products/apparel-textiles` },
+    ],
+  },
+  textiles: {
+    title: 'Apparel & Textile Exporter | Fabrics, Garments, Home Textiles & Yarns | AURA Global Trade',
+    description: 'AURA Global Trade connects international buyers with a diverse range of apparel, fabrics, textile materials, home textiles, handlooms and spun yarns for global B2B trade.',
+    canonical: `${SITE_BASE_URL}/products/apparel-textiles`,
+    ogType: 'website',
+    ogImage: DEFAULT_OG_IMAGE,
+    robots: 'index, follow',
+    breadcrumbs: [
+      { name: 'Home', item: `${SITE_BASE_URL}/` },
+      { name: 'Products', item: `${SITE_BASE_URL}/products` },
+      { name: 'Apparel & Textiles', item: `${SITE_BASE_URL}/products/apparel-textiles` },
     ],
   },
   quality: {

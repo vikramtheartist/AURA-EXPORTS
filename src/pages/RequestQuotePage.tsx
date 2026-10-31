@@ -50,6 +50,29 @@ export default function RequestQuotePage() {
       req = preselectedRequirement || (preselectedProduct 
         ? `Sourcing quotation and specification request for ${preselectedProduct.replace(/-/g, ' ')}.` 
         : 'Agro products bulk sourcing requirement (Spices, commodities or fresh produce).');
+    } else if (
+      preselectedCategory === 'apparel-textiles' ||
+      preselectedCategory === 'textiles' ||
+      preselectedCategory === 'fabrics' ||
+      preselectedCategory === 'garments' ||
+      preselectedCategory === 'home-textiles' ||
+      preselectedProduct.includes('cotton') ||
+      preselectedProduct.includes('linen') ||
+      preselectedProduct.includes('fabric') ||
+      preselectedProduct.includes('apparel') ||
+      preselectedProduct.includes('shirt') ||
+      preselectedProduct.includes('dress') ||
+      preselectedProduct.includes('towel') ||
+      preselectedProduct.includes('handloom') ||
+      preselectedProduct.includes('saree') ||
+      preselectedProduct.includes('yarn') ||
+      preselectedProduct.includes('scarf') ||
+      preselectedProduct.includes('canvas')
+    ) {
+      cat = 'apparel-textiles';
+      req = preselectedRequirement || (preselectedProduct 
+        ? `Commercial quotation and specification inquiry for ${preselectedProduct.replace(/-/g, ' ')}.` 
+        : 'Apparel & Textiles sourcing inquiry (Fabrics, garments, home textiles, or yarns).');
     } else if (preselectedProduct === 'turmeric') {
       cat = 'turmeric';
       req = preselectedForm
@@ -61,10 +84,10 @@ export default function RequestQuotePage() {
         ? `Fashion jewelry collection (${preselectedForm}) design & manufacturing inquiry.`
         : 'Contemporary fashion jewelry production run.';
     } else if (preselectedProduct === 'textiles' || preselectedCategory === 'textiles') {
-      cat = 'textiles';
+      cat = 'apparel-textiles';
       req = preselectedForm
-        ? `Sustainable textile sourcing (${preselectedForm}) fabric order.`
-        : 'Natural / organic woven fabric yardage requirement.';
+        ? `Apparel & textile sourcing (${preselectedForm}) order inquiry.`
+        : 'Fabric yardage or apparel sourcing requirement.';
     }
 
     if (preselectedRequirement) {
@@ -331,7 +354,13 @@ export default function RequestQuotePage() {
                     <option value="moringa">Moringa & Botanical Ingredients (Powder / Leaves)</option>
                     <option value="grains-pulses">Grains & Pulses (Basmati & Non-Basmati Rice, Millets)</option>
                     <option value="jewelry">Fashion & Lifestyle (Contemporary Fashion Jewelry, Brass, Steel)</option>
-                    <option value="textiles">Sustainable Textiles (Organic Cotton, Linen, Hemp, Eco-Weaves)</option>
+                    <option value="apparel-textiles">Apparel & Textiles (Comprehensive Sourcing Portfolio)</option>
+                    <option value="textiles-fabrics">Fabrics & Materials (Cotton, Linen, Woven, Knits & Dyed)</option>
+                    <option value="textiles-apparel">Apparel & Garments (Men's, Women's, Kidswear & Casuals)</option>
+                    <option value="textiles-home">Home Textiles & Furnishings (Bed Linen, Towels & Curtains)</option>
+                    <option value="textiles-handloom">Handloom & Traditional Textiles (Artisan Sarees & Handwoven)</option>
+                    <option value="textiles-yarns">Yarns & Textile Components (Spun Yarns & Sewing Threads)</option>
+                    <option value="textiles-accessories">Textile Accessories & Made-ups (Scarves & Canvas Bags)</option>
                     <option value="other">Other Indian Sourcing Requirement</option>
                   </select>
                 </div>
