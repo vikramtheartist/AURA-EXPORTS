@@ -122,7 +122,7 @@ export default function StartSection({ onNavigate }: StartSectionProps) {
           {/* Action Button: About the company (Styled in gold gradient look and feel) */}
           <motion.div variants={childVariants} className="mt-2">
             <button
-              onClick={() => onNavigate('products')}
+              onClick={() => onNavigate('about')}
               className="group bg-gradient-to-r from-[#dcb782] to-[#ab8558] hover:from-[#fbf3db] hover:to-[#dcb782] text-black px-7 py-3.5 rounded-full font-body font-bold text-sm tracking-wide shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer w-fit"
               id="about-company-btn"
             >

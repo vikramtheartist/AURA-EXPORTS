@@ -149,7 +149,8 @@ export default function QualityCommitment({ onNavigate }: QualityCommitmentProps
           <img
             src={commitmentImg}
             alt="AURA Global Supply Lines"
-            referrerPolicy="no-referrer"
+            loading="lazy"
+            decoding="async"
             className="w-full max-w-[400px] lg:max-w-none h-auto aspect-[3/4] object-cover rounded-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative z-10 transition-transform duration-700 group-hover:scale-[1.02]"
             id="quality-showcase-image"
           />

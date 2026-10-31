@@ -1,24 +1,31 @@
 import { motion } from 'motion/react';
+import { ShieldCheck, Lock, FileSearch } from 'lucide-react';
 
 export default function Testimonials() {
-  const reviews = [
+  const governancePillars = [
     {
-      quote:
-        'AURA\'s custom sourcing and phytosanitary rigor have completely secured our seasonal agricultural supply pipelines.',
-      author: 'Suleiman Al-Hassan',
-      role: 'Managing Director, Gulf Harvest Alliance',
+      icon: Lock,
+      principle: 'Bilateral Confidentiality & NDA',
+      body:
+        'Aura protects our overseas partners\' proprietary formulations, custom branding, and destination trade corridors under legally binding bilateral NDAs. We never exploit client identities for public marketing.',
+      metaLabel: 'Procurement Safeguard 01',
+      metaRole: 'Enterprise Data & Brand Protection',
     },
     {
-      quote:
-        'Their door-to-port logistics are flawlessly synchronized. Over 15,000 metric tons delivered with absolute purity and zero latency.',
-      author: 'Isabella Ricci',
-      role: 'VP of Sourcing, Vercelli Commodities',
+      icon: ShieldCheck,
+      principle: 'Direct Traceability & Purity',
+      body:
+        'Every consignment is traced back to vetted South Indian agricultural collectives and artisan workshops. Buyers receive complete batch documentation, active chemical assays, and phytosanitary clearance.',
+      metaLabel: 'Procurement Safeguard 02',
+      metaRole: 'Zero-Adulteration Supply Chain',
     },
     {
-      quote:
-        'They deliver more than cargo — they deliver structural peace of mind, immaculate product grades, and strict adherence to global compliance.',
-      author: 'Kenji Sato',
-      role: 'Director of Global Import, Pacifica Corp',
+      icon: FileSearch,
+      principle: 'Verifiable References On Request',
+      body:
+        'For institutional procurement committees conducting formal vendor onboarding, verifiable corporate credentials, sample test reports, and banking references are provided under bilateral protocol.',
+      metaLabel: 'Procurement Safeguard 03',
+      metaRole: 'Structured Vendor Verification',
     },
   ];
 
@@ -42,21 +49,24 @@ export default function Testimonials() {
   };
 
   return (
-    <section id="testimonials-section" className="w-full bg-black py-24 px-6 md:px-16">
+    <section id="procurement-governance" className="w-full bg-black py-24 px-6 md:px-16 border-t border-white/5">
       <div className="max-w-6xl mx-auto flex flex-col gap-12">
         {/* Section Header */}
-        <div className="flex flex-col items-center text-center gap-4" id="testimonials-header">
+        <div className="flex flex-col items-center text-center gap-4" id="governance-header">
           <div className="liquid-glass rounded-full px-3.5 py-1 border border-white/10 shadow-sm">
-            <span className="text-white font-body font-medium text-xs tracking-wider uppercase">
-              What They Say
+            <span className="text-[#dcb782] font-body font-medium text-xs tracking-wider uppercase">
+              PROCUREMENT GOVERNANCE
             </span>
           </div>
           <h2
-            className="text-4xl md:text-5xl lg:text-6xl font-heading text-white tracking-tight leading-[0.9]"
-            id="testimonials-title"
+            className="text-4xl md:text-5xl lg:text-6xl font-heading text-white tracking-tight leading-[1.05]"
+            id="governance-title"
           >
-            Don't take our word for it.
+            Built on <span className="text-[#dcb782] italic font-normal">Integrity & Discretion</span>
           </h2>
+          <p className="text-[#D5C8B7]/80 text-sm md:text-base font-light max-w-2xl">
+            Why international procurement managers trust Aura Global Trade with strategic sourcing relationships.
+          </p>
         </div>
 
         {/* 3-column Grid layout */}
@@ -66,40 +76,45 @@ export default function Testimonials() {
           whileInView="visible"
           viewport={{ once: true, margin: '-15% 0px' }}
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4"
-          id="testimonials-grid"
+          id="governance-grid"
         >
-          {reviews.map((r, i) => (
-            <motion.div
-              key={i}
-              variants={cardVariants}
-              whileHover={{ y: -4, transition: { duration: 0.2 } }}
-              className="liquid-glass rounded-2xl p-8 border border-white/5 flex flex-col justify-between hover:border-white/15 transition-colors group relative"
-              id={`testimonial-card-${i}`}
-            >
-              {/* Quote text */}
-              <p
-                className="text-white/80 font-body font-light text-sm md:text-base italic leading-relaxed mb-8 relative z-10"
-                id={`quote-${i}`}
+          {governancePillars.map((item, i) => {
+            const Icon = item.icon;
+            return (
+              <motion.div
+                key={i}
+                variants={cardVariants}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                className="liquid-glass rounded-2xl p-8 border border-white/5 flex flex-col justify-between hover:border-[#dcb782]/30 transition-colors group relative"
+                id={`governance-card-${i}`}
               >
-                “{r.quote}”
-              </p>
+                <div>
+                  <div className="h-10 w-10 rounded-xl bg-white/5 border border-[#dcb782]/20 flex items-center justify-center mb-6">
+                    <Icon className="h-5 w-5 text-[#dcb782]" />
+                  </div>
+                  <h3 className="text-white font-heading text-lg font-medium mb-3">
+                    {item.principle}
+                  </h3>
+                  <p
+                    className="text-[#D5C8B7]/80 font-body font-light text-xs md:text-sm leading-relaxed mb-8 relative z-10"
+                    id={`governance-body-${i}`}
+                  >
+                    {item.body}
+                  </p>
+                </div>
 
-              {/* Author attribution */}
-              <div className="flex flex-col gap-0.5 mt-auto relative z-10" id={`author-info-${i}`}>
-                <span className="text-white font-body font-semibold text-sm group-hover:text-white/90 transition-colors">
-                  {r.author}
-                </span>
-                <span className="text-white/50 font-body font-light text-xs">
-                  {r.role}
-                </span>
-              </div>
-
-              {/* Decorative subtle ambient quote marker inside card */}
-              <span className="absolute right-6 bottom-4 text-7xl font-heading text-white/[0.03] select-none pointer-events-none italic font-bold">
-                ”
-              </span>
-            </motion.div>
-          ))}
+                {/* Attribution / Meta line */}
+                <div className="flex flex-col gap-0.5 mt-auto pt-4 border-t border-white/5 relative z-10" id={`governance-meta-${i}`}>
+                  <span className="text-[#dcb782] font-mono font-semibold text-xs tracking-wider uppercase">
+                    {item.metaLabel}
+                  </span>
+                  <span className="text-white/50 font-body font-light text-[11px]">
+                    {item.metaRole}
+                  </span>
+                </div>
+              </motion.div>
+            );
+          })}
         </motion.div>
       </div>
     </section>

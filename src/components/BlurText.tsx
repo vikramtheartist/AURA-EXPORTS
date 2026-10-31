@@ -7,6 +7,7 @@ interface BlurTextProps {
   stagger?: number; // stagger delay between items in ms
   splitBy?: 'words' | 'letters';
   className?: string;
+  as?: 'h1' | 'h2' | 'h3' | 'div';
 }
 
 export default function BlurText({
@@ -15,10 +16,11 @@ export default function BlurText({
   stagger = 60,
   splitBy = 'words',
   className = '',
+  as = 'h1',
 }: BlurTextProps) {
   const elements = splitBy === 'words' ? text.split(' ') : text.split('');
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [isInView, setIsInView] = useState(false);
+  const [isInView, setIsInView] = useState(true);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -41,26 +43,27 @@ export default function BlurText({
 
   const itemVariants = {
     hidden: {
-      filter: 'blur(10px)',
-      opacity: 0,
-      y: 50,
+      filter: 'blur(2px)',
+      opacity: 0.9,
+      y: 4,
     },
     visible: (index: number) => ({
-      filter: ['blur(10px)', 'blur(5px)', 'blur(0px)'],
-      opacity: [0, 0.5, 1],
-      y: [50, -5, 0],
+      filter: 'blur(0px)',
+      opacity: 1,
+      y: 0,
       transition: {
-        duration: 0.7, // total 0.35s per keyframe step transition (2 steps = 0.7s)
-        times: [0, 0.5, 1],
-        delay: (delay + index * stagger) / 1000,
+        duration: 0.35,
+        delay: Math.min((delay + index * stagger) / 1000, 0.15),
         ease: 'easeOut',
       },
     }),
   };
 
+  const Component: React.ElementType = as;
+
   return (
-    <div
-      ref={containerRef}
+    <Component
+      ref={containerRef as any}
       className={`flex flex-wrap gap-x-[0.25em] gap-y-[0.1em] ${className}`}
       id="blur-text-container"
     >
@@ -69,16 +72,12 @@ export default function BlurText({
         if (i === 0) {
           customStyle.fontStyle = 'normal';
           customStyle.fontWeight = 'bold';
-          customStyle.fontSize = '62px';
         } else if (i === 1) {
           customStyle.fontStyle = 'normal';
-          customStyle.fontSize = '62px';
         } else if (i === 2) {
           customStyle.fontStyle = 'normal';
-          customStyle.fontSize = '62px';
         } else if (i === 3) {
           customStyle.fontStyle = 'normal';
-          customStyle.fontSize = '62px';
         }
 
         return (
@@ -96,6 +95,6 @@ export default function BlurText({
           </motion.span>
         );
       })}
-    </div>
+    </Component>
   );
 }

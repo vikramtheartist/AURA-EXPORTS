@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useScroll, useTransform, useMotionValueEvent, useMotionValue, motion, AnimatePresence } from 'motion/react';
+import { useScroll, useTransform, useMotionValueEvent, useMotionValue, motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
 import BlurText from './BlurText';
 
@@ -29,15 +29,6 @@ export default function Hero({ onNavigate }: HeroProps) {
     const handleResize = () => setVh(window.innerHeight);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Set up fallback timeout to ensure preloader is hidden even under poor network conditions
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setVideo1Loaded(true);
-      setVideo2Loaded(true);
-    }, 4500);
-    return () => clearTimeout(timer);
   }, []);
 
   // Monitor scroll height, update viewport states, and control title-relative fade out
@@ -197,57 +188,6 @@ export default function Hero({ onNavigate }: HeroProps) {
       className="relative w-full overflow-hidden bg-black flex flex-col"
       style={{ height: '130vh' }}
     >
-      <AnimatePresence>
-        {!(video1Loaded && video2Loaded) && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0, y: -20, filter: "blur(10px)" }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-50 bg-[#050505] flex flex-col items-center justify-center select-none"
-            id="hero-preloader"
-          >
-            <div className="relative flex flex-col items-center">
-              {/* Elegant pulsing logo symbol/text */}
-              <motion.span 
-                initial={{ opacity: 0.3, letterSpacing: "0.15em" }}
-                animate={{ opacity: [0.3, 1, 0.3], letterSpacing: ["0.15em", "0.25em", "0.15em"] }}
-                transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-                className="text-2xl font-sans text-[#dcb782] mb-6 font-light uppercase tracking-[0.25em]"
-                id="hero-loader-title"
-              >
-                AURA
-              </motion.span>
-              
-              {/* Minimalist sleek gold loading line */}
-              <div className="w-24 h-[1px] bg-[#dcb782]/20 relative overflow-hidden rounded-full" id="hero-loader-bar-bg">
-                <motion.div 
-                  className="absolute top-0 bottom-0 left-0 bg-[#dcb782] w-1/2"
-                  animate={{ 
-                    left: ["-50%", "100%"]
-                  }}
-                  transition={{ 
-                    repeat: Infinity, 
-                    duration: 1.8, 
-                    ease: "easeInOut" 
-                  }}
-                  id="hero-loader-bar-fill"
-                />
-              </div>
-
-              {/* Minimalist subtext */}
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.4 }}
-                transition={{ delay: 0.5, duration: 1 }}
-                className="text-[10px] text-[#fbfbeb] font-body tracking-[0.1em] uppercase mt-4 font-light animate-pulse"
-                id="hero-loader-subtitle"
-              >
-                Sourcing Precision
-              </motion.p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Background Video (Fixed/Static Wrapper) */}
       {isVisible && (
@@ -277,34 +217,36 @@ export default function Hero({ onNavigate }: HeroProps) {
             />
           </motion.div>
 
-          {/* Video 2 (When scrolled, no background=1 parameter to allow loop=0 control) */}
-          <motion.div 
-            className="absolute inset-0 w-full h-full"
-            id="hero-video-2-wrap"
-            style={{ 
-              opacity: video2Finished ? 0 : video2Opacity,
-              transition: video2Finished ? 'opacity 0.5s ease-in-out' : 'none'
-            }}
-          >
-            <iframe
-              ref={iframe2Ref}
-              src="https://player.vimeo.com/video/1209646687?autoplay=0&loop=0&controls=0&muted=1&byline=0&title=0&portrait=0&playsinline=1&api=1"
-              onLoad={() => {
-                setTimeout(() => {
-                  setVideo2Loaded(true);
-                  if (iframe2Ref.current?.contentWindow) {
-                    iframe2Ref.current.contentWindow.postMessage(JSON.stringify({ method: 'addEventListener', value: 'finish' }), '*');
-                    iframe2Ref.current.contentWindow.postMessage(JSON.stringify({ method: 'addEventListener', value: 'timeupdate' }), '*');
-                  }
-                }, 600);
+          {/* Video 2 (Mounted when scroll progresses beyond 40px to protect mobile initial paint) */}
+          {(hasPassed40 || video2Loaded) && (
+            <motion.div 
+              className="absolute inset-0 w-full h-full"
+              id="hero-video-2-wrap"
+              style={{ 
+                opacity: video2Finished ? 0 : video2Opacity,
+                transition: video2Finished ? 'opacity 0.5s ease-in-out' : 'none'
               }}
-              className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-full min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none scale-[1.05] brightness-[0.7]"
-              allow="autoplay; fullscreen"
-              title="Hero Background Video 2"
-              frameBorder="0"
-              id="hero-bg-vimeo-iframe-2"
-            />
-          </motion.div>
+            >
+              <iframe
+                ref={iframe2Ref}
+                src="https://player.vimeo.com/video/1209646687?autoplay=0&loop=0&controls=0&muted=1&byline=0&title=0&portrait=0&playsinline=1&api=1"
+                onLoad={() => {
+                  setTimeout(() => {
+                    setVideo2Loaded(true);
+                    if (iframe2Ref.current?.contentWindow) {
+                      iframe2Ref.current.contentWindow.postMessage(JSON.stringify({ method: 'addEventListener', value: 'finish' }), '*');
+                      iframe2Ref.current.contentWindow.postMessage(JSON.stringify({ method: 'addEventListener', value: 'timeupdate' }), '*');
+                    }
+                  }, 600);
+                }}
+                className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-full min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none scale-[1.05] brightness-[0.7]"
+                allow="autoplay; fullscreen"
+                title="Hero Background Video 2"
+                frameBorder="0"
+                id="hero-bg-vimeo-iframe-2"
+              />
+            </motion.div>
+          )}
 
           {/* Dark tint overlay */}
           <div className="absolute inset-0 bg-black/5 z-0 pointer-events-none" id="hero-tint-overlay" />
@@ -334,37 +276,47 @@ export default function Hero({ onNavigate }: HeroProps) {
           {/* Heading: BlurText Component */}
           <BlurText
             text="Empowering exports, enriching lives."
-            delay={100}
-            stagger={80}
-            className="text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] font-display italic text-[#E3C591] leading-[1.05] max-w-2xl tracking-[-2px] text-left justify-start font-bold"
+            delay={50}
+            stagger={40}
+            className="text-4xl md:text-5xl lg:text-6xl xl:text-[4rem] font-display italic text-[#E3C591] leading-[1.05] max-w-2xl tracking-[-2px] text-left justify-start font-bold"
           />
 
           {/* Subtext Paragraph */}
           <motion.p
-            initial={{ filter: 'blur(10px)', opacity: 0, y: 20 }}
-            animate={{ filter: 'blur(0px)', opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
+            initial={{ opacity: 0.9, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
             className="max-w-xl font-body font-light leading-relaxed text-left text-lg md:text-xl text-[#D5C8B7]"
             id="hero-subtext"
           >
             Through quality sourcing and global partnerships, we deliver more than products — we deliver value.
           </motion.p>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons - Conversion Hierarchy: Primary Request Quote, Secondary Explore Products */}
           <motion.div
-            initial={{ filter: 'blur(10px)', opacity: 0, y: 20 }}
-            animate={{ filter: 'blur(0px)', opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.1 }}
+            initial={{ opacity: 0.9, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.15 }}
             className="flex flex-col sm:flex-row items-start justify-start gap-4 sm:gap-6"
             id="hero-ctas"
           >
-            {/* Main CTA */}
+            {/* Primary CTA */}
+            <button
+              onClick={() => onNavigate('request-quote')}
+              className="group bg-gradient-to-r from-[#dcb782] to-[#ab8558] hover:from-white hover:to-[#dcb782] text-black font-body font-bold text-xs uppercase tracking-wider rounded-full px-7 py-3.5 flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg hover:scale-[1.03] active:scale-[0.98]"
+              id="hero-cta-quote"
+            >
+              <span>Request a Quote</span>
+              <ArrowUpRight className="h-4 w-4" />
+            </button>
+
+            {/* Secondary CTA */}
             <button
               onClick={() => onNavigate('products')}
-              className="group liquid-glass-strong rounded-full px-7 py-3 flex items-center justify-center gap-2 text-white border border-[#dcb782]/30 hover:border-[#dcb782]/60 hover:bg-white/5 transition-all cursor-pointer shadow-lg hover:scale-[1.03] active:scale-[0.98]"
+              className="group liquid-glass-strong rounded-full px-7 py-3.5 flex items-center justify-center gap-2 text-white border border-[#dcb782]/30 hover:border-[#dcb782]/60 hover:bg-white/5 transition-all cursor-pointer shadow-lg hover:scale-[1.03] active:scale-[0.98]"
               id="hero-cta-main"
             >
-              <span className="font-body font-medium text-sm tracking-wide text-[#fbfbeb] group-hover:text-white">Discover our products</span>
+              <span className="font-body font-medium text-xs uppercase tracking-wider text-[#fbfbeb] group-hover:text-white">Explore Products</span>
               <ArrowUpRight className="h-4 w-4 text-[#dcb782] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </button>
           </motion.div>

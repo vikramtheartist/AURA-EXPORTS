@@ -1,12 +1,32 @@
+import { useState, useRef, useEffect, lazy, Suspense } from 'react';
 import { motion } from 'motion/react';
-import HlsVideoBg from './HlsVideoBg';
+
+const HlsVideoBg = lazy(() => import('./HlsVideoBg'));
 
 export default function Stats() {
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoadVideo(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '300px' }
+    );
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   const statItems = [
-    { value: '45+', label: 'Partner Countries' },
-    { value: '12K+', label: 'Tons Shipped Annually' },
-    { value: '99.4%', label: 'On-time Deliveries' },
-    { value: '150+', label: 'Vetted Producers' },
+    { value: 'Verified', label: 'Pre-Shipment Quality Assays' },
+    { value: 'FOB·CIF', label: 'Incoterms Governed' },
+    { value: 'Policy', label: 'Zero-Tolerance on Adulteration' },
+    { value: 'Chennai', label: 'Operating Trade Base' },
   ];
 
   const containerVariants = {
@@ -30,16 +50,22 @@ export default function Stats() {
 
   return (
     <section
-      className="relative w-full overflow-hidden bg-black py-24 select-none"
+      ref={sectionRef}
+      className="relative w-full overflow-hidden bg-black py-24 select-none min-h-[360px]"
       id="stats-section"
+      aria-label="Aura Trade Operational Parameters"
     >
-      {/* Background desaturated HLS video */}
-      <div className="absolute inset-0 w-full h-full z-0">
-        <HlsVideoBg
-          src="https://stream.mux.com/NcU3HlHeF7CUL86azTTzpy3Tlb00d6iF3BmCdFslMJYM.m3u8"
-          desaturate={true}
-          className="opacity-45"
-        />
+      {/* Background desaturated HLS video (Lazy mounted on approach) */}
+      <div className="absolute inset-0 w-full h-full z-0 bg-black pointer-events-none" aria-hidden="true">
+        {shouldLoadVideo && (
+          <Suspense fallback={null}>
+            <HlsVideoBg
+              src="https://stream.mux.com/NcU3HlHeF7CUL86azTTzpy3Tlb00d6iF3BmCdFslMJYM.m3u8"
+              desaturate={true}
+              className="opacity-45"
+            />
+          </Suspense>
+        )}
         {/* Soft overlay tint */}
         <div className="absolute inset-0 bg-black/40" />
       </div>
@@ -90,7 +116,7 @@ export default function Stats() {
               >
                 {/* Large Italic Serif Value */}
                 <span
-                  className="text-white text-5xl md:text-6xl lg:text-7xl font-heading italic tracking-tight transition-transform duration-500 group-hover:scale-105"
+                  className="text-white text-3xl sm:text-4xl md:text-5xl font-heading italic tracking-tight transition-transform duration-500 group-hover:scale-105"
                   id={`stat-value-${index}`}
                 >
                   {item.value}

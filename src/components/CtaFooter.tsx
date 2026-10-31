@@ -1,11 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, lazy, Suspense } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowUpRight, Check, Sparkles, Globe } from 'lucide-react';
-import HlsVideoBg from './HlsVideoBg';
+import { ArrowUpRight, Check, Sparkles, Globe, ShieldCheck } from 'lucide-react';
+
+const HlsVideoBg = lazy(() => import('./HlsVideoBg'));
 
 export default function CtaFooter() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const footerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!footerRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoadVideo(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '300px' }
+    );
+    observer.observe(footerRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const handleBookCallSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,20 +43,25 @@ export default function CtaFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <section
+    <footer
+      ref={footerRef}
       id="contact"
-      className="relative w-full border-t border-[#dcb782]/10 bg-black py-32 px-6 md:px-16 select-none overflow-hidden"
+      className="relative w-full min-h-[600px] border-t border-[#dcb782]/10 bg-black py-28 px-6 md:px-16 select-none overflow-hidden"
     >
-      {/* Background HLS Video */}
-      <div className="absolute inset-0 w-full h-full z-0">
-        <HlsVideoBg
-          src="https://stream.mux.com/8wrHPCX2dC3msyYU9ObwqNdm00u3ViXvOSHUMRYSEe5Q.m3u8"
-          className="opacity-55"
-        />
-        <div className="absolute inset-0 bg-black/45" />
+      {/* Background HLS Video (Lazy loaded on viewport approach) */}
+      <div className="absolute inset-0 w-full h-full z-0 bg-black pointer-events-none" aria-hidden="true">
+        {shouldLoadVideo && (
+          <Suspense fallback={null}>
+            <HlsVideoBg
+              src="https://stream.mux.com/8wrHPCX2dC3msyYU9ObwqNdm00u3ViXvOSHUMRYSEe5Q.m3u8"
+              className="opacity-55"
+            />
+          </Suspense>
+        )}
+        <div className="absolute inset-0 bg-black/55" />
       </div>
 
-      {/* Top and Bottom Fades (200px each) */}
+      {/* Top and Bottom Fades */}
       <div
         className="absolute top-0 left-0 right-0 w-full pointer-events-none z-1"
         style={{
@@ -55,25 +79,30 @@ export default function CtaFooter() {
         id="cta-bottom-fade"
       />
 
-      {/* Hero CTA Core */}
-      <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center text-center gap-10 pt-16">
-        {/* Animated Headline */}
-        <div className="flex flex-col gap-5 items-center">
+      {/* Core CTA */}
+      <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center text-center gap-10 pt-8">
+        <div className="flex flex-col gap-4 items-center">
+          <div className="inline-flex items-center gap-2 bg-white/5 border border-[#dcb782]/20 rounded-full px-4 py-1.5 shadow-sm">
+            <Globe className="h-3.5 w-3.5 text-[#dcb782]" />
+            <span className="text-xs font-mono text-[#dcb782] tracking-wider uppercase font-semibold">
+              COMMERCIAL TRADE CONSULTATION
+            </span>
+          </div>
           <h2
-            className="text-5xl md:text-6xl lg:text-7xl font-heading italic leading-[0.9] text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#dcb782] tracking-tight font-bold"
+            className="text-4xl md:text-5xl lg:text-6xl font-heading italic leading-[0.95] text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#dcb782] tracking-tight font-bold"
             id="cta-heading"
           >
-            Initiate your trade evolution today.
+            Initiate your trade relationship today.
           </h2>
           <p
-            className="text-[#dfd1b9]/75 font-body font-light text-sm md:text-base leading-relaxed max-w-lg mx-auto"
+            className="text-[#dfd1b9]/75 font-body font-light text-sm md:text-base leading-relaxed max-w-xl mx-auto"
             id="cta-desc"
           >
-            Establish solid, recurring trade partnerships. Secure pristine assay grades, verified phytosanitary origin clearances, and dependable cargo freight schedules with our trade desk officers.
+            Connect directly with our Chennai trade desk officers. Establish reliable recurring supply corridors, review laboratory assay certifications, and schedule export consignments.
           </p>
         </div>
 
-        {/* Subscription / Interactive booking form */}
+        {/* Quick Consultation Form */}
         <form
           onSubmit={handleBookCallSubmit}
           className="w-full max-w-md flex flex-col sm:flex-row items-center gap-3 bg-black/60 border border-[#dcb782]/20 p-1.5 rounded-full backdrop-blur-md relative"
@@ -92,7 +121,7 @@ export default function CtaFooter() {
           <button
             type="submit"
             disabled={status === 'loading' || status === 'success'}
-            className="w-full sm:w-auto bg-gradient-to-r from-[#dcb782] to-[#ab8558] hover:from-[#fbf3db] hover:to-[#dcb782] text-black px-6 py-2.5 rounded-full text-sm font-bold font-body cursor-pointer flex items-center justify-center gap-1.5 shadow-md hover:scale-[1.02] active:scale-[0.98] transition-transform shrink-0"
+            className="w-full sm:w-auto bg-gradient-to-r from-[#dcb782] to-[#ab8558] hover:from-[#fbf3db] hover:to-[#dcb782] text-black px-6 py-2.5 rounded-full text-xs font-bold font-body tracking-wider uppercase cursor-pointer flex items-center justify-center gap-1.5 shadow-md hover:scale-[1.02] active:scale-[0.98] transition-transform shrink-0"
             id="cta-book-submit"
           >
             {status === 'loading' ? (
@@ -103,7 +132,7 @@ export default function CtaFooter() {
               </span>
             ) : (
               <span className="flex items-center gap-1">
-                <Globe className="h-3.5 w-3.5" /> Book Consultation <ArrowUpRight className="h-4 w-4" />
+                Book Consultation <ArrowUpRight className="h-4 w-4" />
               </span>
             )}
           </button>
@@ -119,7 +148,7 @@ export default function CtaFooter() {
               id="cta-success-message"
             >
               <Sparkles className="h-3.5 w-3.5 text-[#dcb782] animate-pulse" />
-              <span>Inquiry locked. Our regional trade delegate will contact you within 2 business hours.</span>
+              <span>Inquiry received. A trade desk officer will review your message and contact you promptly during business hours.</span>
             </motion.div>
           )}
           {status === 'error' && (
@@ -135,31 +164,56 @@ export default function CtaFooter() {
           )}
         </AnimatePresence>
 
-        {/* Footer legal bar */}
+        {/* Corporate Legal & Navigation Footer */}
         <div
-          className="w-full mt-32 pt-8 border-t border-[#dcb782]/10 flex flex-col sm:flex-row justify-between items-center bg-transparent gap-4"
+          className="w-full mt-24 pt-8 border-t border-[#dcb782]/10 flex flex-col md:flex-row justify-between items-center bg-transparent gap-6 text-center md:text-left"
           id="footer-bar"
         >
-          {/* Left copyright notice */}
-          <span className="text-[#dfd1b9]/40 font-body font-light text-xs text-center sm:text-left select-text">
-            © {currentYear} AURA Global Trade. All rights reserved. Sourcing partnerships refined globally.
-          </span>
+          {/* Entity Identification */}
+          <div className="flex flex-col gap-1 select-text">
+            <span className="text-[#dfd1b9]/70 font-body font-normal text-xs">
+              © {currentYear} Aura Global Trade (OPC) Private Limited.
+            </span>
+            <span className="text-[#dfd1b9]/40 font-mono font-light text-[11px]">
+              Operating Base: Chennai, Tamil Nadu, India | Port Corridors: Chennai & Tuticorin
+            </span>
+          </div>
 
-          {/* Right link directory (Removed alert and made smooth scroll back to top or section clicks) */}
-          <div className="flex items-center gap-6" id="footer-links">
-            {['Privacy Policy', 'Terms of Trade', 'Certificates'].map((link) => (
-              <a
-                key={link}
-                href={`#${link.toLowerCase().replace(/ /g, '-')}`}
-                className="text-[#dfd1b9]/40 hover:text-[#dcb782] font-body font-light text-xs transition-colors"
-                id={`footer-link-${link.toLowerCase().replace(/ /g, '-')}`}
-              >
-                {link}
-              </a>
-            ))}
+          {/* Canonical Internal Footer Links */}
+          <div className="flex flex-wrap justify-center md:justify-end items-center gap-5" id="footer-links">
+            <Link
+              to="/privacy"
+              className="text-[#dfd1b9]/50 hover:text-[#dcb782] font-body font-light text-xs transition-colors"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              to="/terms"
+              className="text-[#dfd1b9]/50 hover:text-[#dcb782] font-body font-light text-xs transition-colors"
+            >
+              Terms of Use
+            </Link>
+            <Link
+              to="/terms-of-trade"
+              className="text-[#dfd1b9]/50 hover:text-[#dcb782] font-body font-light text-xs transition-colors"
+            >
+              Terms of Trade
+            </Link>
+            <Link
+              to="/quality-compliance"
+              className="text-[#dfd1b9]/50 hover:text-[#dcb782] font-body font-light text-xs transition-colors"
+            >
+              Verification Kit
+            </Link>
+            <Link
+              to="/request-quote"
+              className="text-[#dcb782] hover:text-white font-mono text-xs uppercase tracking-wider transition-colors font-medium"
+            >
+              Request Quote →
+            </Link>
           </div>
         </div>
       </div>
-    </section>
+    </footer>
   );
 }

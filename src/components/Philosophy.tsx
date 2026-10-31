@@ -22,9 +22,9 @@ export default function Philosophy() {
   };
 
   const statItems = [
-    { value: '14+', label: 'GLOBAL HUBS' },
-    { value: '98.4%', label: 'COMPLIANCE RATE' },
-    { value: '500+', label: 'PARTNER FARMS' },
+    { value: '3', label: 'CORE SOURCING STREAMS' },
+    { value: 'Direct', label: 'HARVEST ALLOCATION PROTOCOL' },
+    { value: 'Chennai', label: 'OPERATING BASE' },
   ];
 
   return (
@@ -58,7 +58,8 @@ export default function Philosophy() {
                   src={philosophyImg}
                   alt="Aura Global Trade Wisdom Philosophy - South Indian Heritage stone craftsmanship"
                   className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105 filter grayscale contrast-125"
-                  referrerPolicy="no-referrer"
+                  loading="lazy"
+                  decoding="async"
                   id="philosophy-heritage-img"
                 />
                 
@@ -79,7 +80,7 @@ export default function Philosophy() {
               className="text-xs font-body font-semibold tracking-[0.25em] text-[#dcb782] uppercase"
               id="philosophy-label-tag"
             >
-              OUR PHILOSOPHY
+              OUR PHILOSOPHICAL FOUNDATION
             </span>
 
             {/* Quote Heading */}
@@ -96,7 +97,7 @@ export default function Philosophy() {
                 className="text-[11px] md:text-xs font-body tracking-wider text-[#D5C8B7]/70 font-semibold uppercase block"
                 id="philosophy-translation-label"
               >
-                — THE WORLD IS MY HOME. EVERYONE IS MY KIN.
+                — TO US, ALL TOWNS ARE OUR OWN, AND ALL HUMANKIND OUR KIN (PURANANURU, C. 500 BCE)
               </span>
             </div>
 
@@ -105,7 +106,7 @@ export default function Philosophy() {
               className="text-[#D5C8B7]/90 font-body text-sm md:text-base leading-relaxed font-light mb-8 max-w-2xl"
               id="philosophy-narrative-paragraph"
             >
-              Aura Global Trade bridges the gap between the rich heritage of South India and the dynamic requirements of global commerce. We are not merely exporters; we are custodians of value, operating with a philosophy that recognizes the inherent connectivity of all markets.
+              This ancient Sangam verse guides Aura’s commercial ethos: trade is not a transactional extraction, but an enduring bridge between civilizations. Grounded in the deep mercantile traditions of South India, we unite structured quality verification with classical integrity to deliver authentic value to global procurement partners.
             </p>
 
             {/* Thin Aesthetic divider line */}
@@ -116,7 +117,7 @@ export default function Philosophy() {
               {statItems.map((stat, i) => (
                 <div key={i} className="flex flex-col gap-1.5" id={`philosophy-stat-box-${i}`}>
                   <span
-                    className="text-[#dcb782] font-heading italic text-2xl md:text-3.5xl lg:text-4xl tracking-tight leading-none"
+                    className="text-[#dcb782] font-heading italic text-2xl md:text-3xl lg:text-4xl tracking-tight leading-none"
                     id={`philosophy-stat-val-${i}`}
                   >
                     {stat.value}

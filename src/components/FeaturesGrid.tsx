@@ -6,22 +6,22 @@ export default function FeaturesGrid() {
     {
       icon: Globe,
       title: 'Direct-to-Origin Alliances',
-      desc: "By engaging directly at the origin rather than through brokers, we establish reliable capital relationships with local farmers and miners to maximize transparency.",
+      desc: "By engaging directly at the origin rather than through informal brokers, we establish reliable relationships with South Indian farming collectives and artisanal workshops to maximize supply transparency.",
     },
     {
       icon: Shield,
-      title: 'Certified Assay Control',
-      desc: 'All commodities carry validated chemical essays, phytosanitary permits, and certificates of origin required by rigorous global customs regulations.',
+      title: 'Accredited Assay Control',
+      desc: 'Export consignments carry validated laboratory chemical assays, phytosanitary certificates, and certificates of origin aligned with destination customs requirements.',
     },
     {
       icon: Zap,
-      title: 'Synchronized Multimodal Freight',
-      desc: 'Efficiently connecting farmlands and mines to primary hub ports, avoiding transport bottlenecks with structured, end-of-route tracking.',
+      title: 'Multimodal Freight Coordination',
+      desc: 'Direct transport from regional production belts to primary container terminals at Chennai and Tuticorin seaports, ensuring compliant handling and document transmission.',
     },
     {
       icon: BarChart3,
-      title: 'Defensive Supply Buffering',
-      desc: 'Strategic physical stockpiles and flexible multi-year logistics agreements protect your manufacturing pipelines from unforeseen geopolitical shifts.',
+      title: 'Structured Supply Planning',
+      desc: 'Dedicated harvest lot allocation, contract farming coordination, and structured dispatch schedules protect your manufacturing pipelines against seasonal volatility.',
     },
   ];
 
@@ -50,12 +50,12 @@ export default function FeaturesGrid() {
         {/* Section Header */}
         <div className="flex flex-col items-center text-center gap-4" id="why-us-header">
           <div className="liquid-glass rounded-full px-3.5 py-1 border border-[#dcb782]/20 shadow-sm">
-            <span className="text-white font-body font-medium text-xs tracking-wider uppercase">
-              Our Vision & Philosophy
+            <span className="text-[#dcb782] font-body font-medium text-xs tracking-wider uppercase">
+              OUR PROCUREMENT VALUE
             </span>
           </div>
           <h2
-            className="text-4xl md:text-5xl lg:text-6xl font-heading text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#dcb782] tracking-tight leading-[0.9]"
+            className="text-4xl md:text-5xl lg:text-6xl font-heading text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[#dcb782] tracking-tight leading-[1.05]"
             id="why-us-title"
           >
             The AURA Difference.

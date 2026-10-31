@@ -9,32 +9,32 @@ export default function Pillars() {
     {
       id: 'sourcing',
       title: 'SOURCING',
-      subtitle: 'Ethical, Authentic, Exceptional',
-      description: 'We partner with trusted farms to handpick the finest ingredients while supporting ethical and sustainable farming communities worldwide.',
+      subtitle: 'Ethical, Authentic, Direct',
+      description: 'We partner directly with vetted agricultural collectives and artisanal workshops across South India, ensuring transparent origin provenance and ethical trade value distribution.',
       image: sourcingImg,
       isImageRight: true,
     },
     {
       id: 'quality',
       title: 'QUALITY',
-      subtitle: 'Uncompromising Standards, Unmatched Freshness',
-      description: 'Every product undergoes rigorous quality checks to ensure freshness, purity, and excellence — only the best reaches your kitchen.',
+      subtitle: 'Rigorous Verification, Verified Purity',
+      description: 'Every consignment undergoes multi-parameter inspections and accredited laboratory assay screening to verify active constituents, purity levels, and international destination compliance.',
       image: qualityImg,
       isImageRight: false,
     },
     {
       id: 'innovation',
-      title: 'INNOVATION',
-      subtitle: 'Redefining Taste, Elevating Experiences',
-      description: 'From unique blends to pioneering packaging, we make gourmet cooking effortless, turning everyday meals into extraordinary experiences.',
+      title: 'PROCESSING & PACKAGING',
+      subtitle: 'Technical Standards, Custom Formats',
+      description: 'From controlled cold-milling of botanical powders to nitrogen-flushed barrier packaging and private-label customization, we adapt specifications to international buyer requirements.',
       image: innovationImg,
       isImageRight: true,
     },
     {
       id: 'sustainability',
       title: 'SUSTAINABILITY',
-      subtitle: 'A Greener Future, One Spice at a Time',
-      description: 'With sustainable sourcing and recyclable packaging, we ensure bold flavors today while protecting the planet for tomorrow.',
+      subtitle: 'Responsible Trade, Enduring Value',
+      description: 'Committed to responsible sourcing practices, eco-friendly textile weaves, and recyclable export packaging that support regional communities and circular commerce.',
       image: sustainabilityImg,
       isImageRight: false,
     },
@@ -52,7 +52,7 @@ export default function Pillars() {
 
   return (
     <section id="pillars" className="w-full bg-[#0d0d0c] py-24 px-6 md:px-12 lg:px-16 border-t border-white/5 relative overflow-hidden">
-      {/* Visual background lights to create premium dept of field */}
+      {/* Visual background lights to create premium depth of field */}
       <div className="absolute top-[10%] left-[-15%] w-[450px] h-[450px] bg-[#dcb782]/4 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-[20%] right-[-15%] w-[450px] h-[450px] bg-white/2 rounded-full blur-[140px] pointer-events-none" />
 
@@ -61,11 +61,11 @@ export default function Pillars() {
         <div className="flex flex-col items-center text-center gap-4 mb-20" id="pillars-header">
           <div className="w-fit bg-white/5 backdrop-blur-md rounded-full px-4 py-1.5 border border-white/10 shadow-sm">
             <span className="text-[#dcb782] font-body font-bold text-xs tracking-widest uppercase">
-              OUR CORE VALUES
+              OUR OPERATIONAL PILLARS
             </span>
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-[2.85rem] font-heading font-medium tracking-tight text-white leading-none">
-            The Pillars That <span className="text-[#dcb782] italic font-normal">Define Us</span>
+            The Principles That <span className="text-[#dcb782] italic font-normal">Guide Us</span>
           </h2>
           <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#dcb782]/40 to-transparent mt-2" />
         </div>
@@ -123,7 +123,8 @@ export default function Pillars() {
                       src={pillar.image}
                       alt={`AURA Global Trade Pillar - ${pillar.title}`}
                       className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out hover:scale-105 filter brightness-95"
-                      referrerPolicy="no-referrer"
+                      loading="lazy"
+                      decoding="async"
                       id={`pillar-${pillar.id}-img`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />

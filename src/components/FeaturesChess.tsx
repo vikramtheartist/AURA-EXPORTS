@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
-import { ArrowUpRight, ShieldCheck, Zap, Leaf, Sparkles, Award } from 'lucide-react';
-import turmericImg from '../assets/images/product_turmeric_1780423510096.png';
+import { ArrowUpRight, ShieldCheck, Award, Tag } from 'lucide-react';
+import agroHeroImg from '../assets/images/agro_products_hero.jpg';
 import jewelryImg from '../assets/images/product_jewelry_1780423528983.png';
 import textilesImg from '../assets/images/product_textiles_1780423544568.png';
 
@@ -11,50 +11,65 @@ interface FeaturesChessProps {
 export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
   const products = [
     {
-      id: 'turmeric',
-      label: 'ORGANIC SPICES',
-      title: 'Premium Turmeric',
-      description1: 'Experience the unparalleled purity of our high-curcumin turmeric powder and fingers, meticulously grown in the bio-rich volcanic soils of Erode.',
-      description2: 'Sourced directly from GOTS-compliant ethical farm collectives, each batch is cold-milled under 18°C to retain its native therapeutic essential oils and powerful curcuminoids.',
-      image: turmericImg,
-      badge: '95.0% Curcumin Assay',
+      id: 'agro-products',
+      routeId: 'products/agro-products',
+      label: 'PRIMARY AGRICULTURAL STREAM',
+      title: 'Agro Products',
+      keywords: 'Spices | Turmeric | Chillies | Fresh Produce | Moringa | Grains & Pulses',
+      description1:
+        'A diverse selection of agricultural commodities, Indian spices, natural ingredients and fresh produce, connecting quality sourcing with international demand.',
+      description2:
+        'Engineered for international food manufacturers, spice importers, and commodity distributors requiring verified active assays, certified microbiology, and cold-chain integrity across bulk sea and air freight.',
+      ctaText: 'Explore Agro Products',
+      image: agroHeroImg,
+      badge: 'Comprehensive Agro Portfolio',
       specs: [
-        { label: 'Active Curcumin', value: '95% Bio-Active' },
-        { label: 'Thermal Profile', value: 'Cold-Milled 18°C' },
-        { label: 'Chemical Profile', value: 'Zero Pesticides (SGS Cert)' },
-        { label: 'Sourcing Ground', value: 'Lava-Rich Western Ghats' },
+        { label: 'Category Breadth', value: '7 Dedicated Agro Subdivisions' },
+        { label: 'Active Standards', value: 'HPLC Assays, ASTA & Piperine' },
+        { label: 'Logistics Scope', value: 'Dry Container, Reefer & Air Cargo' },
+        { label: 'Export Gateways', value: 'Chennai, Tuticorin & Cochin' },
       ],
       isImageLeft: false,
     },
     {
       id: 'jewelry',
-      label: 'ARTISANAL LUXURY',
-      title: 'Exquisite Jewelry',
-      description1: 'Discover the brilliant allure of our handcrafted jewelry, designed to blend modern sensibilities with deep-rooted heritage elements.',
-      description2: 'Each ring, necklace, and bracelet is hand-fired and sand-cast in certified zero-waste local foundries using hypoallergenic upcycled fine metals.',
+      routeId: 'products/jewelry',
+      label: 'DESIGN & LIFESTYLE',
+      title: 'Fashion & Lifestyle',
+      keywords: 'Fashion Jewelry | Handcrafted Accessories | Lifestyle Products',
+      description1:
+        'Discover fashion jewelry, handcrafted accessories and lifestyle products sourced for evolving international markets.',
+      description2:
+        'Precision handcrafted combining modern geometric silhouettes with South Indian foundry techniques, engineered across selected base metals, high-durability PVD coatings, and private-label packaging configurations.',
+      ctaText: 'Explore Fashion & Lifestyle',
       image: jewelryImg,
-      badge: '98% Artisan Crafted',
+      badge: 'Artisanal Metallurgy & Lifestyle',
       specs: [
-        { label: 'Alloy Composition', value: 'Recycled Fine Brass & Gold' },
-        { label: 'Artistry Rating', value: '100% Hand-fired' },
-        { label: 'Foundry Technique', value: 'Zero-Waste Sand Cast' },
-        { label: 'Lead & Nickel', value: '0% Non-Toxic Profile' },
+        { label: 'Base Metallurgy', value: '316L Surgical Steel & Fine Brass' },
+        { label: 'Surface Finish', value: 'PVD Gold & Anti-Tarnish Sealing' },
+        { label: 'Production Scope', value: 'Private Label & Brand Design Books' },
+        { label: 'Compliance', value: 'EU REACH & Prop 65 Assessed' },
       ],
       isImageLeft: true,
     },
     {
       id: 'textiles',
-      label: 'HERITAGE FABRICS',
+      routeId: 'products/textiles',
+      label: 'RESPONSIBLE MATERIALS',
       title: 'Sustainable Textiles',
-      description1: 'Embrace high-performance circular design with our exquisite GOTS-certified textiles, woven to absolute tailoring perfection.',
-      description2: 'Each yard is spun from indigenous organic heirloom cotton and custom-dyed using Ayurvedic natural madder and traditional botanical indigo extracts.',
+      keywords: 'Cotton | Natural Fibers | Fabrics | Sustainable Textiles',
+      description1:
+        'Explore textile products and natural materials that bring together craftsmanship, versatility and responsible sourcing.',
+      description2:
+        'Connecting institutional buyers with South India’s premier spinning and weaving corridors for traceable organic cotton, natural bast fibers, and low-impact dyed fabrics engineered to manufacturing specifications.',
+      ctaText: 'Explore Textiles',
       image: textilesImg,
-      badge: '96% Carbon Offset',
+      badge: 'Eco-Certified Weaves',
       specs: [
-        { label: 'Weave Design', value: 'Heritage Chevron & Twill' },
-        { label: 'Carbon Reduction', value: '96% Sustainable Offset' },
-        { label: 'Certification', value: 'GOTS & Oeko-Tex Standard' },
-        { label: 'Tensile Strength', value: '32.4 N/m (Industrial)' },
+        { label: 'Fiber Selection', value: 'Organic Cotton, Hemp, Linen & Bamboo' },
+        { label: 'Weave Varieties', value: 'Single Jersey, Twill, Canvas & Poplin' },
+        { label: 'Fabric Weights', value: 'GSM Engineered to Specification' },
+        { label: 'Standards', value: 'Audited Sourcing Corridors' },
       ],
       isImageLeft: false,
     },
@@ -72,12 +87,15 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
         <div className="flex flex-col items-center text-center gap-4 mb-8" id="sourcing-header">
           <div className="bg-white/5 backdrop-blur-md rounded-full px-4 py-1.5 border border-[#dcb782]/20 shadow-sm">
             <span className="text-[#dcb782] font-body font-bold text-xs tracking-widest uppercase">
-              EXPORT STREAM SHOWCASE
+              OUR EXPORT PORTFOLIO
             </span>
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading text-white tracking-tight leading-[1.05] font-normal">
-            Sourcing Precision. <span className="text-[#dcb782] italic font-normal">Refined Globally.</span>
+            Connecting India&apos;s Finest Products <span className="text-[#dcb782] italic font-normal">to Global Markets.</span>
           </h2>
+          <p className="text-sm md:text-base text-[#D5C8B7] font-light max-w-2xl leading-relaxed">
+            From agricultural commodities and premium spices to fashion accessories and sustainable textiles, AURA Global Trade connects diverse product categories with international sourcing opportunities.
+          </p>
           <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#dcb782]/30 to-transparent mt-2" />
         </div>
 
@@ -86,7 +104,7 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
           {products.map((product) => (
             <div
               key={product.id}
-              className={`grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center`}
+              className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center"
               id={`product-${product.id}-block`}
             >
               {/* Overlapping Floating Photo Element */}
@@ -105,7 +123,7 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
                   whileInView={{ y: 0, opacity: 1 }}
                   viewport={{ once: true, margin: '-10% 0px' }}
                   transition={{ duration: 1, ease: 'easeOut' }}
-                  onClick={() => onNavigate(product.id)}
+                  onClick={() => onNavigate(product.routeId)}
                   className="relative p-2 rounded-[2.4rem] overflow-hidden border border-white/5 bg-gradient-to-b from-white/5 to-transparent w-full max-w-[480px] shadow-[0_25px_60px_rgba(0,0,0,0.8)] cursor-pointer"
                 >
                   <div className="rounded-[2rem] overflow-hidden aspect-[4/5] relative">
@@ -113,7 +131,7 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
                       src={product.image}
                       alt={`AURA Global Trade - ${product.title}`}
                       className="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-105"
-                      referrerPolicy="no-referrer"
+                      loading="lazy"
                       id={`product-${product.id}-img`}
                     />
                     {/* Shadow overlay to integrate beautifully */}
@@ -122,7 +140,7 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
                     {/* Dark overlay with 'View more' trigger on hover */}
                     <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2">
                       <div className="transform translate-y-3 group-hover:translate-y-0 transition-transform duration-300 bg-white text-black font-body font-bold text-xs tracking-wider uppercase px-5 py-3 rounded-xl flex items-center gap-2 shadow-2xl hover:bg-[#dcb782] transition-colors">
-                        <span>View more Details</span>
+                        <span>{product.ctaText}</span>
                         <ArrowUpRight className="h-3.5 w-3.5" />
                       </div>
                     </div>
@@ -136,7 +154,7 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
                 </motion.div>
               </div>
 
-              {/* Glassmorphic Rounded Floating Card (Exactly modeled after mockup) */}
+              {/* Glassmorphic Rounded Floating Card */}
               <div
                 className={`lg:col-span-6 flex justify-center lg:justify-start ${
                   product.isImageLeft ? 'lg:order-2 lg:pl-4' : 'lg:order-1'
@@ -150,7 +168,7 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
                   transition={{ duration: 0.8, delay: 0.2 }}
                   className="relative w-full max-w-xl rounded-[2.2rem] p-8 md:p-10 border border-white/10 shadow-[0_30px_70px_rgba(0,0,0,0.9)] backdrop-blur-xl bg-[#0e0e0d]/80 overflow-hidden group/card"
                 >
-                  {/* Upper decorative Greek-key/filigree linear corner frame matching mockup */}
+                  {/* Filigree linear corner frame */}
                   <div className="absolute top-6 left-6 right-6 flex items-center justify-between opacity-25 pointer-events-none">
                     <div className="w-5 h-5 border-t-2 border-l-2 border-[#dcb782]" />
                     <div className="h-[1px] flex-1 bg-gradient-to-r from-[#dcb782] via-transparent to-[#dcb782] mx-3" />
@@ -163,24 +181,32 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
                   </div>
 
                   {/* Main Display Title */}
-                  <h3 className="text-4xl md:text-5xl font-heading text-white font-normal leading-tight mb-6">
+                  <h3 className="text-3xl md:text-4xl font-heading text-white font-normal leading-tight mb-3">
                     {product.title}
                   </h3>
 
+                  {/* Category Keywords Banner */}
+                  <div className="flex items-center gap-2 mb-4 bg-white/[0.03] border border-[#dcb782]/20 rounded-xl px-3 py-1.5">
+                    <Tag className="h-3 w-3 text-[#dcb782] shrink-0" />
+                    <span className="text-[11px] font-mono text-[#dcb782] font-medium tracking-wide">
+                      {product.keywords}
+                    </span>
+                  </div>
+
                   {/* Luxury editorial text body */}
-                  <div className="flex flex-col gap-4 text-sm md:text-[14.5px] leading-relaxed text-[#D5C8B7]/85 font-body font-light mb-8">
+                  <div className="flex flex-col gap-3 text-xs md:text-sm leading-relaxed text-[#D5C8B7]/85 font-body font-light mb-6">
                     <p>{product.description1}</p>
                     <p>{product.description2}</p>
                   </div>
 
                   {/* Technical Specs inner container with decorative accents */}
-                  <div className="border-t border-white/10 pt-6 flex flex-col gap-4">
+                  <div className="border-t border-white/10 pt-5 flex flex-col gap-3">
                     <div className="flex items-center justify-between text-[10px] font-mono text-[#dcb782] tracking-wider font-extrabold uppercase">
-                      <span>INTELLIGENT SPECIFICATIONS</span>
+                      <span>PROCUREMENT PARAMETERS</span>
                       <ShieldCheck className="h-4 w-4" />
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {product.specs.map((spec, sIdx) => (
                         <div 
                           key={sIdx} 
@@ -198,27 +224,27 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
                   </div>
 
                   {/* Interactive luxury Action Buttons */}
-                  <div className="mt-8 flex flex-col sm:flex-row gap-3">
+                  <div className="mt-6 flex flex-col sm:flex-row gap-3">
                     <button 
-                      onClick={() => onNavigate(product.id)}
+                      onClick={() => onNavigate(product.routeId)}
                       className="flex-1 bg-[#dcb782] text-black hover:bg-white hover:text-black font-semibold transition-all duration-300 rounded-xl px-5 py-3 flex items-center justify-center gap-2 text-xs font-body tracking-wider uppercase cursor-pointer shadow-md"
                     >
-                      <span>View details</span>
+                      <span>{product.ctaText}</span>
                       <ArrowUpRight className="h-4 w-4 shrink-0" />
                     </button>
                     
                     <button 
-                      onClick={() => onNavigate('contact')}
+                      onClick={() => onNavigate(`request-quote?category=${product.id}`)}
                       className="flex-1 border border-white/10 text-white hover:border-[#dcb782] hover:bg-white/5 transition-all duration-300 rounded-xl px-4 py-3 flex items-center justify-center gap-1.5 text-xs font-body tracking-wider uppercase font-semibold cursor-pointer"
                     >
-                      <span>Inquire Bulk</span>
+                      <span>Request Quote</span>
                     </button>
                   </div>
 
                   {/* Lower decorative border alignment */}
                   <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between opacity-15 pointer-events-none">
                     <div className="w-5 h-5 border-b-2 border-l-2 border-[#dcb782]" />
-                    <div className="h-[px] flex-1 bg-gradient-to-r from-[#dcb782] via-transparent to-[#dcb782] mx-3" />
+                    <div className="h-[1px] flex-1 bg-gradient-to-r from-[#dcb782] via-transparent to-[#dcb782] mx-3" />
                     <div className="w-5 h-5 border-b-2 border-r-2 border-[#dcb782]" />
                   </div>
                 </motion.div>

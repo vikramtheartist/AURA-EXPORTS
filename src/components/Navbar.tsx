@@ -1,13 +1,14 @@
-import { useState } from 'react';
-import { ArrowUpRight, Menu, X, ChevronDown, Globe } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ArrowUpRight, Menu, X, ChevronDown, Sparkles } from 'lucide-react';
 import logoImg from '../assets/images/regenerated_image_1783707679777.png';
 
 interface NavbarProps {
-  onNavigate: (sectionId: string) => void;
+  onNavigate?: (sectionId: string) => void;
   activeView?: string;
 }
 
-export default function Navbar({ onNavigate, activeView = 'home' }: NavbarProps) {
+export default function Navbar({ onNavigate }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
   const [isMobileProductsOpen, setIsMobileProductsOpen] = useState(false);
@@ -15,75 +16,106 @@ export default function Navbar({ onNavigate, activeView = 'home' }: NavbarProps)
   const [logoPath, setLogoPath] = useState(logoImg);
   const [useFallbackSvg, setUseFallbackSvg] = useState(false);
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const handleLogoError = () => {
-    if (logoPath === 'https://lh3.googleusercontent.com/d/1KeWs8aqOGigQkilHLBEVGV0Xt1heXmfh') {
-      // Try the alternative thumbnail bypass format for Google Drive
-      setLogoPath('https://drive.google.com/thumbnail?id=1KeWs8aqOGigQkilHLBEVGV0Xt1heXmfh&sz=w120');
-    } else if (logoPath.includes('drive.google.com')) {
-      // Try local asset path next
-      setLogoPath('/src/assets/logo-icon.png');
-    } else if (logoPath === '/src/assets/logo-icon.png') {
-      // Try the main custom transparent filename next
-      setLogoPath('/src/assets/Aura_Gold_Trans.png');
-    } else if (logoPath === '/src/assets/Aura_Gold_Trans.png') {
-      // Try local machine file url in case they are local
-      setLogoPath('file:///Users/vikram/Documents/AURA/Website%20Design/AI%20Studio/IMG/Aura_Gold_Trans.png');
+    setUseFallbackSvg(true);
+  };
+
+  // Keyboard navigation & body scroll lock for mobile menu
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsOpen(false);
+        setIsProductsDropdownOpen(false);
+      }
+    };
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      window.addEventListener('keydown', handleKeyDown);
     } else {
-      // Final safe high-fidelity SVG icon fallback
-      setUseFallbackSvg(true);
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen]);
+
+  const navLinks = [
+    { label: 'Home', path: '/', id: 'home' },
+    { label: 'About Us', path: '/about', id: 'about' },
+    { label: 'Our Products', path: '/products', id: 'products', hasDropdown: true },
+    { label: 'Our Approach', path: '/export-process', id: 'approach' },
+    { label: 'Quality', path: '/quality-compliance', id: 'quality' },
+    { label: 'Contact', path: '/contact', id: 'contact' },
+  ];
+
+  const handleLinkClick = (path: string, id: string) => {
+    setIsOpen(false);
+    setIsProductsDropdownOpen(false);
+    if (onNavigate) {
+      onNavigate(id);
     }
   };
 
-  // New menu items matching the user's branding and 1st image
-  const links = [
-    { label: 'Home', id: 'home' },
-    { label: 'About Us', id: 'about' },
-    { label: 'Products', id: 'products', hasDropdown: true },
-    { label: 'Faqs', id: 'faqs' },
-  ];
+  const isCurrentActive = (link: typeof navLinks[0]) => {
+    if (link.id === 'home') return location.pathname === '/';
+    if (link.id === 'about') return location.pathname === '/about';
+    if (link.id === 'products') return location.pathname.startsWith('/products');
+    if (link.id === 'approach') return location.pathname === '/export-process';
+    if (link.id === 'quality') return location.pathname === '/quality-compliance';
+    if (link.id === 'contact') return location.pathname === '/contact';
+    return false;
+  };
 
   return (
-    <>
+    <header className="fixed top-4 left-0 right-0 z-50 px-4 md:px-8 py-2 max-w-7xl mx-auto" id="app-header">
       <nav
-        className="fixed top-4 left-0 right-0 z-50 px-4 md:px-12 py-3 flex items-center justify-between mx-auto max-w-7xl"
+        className="w-full flex items-center justify-between"
         id="app-navbar"
+        aria-label="Main Navigation"
       >
-        {/* Left Side: Logo (AURA Gold Trans logo without container boundary or suffix text) */}
-        <div
-          onClick={() => onNavigate('home')}
-          className="flex items-center cursor-pointer group"
+        {/* Left Side: Logo */}
+        <Link
+          to="/"
+          onClick={() => handleLinkClick('/', 'home')}
+          className="flex items-center cursor-pointer group shrink-0"
           id="nav-logo-container"
+          aria-label="Aura Global Trade Home"
         >
           {!useFallbackSvg ? (
             <img
               src={logoPath}
-              alt="AURA Gold"
+              alt="Aura Global Trade"
               onError={handleLogoError}
               referrerPolicy="no-referrer"
-              className="h-[38px] md:h-[42px] w-auto object-contain transition-transform duration-500 group-hover:scale-[1.03]"
+              className="h-[44px] md:h-[48px] w-auto object-contain transition-transform duration-500 group-hover:scale-[1.03]"
               id="logo-image-element"
             />
           ) : (
             <div className="flex items-center gap-2">
-              {/* High fidelity modern SVG geometric Chevron Star */}
-              <svg viewBox="0 0 100 100" className="h-9 w-9 text-[#dcb782] transition-transform duration-500 group-hover:scale-110" id="logo-icon-svg" referrerPolicy="no-referrer">
+              <svg viewBox="0 0 100 100" className="h-11 w-11 text-[#dcb782] transition-transform duration-500 group-hover:scale-110" id="logo-icon-svg" referrerPolicy="no-referrer">
                 <path d="M50 15 L25 75 H38 L50 42 L62 75 H75 Z" fill="none" stroke="currentColor" strokeWidth="4.5" strokeLinejoin="miter" />
                 <path d="M50 42 L38 75 H62 Z" fill="currentColor" className="opacity-15" />
                 <path d="M50 28 L35 68 H65 Z" fill="none" stroke="#ab8558" strokeWidth="2.5" strokeDasharray="3,3" />
               </svg>
-              <span className="font-heading italic text-2xl tracking-[0.08em] font-bold text-[#fbfbeb] group-hover:text-white transition-colors leading-[1]">
+              <span className="font-heading italic text-3xl tracking-[0.08em] font-bold text-[#fbfbeb] group-hover:text-white transition-colors leading-[1]">
                 Λ U R Λ
               </span>
             </div>
           )}
-        </div>
+        </Link>
 
-        {/* Center: Navigation Links & CTA in a single pill container (Desktop-only - scaled up by 10%) */}
+        {/* Center: Navigation Links in Liquid Glass Pill Container */}
         <div
-          className="hidden lg:flex items-center gap-2 liquid-glass !overflow-visible rounded-2xl px-4.5 py-2 border border-white/10 shadow-xl"
+          className="hidden lg:flex items-center gap-1 ml-10 liquid-glass !overflow-visible rounded-2xl px-3 py-1.5 border border-white/10 shadow-xl"
           id="desktop-nav-pill"
         >
-          {links.map((link) => {
+          {navLinks.map((link) => {
+            const active = isCurrentActive(link);
+
             if (link.hasDropdown) {
               return (
                 <div
@@ -94,100 +126,331 @@ export default function Navbar({ onNavigate, activeView = 'home' }: NavbarProps)
                   id={`nav-link-dropdown-wrapper-${link.id}`}
                 >
                   <button
-                    onClick={() => setIsProductsDropdownOpen(!isProductsDropdownOpen)}
-                    className={`px-4 py-2 font-bold font-body hover:text-white rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
-                      activeView !== 'home' ? 'text-[#dfd1b9]/80' : 'text-[#dfd1b9]/80 hover:bg-white/10'
+                    onClick={() => {
+                      setIsProductsDropdownOpen(!isProductsDropdownOpen);
+                      navigate('/products');
+                    }}
+                    className={`px-3 py-2 font-semibold font-body hover:text-white rounded-xl transition-all cursor-pointer flex items-center gap-1 text-sm ${
+                      active ? 'text-[#D5C8B7] bg-white/10' : 'text-[#dfd1b9]/80 hover:bg-white/5'
                     }`}
-                    style={{ fontSize: '16px' }}
                     id={`nav-link-${link.id}`}
                   >
                     {link.label}
                     <ChevronDown className="h-3.5 w-3.5 opacity-60 text-[#ab8558] group-hover/dropdown:rotate-180 transition-transform duration-300" />
                   </button>
 
-                  {/* Elegant gold translucent dropdown box with physical separator lines */}
+                  {/* Comprehensive 3-Vertical Luxury Mega Menu */}
                   <div
-                    className={`absolute left-0 mt-1.5 w-64 rounded-xl border border-white/10 bg-black/95 backdrop-blur-xl p-2 shadow-2xl transition-all duration-300 origin-top z-50 ${
+                    className={`absolute -left-48 mt-2 w-[840px] rounded-3xl border border-white/10 bg-[#0d0d0c]/98 backdrop-blur-3xl p-7 shadow-[0_30px_90px_rgba(0,0,0,0.95)] transition-all duration-300 origin-top z-50 ${
                       isProductsDropdownOpen
                         ? 'opacity-100 scale-100 translate-y-0 visible'
                         : 'opacity-0 scale-95 -translate-y-2 invisible pointer-events-none'
                     }`}
-                    id="products-sub-dropdown"
+                    id="products-mega-dropdown"
                   >
-                    <button
-                      onClick={() => {
-                        setIsProductsDropdownOpen(false);
-                        onNavigate('turmeric');
-                      }}
-                      className="w-full text-left px-3.5 py-3 rounded-lg font-body text-xs font-bold text-[#dfd1b9]/90 hover:text-white hover:bg-white/5 transition-colors flex flex-col gap-0.5 cursor-pointer text-left"
-                      id="dropdown-opt-turmeric"
-                    >
-                      <span className="text-white text-sm">Turmeric</span>
-                      <span className="text-[10px] text-[#dfd1b9]/50 font-normal leading-normal">Premium Erode Turmeric</span>
-                    </button>
-                    <div className="h-[1px] bg-white/5 my-1" />
-                    
-                    <button
-                      onClick={() => {
-                        setIsProductsDropdownOpen(false);
-                        onNavigate('jewelry');
-                      }}
-                      className="w-full text-left px-3.5 py-3 rounded-lg font-body text-xs font-bold text-[#dfd1b9]/90 hover:text-white hover:bg-white/5 transition-colors flex flex-col gap-0.5 cursor-pointer text-left"
-                      id="dropdown-opt-jewelry"
-                    >
-                      <span className="text-white text-sm">Fashion jewelry</span>
-                      <span className="text-[10px] text-[#dfd1b9]/50 font-normal leading-normal">Couture Artisanal Assemblies</span>
-                    </button>
-                    <div className="h-[1px] bg-white/5 my-1" />
+                    <div className="grid grid-cols-3 gap-6 pb-6 border-b border-white/10">
+                      
+                      {/* Vertical 1: Agro Products */}
+                      <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-[#dcb782]/30 transition-colors group/col">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono text-[#dcb782] tracking-wider uppercase font-bold">
+                            VERTICAL 01
+                          </span>
+                          <span className="text-[9px] font-mono bg-[#dcb782]/10 text-[#dcb782] px-2 py-0.5 rounded-full">
+                            Primary
+                          </span>
+                        </div>
 
-                    <button
-                      onClick={() => {
-                        setIsProductsDropdownOpen(false);
-                        onNavigate('textiles');
-                      }}
-                      className="w-full text-left px-3.5 py-3 rounded-lg font-body text-xs font-bold text-[#dfd1b9]/90 hover:text-white hover:bg-white/5 transition-colors flex flex-col gap-0.5 cursor-pointer text-left"
-                      id="dropdown-opt-textiles"
-                    >
-                      <span className="text-white text-sm">Sustainable Textiles</span>
-                      <span className="text-[10px] text-[#dfd1b9]/50 font-normal leading-normal">Organic Eco-Weaves</span>
-                    </button>
+                        <Link
+                          to="/products/agro-products"
+                          onClick={() => setIsProductsDropdownOpen(false)}
+                          className="font-heading text-lg text-white font-medium group-hover/col:text-[#dcb782] transition-colors flex items-center justify-between"
+                        >
+                          <span>Agro Products</span>
+                          <ArrowUpRight className="h-4 w-4 text-[#dcb782] opacity-0 group-hover/col:opacity-100 transition-opacity" />
+                        </Link>
+                        
+                        <p className="text-[11px] text-[#dfd1b9]/60 font-light leading-relaxed">
+                          Spices, commodities, fresh produce and natural ingredients.
+                        </p>
+
+                        <div className="h-[1px] bg-white/5 my-1" />
+
+                        <div className="flex flex-col gap-1.5 text-xs text-[#dfd1b9]/80 font-light">
+                          <Link 
+                            to="/products/agro-products#agricultural-portfolio"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Spices & Seasonings
+                          </Link>
+                          <Link 
+                            to="/products/agro-products/turmeric"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="text-[#dcb782] hover:text-white transition-colors font-medium"
+                          >
+                            • Turmeric (Fingers & Powder)
+                          </Link>
+                          <Link 
+                            to="/products/agro-products/dried-red-chillies"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Chillies & Chilli Products
+                          </Link>
+                          <Link 
+                            to="/products/agro-products/fresh-drumsticks"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Fresh Agricultural Produce
+                          </Link>
+                          <Link 
+                            to="/products/agro-products/moringa-leaf-powder"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Moringa & Natural Ingredients
+                          </Link>
+                          <Link 
+                            to="/products/agro-products/rice-basmati-non-basmati"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Grains & Pulses
+                          </Link>
+                        </div>
+
+                        <Link
+                          to="/products/agro-products"
+                          onClick={() => setIsProductsDropdownOpen(false)}
+                          className="text-[10px] font-mono text-[#dcb782] tracking-wider uppercase font-bold pt-2 mt-auto hover:underline"
+                        >
+                          Explore Agro Vertical →
+                        </Link>
+                      </div>
+
+                      {/* Vertical 2: Fashion & Lifestyle */}
+                      <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-[#dcb782]/30 transition-colors group/col">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono text-[#dcb782] tracking-wider uppercase font-bold">
+                            VERTICAL 02
+                          </span>
+                          <span className="text-[9px] font-mono bg-white/10 text-white/70 px-2 py-0.5 rounded-full">
+                            Design-Led
+                          </span>
+                        </div>
+
+                        <Link
+                          to="/products/jewelry"
+                          onClick={() => setIsProductsDropdownOpen(false)}
+                          className="font-heading text-lg text-white font-medium group-hover/col:text-[#dcb782] transition-colors flex items-center justify-between"
+                        >
+                          <span>Fashion & Lifestyle</span>
+                          <ArrowUpRight className="h-4 w-4 text-[#dcb782] opacity-0 group-hover/col:opacity-100 transition-opacity" />
+                        </Link>
+
+                        <p className="text-[11px] text-[#dfd1b9]/60 font-light leading-relaxed">
+                          Handcrafted fashion jewelry, artisanal metallurgy and lifestyle accessories.
+                        </p>
+
+                        <div className="h-[1px] bg-white/5 my-1" />
+
+                        <div className="flex flex-col gap-1.5 text-xs text-[#dfd1b9]/80 font-light">
+                          <Link 
+                            to="/products/jewelry"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Contemporary Fashion Jewelry
+                          </Link>
+                          <Link 
+                            to="/products/jewelry"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Hypoallergenic 316L Steel
+                          </Link>
+                          <Link 
+                            to="/products/jewelry"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Artisanal Brass Assemblies
+                          </Link>
+                          <Link 
+                            to="/products/jewelry"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • PVD Gold Vacuum Plating
+                          </Link>
+                          <Link 
+                            to="/products/jewelry"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Semi-Precious Stone Sets
+                          </Link>
+                          <Link 
+                            to="/products/jewelry"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Private Label Collections
+                          </Link>
+                        </div>
+
+                        <Link
+                          to="/products/jewelry"
+                          onClick={() => setIsProductsDropdownOpen(false)}
+                          className="text-[10px] font-mono text-[#dcb782] tracking-wider uppercase font-bold pt-2 mt-auto hover:underline"
+                        >
+                          Explore Jewelry & Lifestyle →
+                        </Link>
+                      </div>
+
+                      {/* Vertical 3: Sustainable Textiles */}
+                      <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-[#dcb782]/30 transition-colors group/col">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono text-[#dcb782] tracking-wider uppercase font-bold">
+                            VERTICAL 03
+                          </span>
+                          <span className="text-[9px] font-mono bg-white/10 text-white/70 px-2 py-0.5 rounded-full">
+                            Responsible
+                          </span>
+                        </div>
+
+                        <Link
+                          to="/products/textiles"
+                          onClick={() => setIsProductsDropdownOpen(false)}
+                          className="font-heading text-lg text-white font-medium group-hover/col:text-[#dcb782] transition-colors flex items-center justify-between"
+                        >
+                          <span>Sustainable Textiles</span>
+                          <ArrowUpRight className="h-4 w-4 text-[#dcb782] opacity-0 group-hover/col:opacity-100 transition-opacity" />
+                        </Link>
+
+                        <p className="text-[11px] text-[#dfd1b9]/60 font-light leading-relaxed">
+                          Eco-responsible cottons, regenerative linen and sustainable fabrics.
+                        </p>
+
+                        <div className="h-[1px] bg-white/5 my-1" />
+
+                        <div className="flex flex-col gap-1.5 text-xs text-[#dfd1b9]/80 font-light">
+                          <Link 
+                            to="/products/textiles"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Certified Organic Cotton Weaves
+                          </Link>
+                          <Link 
+                            to="/products/textiles"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Regenerative Linen & Flax
+                          </Link>
+                          <Link 
+                            to="/products/textiles"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Industrial Hemp & Canvas
+                          </Link>
+                          <Link 
+                            to="/products/textiles"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Bamboo Rayon & Eco-Blends
+                          </Link>
+                          <Link 
+                            to="/products/textiles"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Circular Recycled Textiles
+                          </Link>
+                          <Link 
+                            to="/products/textiles"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Custom Engineered Weights (GSM)
+                          </Link>
+                        </div>
+
+                        <Link
+                          to="/products/textiles"
+                          onClick={() => setIsProductsDropdownOpen(false)}
+                          className="text-[10px] font-mono text-[#dcb782] tracking-wider uppercase font-bold pt-2 mt-auto hover:underline"
+                        >
+                          Explore Textile Sourcing →
+                        </Link>
+                      </div>
+
+                    </div>
+
+                    {/* Mega Menu Bottom Bar */}
+                    <div className="pt-4 flex items-center justify-between text-xs">
+                      <span className="text-[#dfd1b9]/50 font-light">
+                        Vetted Indian sourcing ecosystems structured for international procurement.
+                      </span>
+                      <div className="flex items-center gap-4">
+                        <Link
+                          to="/products"
+                          onClick={() => setIsProductsDropdownOpen(false)}
+                          className="text-[#dcb782] hover:text-white font-mono uppercase tracking-wider transition-colors"
+                        >
+                          Explore Full Catalog →
+                        </Link>
+                        <Link
+                          to="/request-quote"
+                          onClick={() => setIsProductsDropdownOpen(false)}
+                          className="bg-[#dcb782] text-black px-4 py-1.5 rounded-lg font-bold font-body uppercase text-[11px] hover:bg-white transition-colors"
+                        >
+                          Request Sourcing RFQ
+                        </Link>
+                      </div>
+                    </div>
                   </div>
                 </div>
               );
             }
 
             return (
-              <button
+              <Link
                 key={link.id}
-                onClick={() => onNavigate(link.id)}
-                className="px-4 py-2 font-bold text-[#dfd1b9]/80 font-body hover:text-white rounded-xl transition-all hover:bg-white/10 cursor-pointer flex items-center gap-1.5"
-                style={{
-                  fontSize: '16px',
-                  ...(link.id === 'home' && activeView === 'home' ? { color: '#D5C8B7' } : {}),
-                }}
+                to={link.path}
+                onClick={() => handleLinkClick(link.path, link.id)}
+                className={`px-3 py-2 font-semibold font-body hover:text-white rounded-xl transition-all cursor-pointer text-sm ${
+                  active ? 'text-[#D5C8B7] bg-white/10' : 'text-[#dfd1b9]/80 hover:bg-white/5'
+                }`}
                 id={`nav-link-${link.id}`}
               >
                 {link.label}
-              </button>
+              </Link>
             );
           })}
-          {/* Action solid button inside pill: "Contact us" */}
-          <button
-            onClick={() => onNavigate('contact')}
-            className="flex items-center gap-2 bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black rounded-xl px-5 py-2 hover:from-[#fbf3db] hover:to-[#dcb782] transition-all shadow-md cursor-pointer hover:scale-[1.03]"
-            style={{ fontSize: '16px', fontWeight: 'bold', fontFamily: 'Urbanist, sans-serif' }}
-            id="nav-get-started"
-          >
-            <Globe className="h-3.5 w-3.5" />
-            Contact us
-            <ArrowUpRight className="h-3.5 w-3.5" />
-          </button>
         </div>
 
-        {/* Right Side: Mobile Hamburger toggle */}
+        {/* Right Side: Primary B2B CTA "Request a Quote" */}
+        <div className="hidden lg:flex items-center gap-3 ml-5">
+          <Link
+            to="/request-quote"
+            className="flex items-center gap-2 bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black rounded-xl px-5 py-2.5 hover:from-[#fbf3db] hover:to-[#dcb782] transition-all shadow-md cursor-pointer hover:scale-[1.02] text-xs font-bold font-body tracking-wider uppercase"
+            id="nav-request-quote"
+          >
+            <span>Request a Quote</span>
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+
+        {/* Mobile Hamburger toggle */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="lg:hidden flex items-center justify-center text-white bg-black/40 border border-[#dcb782]/20 hover:bg-white/5 h-10 w-10 rounded-full cursor-pointer transition-colors backdrop-blur-md"
+          className="lg:hidden flex items-center justify-center text-white bg-black/40 border border-[#dcb782]/20 hover:bg-white/5 h-11 w-11 rounded-full cursor-pointer transition-colors backdrop-blur-md"
           id="mobile-nav-toggle"
           aria-label="Toggle navigation menu"
         >
@@ -198,104 +461,115 @@ export default function Navbar({ onNavigate, activeView = 'home' }: NavbarProps)
       {/* Mobile Drawer menu */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/98 backdrop-blur-2xl flex flex-col justify-center items-center gap-8 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/98 backdrop-blur-2xl flex flex-col justify-start items-center gap-6 lg:hidden px-6 pt-24 pb-12 overflow-y-auto"
           id="mobile-nav-menu"
         >
-          <div className="flex flex-col items-center gap-6">
-            <div className="flex flex-col items-center mb-6">
-              {!useFallbackSvg ? (
-                <img
-                  src={logoPath}
-                  alt="AURA Gold"
-                  onError={handleLogoError}
-                  referrerPolicy="no-referrer"
-                  className="h-14 w-auto object-contain"
-                  id="mobile-logo-image"
-                />
-              ) : (
-                <span className="font-heading italic text-5xl text-[#dcb782] tracking-widest font-bold">Λ U R Λ</span>
-              )}
-              <span className="font-body text-xs tracking-[0.3em] text-[#ab8558] uppercase font-bold mt-2">GLOBAL TRADE</span>
+          <div className="flex flex-col items-center gap-4 w-full max-w-sm">
+            <div className="flex flex-col items-center mb-2">
+              <span className="font-heading italic text-4xl text-[#dcb782] tracking-widest font-bold">Λ U R Λ</span>
+              <span className="font-body text-[10px] tracking-[0.3em] text-[#ab8558] uppercase font-bold mt-1">GLOBAL TRADE</span>
             </div>
-            {links.map((link) => {
+
+            {navLinks.map((link) => {
               if (link.hasDropdown) {
                 return (
-                  <div className="flex flex-col items-center gap-2" key={link.id} id={`mobile-dropdown-wrapper-${link.id}`}>
+                  <div className="flex flex-col items-center gap-2 w-full" key={link.id}>
                     <button
                       onClick={() => setIsMobileProductsOpen(!isMobileProductsOpen)}
-                      className="font-heading italic text-3xl text-[#dfd1b9] hover:text-[#fbfbeb] transition-all transform hover:scale-105 flex items-center gap-2"
-                      id={`mobile-link-${link.id}`}
+                      className="font-heading italic text-3xl text-[#dfd1b9] hover:text-[#fbfbeb] transition-all flex items-center gap-2"
                     >
                       {link.label}
-                      <ChevronDown className={`h-5 w-5 opacity-50 text-[#ab8558] transition-transform duration-300 ${isMobileProductsOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`h-4 w-4 opacity-50 text-[#ab8558] transition-transform duration-300 ${isMobileProductsOpen ? 'rotate-180' : ''}`} />
                     </button>
+
                     {isMobileProductsOpen && (
-                      <div className="flex flex-col items-center gap-4 py-4 bg-white/5 rounded-xl px-6 border border-white/5 w-64 mt-2" id="mobile-products-sublist">
-                        <button
-                          onClick={() => {
-                            setIsOpen(false);
-                            onNavigate('turmeric');
-                          }}
-                          className="font-body text-sm text-[#dcb782] font-bold hover:text-white transition-colors text-center flex flex-col items-center gap-1"
-                          id="mobile-dropdown-opt-turmeric"
+                      <div className="flex flex-col gap-4 py-4 bg-white/5 rounded-2xl px-5 border border-white/10 w-full text-left">
+                        {/* Agro Products Group */}
+                        <div>
+                          <Link
+                            to="/products/agro-products"
+                            onClick={() => setIsOpen(false)}
+                            className="font-body text-sm text-[#dcb782] font-bold block mb-1"
+                          >
+                            01. Agro Products →
+                          </Link>
+                          <div className="pl-3 flex flex-col gap-1 text-xs text-white/70">
+                            <Link to="/products/agro-products" onClick={() => setIsOpen(false)}>• Spices & Seasonings</Link>
+                            <Link to="/products/agro-products/turmeric" onClick={() => setIsOpen(false)}>• Turmeric (Whole & Powder)</Link>
+                            <Link to="/products/agro-products/dried-red-chillies" onClick={() => setIsOpen(false)}>• Chillies & Chilli Products</Link>
+                            <Link to="/products/agro-products/fresh-drumsticks" onClick={() => setIsOpen(false)}>• Fresh Produce (Moringa/Onions)</Link>
+                            <Link to="/products/agro-products/moringa-leaf-powder" onClick={() => setIsOpen(false)}>• Moringa & Botanicals</Link>
+                            <Link to="/products/agro-products/rice-basmati-non-basmati" onClick={() => setIsOpen(false)}>• Grains & Pulses</Link>
+                          </div>
+                        </div>
+
+                        {/* Fashion & Lifestyle */}
+                        <div className="pt-2 border-t border-white/5">
+                          <Link
+                            to="/products/jewelry"
+                            onClick={() => setIsOpen(false)}
+                            className="font-body text-sm text-white font-bold block mb-1"
+                          >
+                            02. Fashion & Lifestyle →
+                          </Link>
+                          <div className="pl-3 flex flex-col gap-1 text-xs text-white/70">
+                            <span>• Contemporary Fashion Jewelry</span>
+                            <span>• Stainless Steel & Artisanal Brass</span>
+                            <span>• PVD Plating & Lifestyle Goods</span>
+                          </div>
+                        </div>
+
+                        {/* Sustainable Textiles */}
+                        <div className="pt-2 border-t border-white/5">
+                          <Link
+                            to="/products/textiles"
+                            onClick={() => setIsOpen(false)}
+                            className="font-body text-sm text-white font-bold block mb-1"
+                          >
+                            03. Sustainable Textiles →
+                          </Link>
+                          <div className="pl-3 flex flex-col gap-1 text-xs text-white/70">
+                            <span>• Organic Cotton Weaves</span>
+                            <span>• Regenerative Linen & Flax</span>
+                            <span>• Industrial Hemp & Canvas</span>
+                          </div>
+                        </div>
+
+                        <Link
+                          to="/products"
+                          onClick={() => setIsOpen(false)}
+                          className="font-mono text-[10px] text-[#dcb782] uppercase pt-2 border-t border-white/10 text-center font-bold"
                         >
-                          <span className="font-bold">Turmeric</span>
-                          <span className="text-[10px] text-[#dfd1b9]/50 font-normal">Premium Erode Turmeric</span>
-                        </button>
-                        <button
-                          onClick={() => {
-                            setIsOpen(false);
-                            onNavigate('jewelry');
-                          }}
-                          className="font-body text-lg text-white/80 hover:text-white transition-colors"
-                          id="mobile-dropdown-opt-jewelry"
-                        >
-                          Fashion jewelry
-                        </button>
-                        <button
-                          onClick={() => {
-                            setIsOpen(false);
-                            onNavigate('textiles');
-                          }}
-                          className="font-body text-lg text-white/80 hover:text-white transition-colors"
-                          id="mobile-dropdown-opt-textiles"
-                        >
-                          Sustainable Textiles
-                        </button>
+                          View Full Sourcing Catalog →
+                        </Link>
                       </div>
                     )}
                   </div>
                 );
               }
               return (
-                <button
+                <Link
                   key={link.id}
-                  onClick={() => {
-                    setIsOpen(false);
-                    onNavigate(link.id);
-                  }}
-                  className="font-heading italic text-3xl text-[#dfd1b9] hover:text-[#fbfbeb] transition-all transform hover:scale-105"
-                  id={`mobile-link-${link.id}`}
+                  to={link.path}
+                  onClick={() => setIsOpen(false)}
+                  className="font-heading italic text-2xl text-[#dfd1b9] hover:text-[#fbfbeb] transition-all"
                 >
                   {link.label}
-                </button>
+                </Link>
               );
             })}
-            <button
-              onClick={() => {
-                setIsOpen(false);
-                onNavigate('contact');
-              }}
-              className="mt-6 flex items-center gap-2 bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold rounded-full px-8 py-3.5 text-base hover:opacity-90 transition-all cursor-pointer"
-              id="mobile-get-started"
+
+            <Link
+              to="/request-quote"
+              onClick={() => setIsOpen(false)}
+              className="mt-4 w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold rounded-xl py-3.5 text-xs tracking-wider uppercase shadow-lg"
             >
-              <Globe className="h-4 w-4" />
-              Contact us
+              <span>Request a Quote</span>
               <ArrowUpRight className="h-4 w-4" />
-            </button>
+            </Link>
           </div>
         </div>
       )}
-    </>
+    </header>
   );
 }

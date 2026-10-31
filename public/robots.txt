@@ -1,0 +1,14 @@
+# robots.txt for Aura Global Trade (https://auraexport.co)
+User-agent: *
+Allow: /
+
+# Exclude internal technical fallbacks and duplicate aliases
+Disallow: /404
+Disallow: /turmeric
+Disallow: /products/turmeric
+Disallow: /jewelry
+Disallow: /textiles
+Disallow: /quality
+
+# Sitemap location
+Sitemap: https://auraexport.co/sitemap.xml
