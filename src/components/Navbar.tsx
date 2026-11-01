@@ -237,12 +237,12 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                             VERTICAL 02
                           </span>
                           <span className="text-[9px] font-mono bg-white/10 text-white/70 px-2 py-0.5 rounded-full">
-                            Design-Led
+                            Artisanal Craft
                           </span>
                         </div>
 
                         <Link
-                          to="/products/jewelry"
+                          to="/products/fashion-lifestyle"
                           onClick={() => setIsProductsDropdownOpen(false)}
                           className="font-heading text-lg text-white font-medium group-hover/col:text-[#dcb782] transition-colors flex items-center justify-between"
                         >
@@ -251,62 +251,62 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                         </Link>
 
                         <p className="text-[11px] text-[#dfd1b9]/60 font-light leading-relaxed">
-                          Handcrafted fashion jewelry, artisanal metallurgy and lifestyle accessories.
+                          Indian craftsmanship, temple jewelry, Kundan, tribal metallurgy and lifestyle accessories.
                         </p>
 
                         <div className="h-[1px] bg-white/5 my-1" />
 
                         <div className="flex flex-col gap-1.5 text-xs text-[#dfd1b9]/80 font-light">
                           <Link 
-                            to="/products/jewelry"
+                            to="/products/fashion-lifestyle"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Temple & Traditional Jewelry
+                          </Link>
+                          <Link 
+                            to="/products/fashion-lifestyle"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Kundan & Meenakari
+                          </Link>
+                          <Link 
+                            to="/products/fashion-lifestyle"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Oxidized & Tribal Jewelry
+                          </Link>
+                          <Link 
+                            to="/products/fashion-lifestyle"
                             onClick={() => setIsProductsDropdownOpen(false)}
                             className="hover:text-white transition-colors"
                           >
                             • Contemporary Fashion Jewelry
                           </Link>
                           <Link 
-                            to="/products/jewelry"
+                            to="/products/fashion-lifestyle"
                             onClick={() => setIsProductsDropdownOpen(false)}
                             className="hover:text-white transition-colors"
                           >
-                            • Hypoallergenic 316L Steel
+                            • Handcrafted Accessories
                           </Link>
                           <Link 
-                            to="/products/jewelry"
+                            to="/products/fashion-lifestyle"
                             onClick={() => setIsProductsDropdownOpen(false)}
                             className="hover:text-white transition-colors"
                           >
-                            • Artisanal Brass Assemblies
-                          </Link>
-                          <Link 
-                            to="/products/jewelry"
-                            onClick={() => setIsProductsDropdownOpen(false)}
-                            className="hover:text-white transition-colors"
-                          >
-                            • PVD Gold Vacuum Plating
-                          </Link>
-                          <Link 
-                            to="/products/jewelry"
-                            onClick={() => setIsProductsDropdownOpen(false)}
-                            className="hover:text-white transition-colors"
-                          >
-                            • Semi-Precious Stone Sets
-                          </Link>
-                          <Link 
-                            to="/products/jewelry"
-                            onClick={() => setIsProductsDropdownOpen(false)}
-                            className="hover:text-white transition-colors"
-                          >
-                            • Private Label Collections
+                            • Indian Lifestyle Products
                           </Link>
                         </div>
 
                         <Link
-                          to="/products/jewelry"
+                          to="/products/fashion-lifestyle"
                           onClick={() => setIsProductsDropdownOpen(false)}
                           className="text-[10px] font-mono text-[#dcb782] tracking-wider uppercase font-bold pt-2 mt-auto hover:underline"
                         >
-                          Explore Jewelry & Lifestyle →
+                          Explore Fashion & Lifestyle →
                         </Link>
                       </div>
 
@@ -317,7 +317,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                             VERTICAL 03
                           </span>
                           <span className="text-[9px] font-mono bg-white/10 text-white/70 px-2 py-0.5 rounded-full">
-                            Diversified
+                            Textile Heritage
                           </span>
                         </div>
 
@@ -331,39 +331,53 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                         </Link>
 
                         <p className="text-[11px] text-[#dfd1b9]/60 font-light leading-relaxed">
-                          Fabrics, finished apparel, home furnishings, handlooms and industrial yarns.
+                          Silk sarees, handlooms, cotton fabrics, block prints, apparel, home furnishings and yarns.
                         </p>
 
                         <div className="h-[1px] bg-white/5 my-1" />
 
                         <div className="flex flex-col gap-1.5 text-xs text-[#dfd1b9]/80 font-light">
                           <Link 
-                            to="/products/apparel-textiles"
+                            to="/products/apparel-textiles/kanjivaram-silk-saree"
                             onClick={() => setIsProductsDropdownOpen(false)}
-                            className="hover:text-white transition-colors"
+                            className="text-[#dcb782] hover:text-white transition-colors font-medium"
                           >
-                            • Fabrics & Materials (Woven & Knits)
+                            • Silk Sarees & Traditional Silk (Kanjivaram)
                           </Link>
                           <Link 
                             to="/products/apparel-textiles"
                             onClick={() => setIsProductsDropdownOpen(false)}
                             className="hover:text-white transition-colors"
                           >
-                            • Apparel & Garments (Men, Women, Kids)
+                            • Handloom & Regional Textiles
                           </Link>
                           <Link 
                             to="/products/apparel-textiles"
                             onClick={() => setIsProductsDropdownOpen(false)}
                             className="hover:text-white transition-colors"
                           >
-                            • Home Textiles (Bed Linen & Towels)
+                            • Cotton & Linen Fabrics
                           </Link>
                           <Link 
                             to="/products/apparel-textiles"
                             onClick={() => setIsProductsDropdownOpen(false)}
                             className="hover:text-white transition-colors"
                           >
-                            • Handloom & Traditional Textiles
+                            • Hand Block Printed Textiles
+                          </Link>
+                          <Link 
+                            to="/products/apparel-textiles"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Apparel & Garments
+                          </Link>
+                          <Link 
+                            to="/products/apparel-textiles"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="hover:text-white transition-colors"
+                          >
+                            • Home Textiles & Furnishings
                           </Link>
                           <Link 
                             to="/products/apparel-textiles"
@@ -371,13 +385,6 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                             className="hover:text-white transition-colors"
                           >
                             • Yarns & Textile Components
-                          </Link>
-                          <Link 
-                            to="/products/apparel-textiles"
-                            onClick={() => setIsProductsDropdownOpen(false)}
-                            className="hover:text-white transition-colors"
-                          >
-                            • Textile Accessories & Made-ups
                           </Link>
                         </div>
 
@@ -495,10 +502,10 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                           </Link>
                           <div className="pl-3 flex flex-col gap-1 text-xs text-white/70">
                             <Link to="/products/agro-products" onClick={() => setIsOpen(false)}>• Spices & Seasonings</Link>
-                            <Link to="/products/agro-products/turmeric" onClick={() => setIsOpen(false)}>• Turmeric (Whole & Powder)</Link>
+                            <Link to="/products/agro-products/turmeric" onClick={() => setIsOpen(false)}>• Turmeric (Fingers & Powder)</Link>
                             <Link to="/products/agro-products/dried-red-chillies" onClick={() => setIsOpen(false)}>• Chillies & Chilli Products</Link>
-                            <Link to="/products/agro-products/fresh-drumsticks" onClick={() => setIsOpen(false)}>• Fresh Produce (Moringa/Onions)</Link>
-                            <Link to="/products/agro-products/moringa-leaf-powder" onClick={() => setIsOpen(false)}>• Moringa & Botanicals</Link>
+                            <Link to="/products/agro-products/fresh-drumsticks" onClick={() => setIsOpen(false)}>• Fresh Agricultural Produce</Link>
+                            <Link to="/products/agro-products/moringa-leaf-powder" onClick={() => setIsOpen(false)}>• Moringa & Natural Botanicals</Link>
                             <Link to="/products/agro-products/rice-basmati-non-basmati" onClick={() => setIsOpen(false)}>• Grains & Pulses</Link>
                           </div>
                         </div>
@@ -506,16 +513,19 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                         {/* Fashion & Lifestyle */}
                         <div className="pt-2 border-t border-white/5">
                           <Link
-                            to="/products/jewelry"
+                            to="/products/fashion-lifestyle"
                             onClick={() => setIsOpen(false)}
                             className="font-body text-sm text-white font-bold block mb-1"
                           >
                             02. Fashion & Lifestyle →
                           </Link>
                           <div className="pl-3 flex flex-col gap-1 text-xs text-white/70">
-                            <span>• Contemporary Fashion Jewelry</span>
-                            <span>• Stainless Steel & Artisanal Brass</span>
-                            <span>• PVD Plating & Lifestyle Goods</span>
+                            <Link to="/products/fashion-lifestyle" onClick={() => setIsOpen(false)}>• Temple & Traditional Jewelry</Link>
+                            <Link to="/products/fashion-lifestyle" onClick={() => setIsOpen(false)}>• Kundan & Meenakari</Link>
+                            <Link to="/products/fashion-lifestyle" onClick={() => setIsOpen(false)}>• Oxidized & Tribal Jewelry</Link>
+                            <Link to="/products/fashion-lifestyle" onClick={() => setIsOpen(false)}>• Contemporary Fashion Jewelry</Link>
+                            <Link to="/products/fashion-lifestyle" onClick={() => setIsOpen(false)}>• Handcrafted Accessories</Link>
+                            <Link to="/products/fashion-lifestyle" onClick={() => setIsOpen(false)}>• Indian Lifestyle Products</Link>
                           </div>
                         </div>
 
@@ -529,12 +539,13 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                             03. Apparel & Textiles →
                           </Link>
                           <div className="pl-3 flex flex-col gap-1 text-xs text-white/70">
-                            <Link to="/products/apparel-textiles" onClick={() => setIsOpen(false)}>• Fabrics & Materials (Cotton, Linen, Blends)</Link>
-                            <Link to="/products/apparel-textiles" onClick={() => setIsOpen(false)}>• Apparel & Garments (Men, Women, Kids)</Link>
+                            <Link to="/products/apparel-textiles/kanjivaram-silk-saree" onClick={() => setIsOpen(false)} className="text-[#dcb782] font-medium">• Silk Sarees & Traditional Silk (Kanjivaram)</Link>
+                            <Link to="/products/apparel-textiles" onClick={() => setIsOpen(false)}>• Handloom & Regional Textiles</Link>
+                            <Link to="/products/apparel-textiles" onClick={() => setIsOpen(false)}>• Cotton & Linen Fabrics</Link>
+                            <Link to="/products/apparel-textiles" onClick={() => setIsOpen(false)}>• Hand Block Printed Textiles</Link>
+                            <Link to="/products/apparel-textiles" onClick={() => setIsOpen(false)}>• Apparel & Garments</Link>
                             <Link to="/products/apparel-textiles" onClick={() => setIsOpen(false)}>• Home Textiles & Furnishings</Link>
-                            <Link to="/products/apparel-textiles" onClick={() => setIsOpen(false)}>• Handloom & Traditional Sarees</Link>
-                            <Link to="/products/apparel-textiles" onClick={() => setIsOpen(false)}>• Spun Yarns & Industrial Threads</Link>
-                            <Link to="/products/apparel-textiles" onClick={() => setIsOpen(false)}>• Fashion Accessories & Canvas Bags</Link>
+                            <Link to="/products/apparel-textiles" onClick={() => setIsOpen(false)}>• Yarns & Textile Components</Link>
                           </div>
                         </div>
 

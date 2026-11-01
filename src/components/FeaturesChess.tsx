@@ -1,8 +1,8 @@
 import { motion } from 'motion/react';
 import { ArrowUpRight, ShieldCheck, Award, Tag } from 'lucide-react';
 import agroHeroImg from '../assets/images/agro_products_hero.jpg';
-import jewelryImg from '../assets/images/product_jewelry_1780423528983.png';
-import apparelHeroImg from '../assets/images/apparel_textiles_hero.jpg';
+import fashionHeroImg from '../assets/images/fashion_lifestyle_hero.jpg';
+import apparelHeritageHeroImg from '../assets/images/apparel_textiles_hero_heritage.jpg';
 
 interface FeaturesChessProps {
   onNavigate: (sectionId: string) => void;
@@ -32,44 +32,44 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
       isImageLeft: false,
     },
     {
-      id: 'jewelry',
-      routeId: 'products/jewelry',
-      label: 'DESIGN & LIFESTYLE',
+      id: 'fashion-lifestyle',
+      routeId: 'products/fashion-lifestyle',
+      label: 'INDIAN CRAFTSMANSHIP. GLOBAL STYLE.',
       title: 'Fashion & Lifestyle',
-      keywords: 'Fashion Jewelry | Handcrafted Accessories | Lifestyle Products',
+      keywords: 'Fashion Jewelry | Temple Jewelry | Kundan & Meenakari | Oxidized Jewelry | Handcrafted Accessories | Lifestyle Products',
       description1:
-        'Discover fashion jewelry, handcrafted accessories and lifestyle products sourced for evolving international markets.',
+        'Discover an expressive collection of Indian-inspired jewelry, handcrafted accessories and lifestyle products, bringing traditional artistry and contemporary design to international markets.',
       description2:
-        'Precision handcrafted combining modern geometric silhouettes with South Indian foundry techniques, engineered across selected base metals, high-durability PVD coatings, and private-label packaging configurations.',
+        'Connecting international buyers with South Indian temple metallurgy, Rajasthani Kundan and Meenakari enamel, Bohemian oxidized silver-tone adornments, and PVD gold-plated contemporary fashion accessories.',
       ctaText: 'Explore Fashion & Lifestyle',
-      image: jewelryImg,
-      badge: 'Artisanal Metallurgy & Lifestyle',
+      image: fashionHeroImg,
+      badge: 'Authentic Indian Craftsmanship & Lifestyle',
       specs: [
-        { label: 'Base Metallurgy', value: '316L Surgical Steel & Fine Brass' },
-        { label: 'Surface Finish', value: 'PVD Gold & Anti-Tarnish Sealing' },
-        { label: 'Production Scope', value: 'Private Label & Brand Design Books' },
-        { label: 'Compliance', value: 'EU REACH & Prop 65 Assessed' },
+        { label: 'Artisan Traditions', value: 'Temple, Kundan, Meenakari & Oxidized' },
+        { label: 'Metallurgy & Media', value: 'Brass, Zinc Alloy & 316L Surgical Steel' },
+        { label: 'Manufacturing Scope', value: 'Private Label, Brand Books & Custom Cards' },
+        { label: 'Safety Compliance', value: 'EU REACH Tested, Lead & Nickel Safe' },
       ],
       isImageLeft: true,
     },
     {
       id: 'apparel-textiles',
       routeId: 'products/apparel-textiles',
-      label: 'DIVERSIFIED SOURCING VERTICAL',
+      label: 'INDIAN TEXTILE HERITAGE. GLOBAL POSSIBILITIES.',
       title: 'Apparel & Textiles',
-      keywords: 'Fabrics | Apparel | Garments | Home Textiles | Handloom | Textile Materials',
+      keywords: 'Silk Sarees | Handloom Textiles | Cotton Fabrics | Apparel & Garments | Home Textiles | Traditional Indian Fabrics',
       description1:
-        'From quality fabrics and textile materials to finished garments and home textiles, we connect international buyers with diverse apparel and textile sourcing opportunities.',
+        'From exquisite silk sarees and traditional handloom fabrics to contemporary apparel and home textiles, discover India\'s diverse textile craftsmanship and sourcing opportunities for international markets.',
       description2:
-        'Facilitating end-to-end global trade across woven cottons, commercial apparel manufacturing, hospitality linens, heritage handlooms, and industrial spinning yarns with verified mill compliance.',
+        'Connecting international institutional buyers with authentic Kanjivaram and Banarasi silk weaving corridors, GI-tagged Pochampally Ikats, Rajasthani hand block prints, premium cotton-linen fabrics, and export garments.',
       ctaText: 'Explore Apparel & Textiles',
-      image: apparelHeroImg,
-      badge: 'Global Textile & Apparel Portfolio',
+      image: apparelHeritageHeroImg,
+      badge: 'Indian Textile Heritage & Sourcing',
       specs: [
-        { label: 'Category Breadth', value: '6 Major Textile & Apparel Categories' },
-        { label: 'Manufacturing Corridors', value: 'Tirupur, Coimbatore, Karur & Surat' },
-        { label: 'Product Spectrum', value: 'Raw Yarns to Finished Tailored Garments' },
-        { label: 'Export Gateways', value: 'Tuticorin, Chennai & Nhava Sheva' },
+        { label: 'Heritage Weaves', value: 'Kanjivaram & Banarasi Silk, Pochampally Ikat' },
+        { label: 'Fabric Formats', value: 'Pure Silk, Linen Blends, Airjet Cotton & Knits' },
+        { label: 'Production Scope', value: 'Yarns, Mill Fabrics, Cut-to-Pack Garments' },
+        { label: 'Export Gateways', value: 'Chennai, Tuticorin, Nhava Sheva & Mumbai' },
       ],
       isImageLeft: false,
     },

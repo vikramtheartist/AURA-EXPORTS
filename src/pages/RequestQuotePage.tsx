@@ -78,16 +78,27 @@ export default function RequestQuotePage() {
       req = preselectedForm
         ? `Turmeric (${preselectedForm}) specification for global procurement.`
         : 'Turmeric whole fingers / fine powder sourcing requirement.';
-    } else if (preselectedProduct === 'jewelry' || preselectedCategory === 'jewelry') {
-      cat = 'jewelry';
+    } else if (
+      preselectedProduct === 'fashion-lifestyle' || 
+      preselectedCategory === 'fashion-lifestyle' ||
+      preselectedProduct === 'jewelry' || 
+      preselectedCategory === 'jewelry'
+    ) {
+      cat = 'fashion-lifestyle';
       req = preselectedForm
-        ? `Fashion jewelry collection (${preselectedForm}) design & manufacturing inquiry.`
-        : 'Contemporary fashion jewelry production run.';
-    } else if (preselectedProduct === 'textiles' || preselectedCategory === 'textiles') {
+        ? `Fashion jewelry & lifestyle collection (${preselectedForm}) sourcing inquiry.`
+        : 'Indian fashion jewelry, handcrafted accessories or lifestyle products sourcing requirement.';
+    } else if (
+      preselectedProduct === 'kanjivaram-silk-saree' ||
+      preselectedRequirement?.toLowerCase().includes('kanjivaram')
+    ) {
+      cat = 'textiles-kanjivaram';
+      req = 'Wholesale proforma quotation request for authentic Kanjivaram Silk Sarees with Zari borders.';
+    } else if (preselectedProduct === 'apparel-textiles' || preselectedCategory === 'apparel-textiles' || preselectedProduct === 'textiles' || preselectedCategory === 'textiles') {
       cat = 'apparel-textiles';
       req = preselectedForm
         ? `Apparel & textile sourcing (${preselectedForm}) order inquiry.`
-        : 'Fabric yardage or apparel sourcing requirement.';
+        : 'Fabric yardage, silk sarees or apparel sourcing requirement.';
     }
 
     if (preselectedRequirement) {
@@ -353,14 +364,21 @@ export default function RequestQuotePage() {
                     <option value="fresh-produce">Fresh Agricultural Produce (Drumsticks, Onions, Tomatoes)</option>
                     <option value="moringa">Moringa & Botanical Ingredients (Powder / Leaves)</option>
                     <option value="grains-pulses">Grains & Pulses (Basmati & Non-Basmati Rice, Millets)</option>
-                    <option value="jewelry">Fashion & Lifestyle (Contemporary Fashion Jewelry, Brass, Steel)</option>
+                    <option value="fashion-lifestyle">Fashion & Lifestyle (Indian Craftsmanship & Accessories Portfolio)</option>
+                    <option value="jewelry-temple">Temple & Traditional Jewelry (Antique-Finish, Jhumkas & Bangles)</option>
+                    <option value="jewelry-kundan">Kundan, Meenakari & Polki-Inspired Sets (Bridal & Occasion)</option>
+                    <option value="jewelry-oxidized">Oxidized & Tribal Jewelry (Silver-Tone, Bohemian Necklaces)</option>
+                    <option value="jewelry-contemporary">Contemporary Fashion Jewelry (Everyday Minimal, Steel, Brass)</option>
+                    <option value="jewelry-accessories">Handcrafted Fashion Accessories (Potli Bags, Scarves, Stoles)</option>
+                    <option value="jewelry-lifestyle">Indian Lifestyle & Artisan Products (Handmade Decor & Artifacts)</option>
                     <option value="apparel-textiles">Apparel & Textiles (Comprehensive Sourcing Portfolio)</option>
-                    <option value="textiles-fabrics">Fabrics & Materials (Cotton, Linen, Woven, Knits & Dyed)</option>
-                    <option value="textiles-apparel">Apparel & Garments (Men's, Women's, Kidswear & Casuals)</option>
-                    <option value="textiles-home">Home Textiles & Furnishings (Bed Linen, Towels & Curtains)</option>
-                    <option value="textiles-handloom">Handloom & Traditional Textiles (Artisan Sarees & Handwoven)</option>
-                    <option value="textiles-yarns">Yarns & Textile Components (Spun Yarns & Sewing Threads)</option>
-                    <option value="textiles-accessories">Textile Accessories & Made-ups (Scarves & Canvas Bags)</option>
+                    <option value="textiles-kanjivaram">Kanjivaram Silk Sarees & Traditional Silk (Hero Collection)</option>
+                    <option value="textiles-handloom">Handloom & Regional Indian Textiles (Ikat, Chanderi, Maheshwari)</option>
+                    <option value="textiles-fabrics">Cotton, Linen & Everyday Fabrics (Poplins, Twills, Knits)</option>
+                    <option value="textiles-block-print">Hand Block Printed & Decorative Textiles (Bagru, Sanganeri)</option>
+                    <option value="textiles-apparel">Apparel & Garments (Ethnic Kurtas, Shirts & Casuals)</option>
+                    <option value="textiles-home">Home Textiles & Furnishings (Bed Linen, Towels & Throws)</option>
+                    <option value="textiles-yarns">Yarns, Fabrics & Textile Components (Spun Yarns & Threads)</option>
                     <option value="other">Other Indian Sourcing Requirement</option>
                   </select>
                 </div>

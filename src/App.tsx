@@ -12,8 +12,10 @@ const ProductDetailPage = lazy(() => import('./pages/ProductDetailPage'));
 const SpicesCategoryPage = lazy(() => import('./pages/SpicesCategoryPage'));
 const TurmericDetailPage = lazy(() => import('./pages/TurmericDetailPage'));
 const JewelryPage = lazy(() => import('./pages/JewelryPage'));
+const FashionLifestylePage = lazy(() => import('./pages/FashionLifestylePage'));
 const TextilesPage = lazy(() => import('./pages/TextilesPage'));
 const ApparelTextilesPage = lazy(() => import('./pages/ApparelTextilesPage'));
+const KanjivaramSareePage = lazy(() => import('./pages/KanjivaramSareePage'));
 const QualityPage = lazy(() => import('./pages/QualityPage'));
 const ExportProcessPage = lazy(() => import('./pages/ExportProcessPage'));
 const FaqsPage = lazy(() => import('./pages/FaqsPage'));
@@ -62,12 +64,15 @@ export default function App() {
               <Route path="/products" element={<ProductsPage />} />
               <Route path="/products/agro-products" element={<AgroProductsPage />} />
               <Route path="/products/agro-products/:productSlug" element={<ProductDetailPage />} />
+              <Route path="/products/fashion-lifestyle" element={<FashionLifestylePage />} />
+              <Route path="/products/fashion-lifestyle/:productSlug" element={<ProductDetailPage />} />
               <Route path="/products/apparel-textiles" element={<ApparelTextilesPage />} />
+              <Route path="/products/apparel-textiles/kanjivaram-silk-saree" element={<KanjivaramSareePage />} />
               <Route path="/products/apparel-textiles/:productSlug" element={<ProductDetailPage />} />
               <Route path="/products/:categorySlug/:productSlug" element={<ProductDetailPage />} />
               <Route path="/products/spices" element={<Navigate to="/products/agro-products" replace />} />
               <Route path="/products/spices/turmeric" element={<TurmericDetailPage />} />
-              <Route path="/products/jewelry" element={<JewelryPage />} />
+              <Route path="/products/jewelry" element={<Navigate to="/products/fashion-lifestyle" replace />} />
               <Route path="/products/textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
               <Route path="/quality-compliance" element={<QualityPage />} />
               <Route path="/export-process" element={<ExportProcessPage />} />
@@ -85,7 +90,8 @@ export default function App() {
               <Route path="/spices" element={<Navigate to="/products/agro-products" replace />} />
               <Route path="/products/turmeric" element={<Navigate to="/products/agro-products/turmeric" replace />} />
               <Route path="/turmeric" element={<Navigate to="/products/agro-products/turmeric" replace />} />
-              <Route path="/jewelry" element={<Navigate to="/products/jewelry" replace />} />
+              <Route path="/fashion-lifestyle" element={<Navigate to="/products/fashion-lifestyle" replace />} />
+              <Route path="/jewelry" element={<Navigate to="/products/fashion-lifestyle" replace />} />
               <Route path="/textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
               <Route path="/apparel-textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
               <Route path="/quality" element={<Navigate to="/quality-compliance" replace />} />

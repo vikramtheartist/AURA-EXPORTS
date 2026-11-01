@@ -19,14 +19,19 @@ import Breadcrumbs from '../components/procurement/Breadcrumbs';
 import HowToBuyModule from '../components/procurement/HowToBuyModule';
 import { getProductBySlug, masterCatalogProducts } from '../data/agroCatalog';
 import { getTextileProductBySlug, masterTextileProducts } from '../data/textilesCatalog';
+import { getFashionProductBySlug, masterFashionProducts } from '../data/fashionCatalog';
 
 export default function ProductDetailPage() {
   const { productSlug } = useParams<{ productSlug: string }>();
   const navigate = useNavigate();
 
-  // Look up product by slug across agro and textile catalogs
-  const allProducts = [...masterCatalogProducts, ...masterTextileProducts];
-  const product = getTextileProductBySlug(productSlug || '') || getProductBySlug(productSlug || '') || allProducts[0];
+  // Look up product by slug across agro, textile and fashion catalogs
+  const allProducts = [...masterCatalogProducts, ...masterTextileProducts, ...masterFashionProducts];
+  const product = 
+    getFashionProductBySlug(productSlug || '') ||
+    getTextileProductBySlug(productSlug || '') || 
+    getProductBySlug(productSlug || '') || 
+    allProducts[0];
 
   // Related products in same subcategory or category
   const relatedProducts = allProducts

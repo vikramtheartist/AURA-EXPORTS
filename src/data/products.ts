@@ -9,7 +9,8 @@ import jewelryImg from '../assets/images/product_jewelry_1780423528983.png';
 import textilesImg from '../assets/images/product_textiles_1780423544568.png';
 
 import agroHeroImg from '../assets/images/agro_products_hero.jpg';
-import apparelHeroImg from '../assets/images/apparel_textiles_hero.jpg';
+import apparelHeroImg from '../assets/images/apparel_textiles_hero_heritage.jpg';
+import fashionHeroImg from '../assets/images/fashion_lifestyle_hero.jpg';
 
 export const productCategories: ProductCategory[] = [
   {
@@ -29,13 +30,13 @@ export const productCategories: ProductCategory[] = [
         'AURA works through precise buyer specifications across bulk agricultural commodities, spice extracts, and fresh export produce:',
       definableFields: [
         'Commodity Category (Spices, Turmeric, Chillies, Fresh Produce, Moringa, Grains & Pulses)',
-        'Product Form (Whole rhizomes, dried pods, cold-milled powders, standardized extracts, fresh refrigerated produce)',
+        'Product Form (Whole rhizomes, dried pods, cold-milled powders, standardized extracts, fresh produce)',
         'Grade & Varietal Specification (Guntur/Byadgi chillies, Tellicherry pepper, Erode turmeric, Basmati 1121)',
         'Active Compound / Assays (Curcuminoid HPLC percentage, Piperine, Capsaicin SHU, ASTA color value)',
-        'Maximum Acceptable Moisture Threshold (Vacuum packaged or standard export dried)',
+        'Maximum Acceptable Moisture Threshold (Standard or low-moisture vacuum packed)',
         'Physical Granulation & Mesh Size (40 to 100+ mesh or customized cut sizes)',
         'Cold-Chain & Reefer Shipping Parameters (For fresh produce: onions, tomatoes, drumsticks)',
-        'Custom Packaging Formats (Multi-wall kraft bags, PP woven sacks, fiber drums, retail pouches, or telescopic produce cartons)',
+        'Custom Packaging Formats (Multi-wall kraft bags, PP woven sacks, fiber drums, telescopic produce cartons)',
       ],
     },
     productCount: 20,
@@ -65,56 +66,72 @@ export const productCategories: ProductCategory[] = [
     productCount: 1,
   },
   {
-    slug: 'jewelry',
+    slug: 'fashion-lifestyle',
     name: 'Fashion & Lifestyle',
     shortName: 'Fashion & Lifestyle',
-    headline: 'Discover fashion jewelry, handcrafted accessories and lifestyle products sourced for evolving international markets.',
+    headline: 'Indian Craftsmanship. Global Style.',
     description:
-      'Precision handcrafted jewelry combining modern geometric silhouettes with South Indian foundry techniques, engineered across selected base metals, premium finishes, and private-label packaging configurations.',
+      'Discover an expressive collection of Indian-inspired jewelry, handcrafted accessories and lifestyle products, bringing traditional artistry and contemporary design to international markets.',
     sourcingPhilosophy:
-      'Bridging heritage South Indian casting artisans with contemporary European and American retail standards. Strict metallurgical discipline, durable PVD coatings, and collection-level private label capability.',
-    featuredImage: jewelryImg,
-    badge: 'Artisanal Metallurgy & Lifestyle',
+      'Bridging India\'s master jewelry artisans, Kundan ateliers, temple craftsmanship, and tribal metallurgists with international distributors, boutiques, and fashion brands.',
+    featuredImage: fashionHeroImg,
+    badge: 'Artisanal Jewelry & Lifestyle',
     procurementLens: {
       title: 'What Buyers Can Define',
       description:
-        'Jewelry production runs are configured around brand design books, target price architecture, and regional regulatory compliance:',
+        'Jewelry and fashion accessory production runs are configured around brand design books, target price architecture, and regional regulatory compliance:',
       definableFields: [
-        'Base Metal Alloy (Hypoallergenic 316L surgical stainless steel, recycled brass, copper alloys)',
-        'Surface Plating & Finish (PVD vacuum gold 14k/18k, high-polish rhodium, antique matte, anti-tarnish e-coating)',
-        'Dimensional Tolerances & Structural Assembly',
-        'Stone & Setting Specifications (Semi-precious cabochons, cubic zirconia, bezel or prong setting)',
+        'Category Vertical (Temple Jewelry, Kundan & Meenakari, Oxidized & Tribal, Contemporary Fashion, Artisan Bags, Lifestyle Objects)',
+        'Base Metal Alloy & Finish (Antique gold-tone, brass, German silver, oxidized silver finish, lacquer coating)',
+        'Ornamental Detailing (Synthetic polki/kundan stones, enamel/meenakari hues, glass beads, ghungroo drops)',
         'Private Label Branding (Laser engraving, embossed custom metal tags, branded presentation cards)',
-        'Packaging Configuration (Anti-tarnish bio-polybags, velvet pouches, rigid presentation boxes)',
-        'Destination Compliance (EU REACH, Prop 65, Nickel-release limits evaluated per SKU)',
-        'Production Batch Runs & Repeat Order MOQs',
+        'Packaging Configuration (Anti-tarnish bio-polybags, velvet pouches, rigid presentation gift boxes)',
+        'Destination Compliance (EU REACH, Prop 65, Nickel-free & Lead-safe lab testing on request)',
+        'Production Batch Runs & Wholesale MOQs',
       ],
     },
-    productCount: 4,
+    productCount: 8,
+  },
+  {
+    slug: 'jewelry', // Compatibility alias
+    name: 'Fashion & Lifestyle',
+    shortName: 'Fashion & Lifestyle',
+    headline: 'Indian Craftsmanship. Global Style.',
+    description:
+      'Discover an expressive collection of Indian-inspired jewelry, handcrafted accessories and lifestyle products.',
+    sourcingPhilosophy:
+      'Bridging heritage South Indian casting artisans with contemporary European and American retail standards.',
+    featuredImage: fashionHeroImg,
+    badge: 'Artisanal Metallurgy & Lifestyle',
+    procurementLens: {
+      title: 'What Buyers Can Define',
+      description: 'Jewelry production runs are configured around brand design books.',
+      definableFields: ['Base Metal Alloy', 'Surface Plating', 'Private Label Branding'],
+    },
+    productCount: 8,
   },
   {
     slug: 'apparel-textiles',
     name: 'Apparel & Textiles',
     shortName: 'Apparel & Textiles',
-    headline: 'From Fabrics to Finished Apparel. Sourcing Without Boundaries.',
+    headline: 'Indian Textile Heritage. Global Possibilities.',
     description:
-      'From quality fabrics and textile materials to finished garments and home textiles, we connect international buyers with diverse apparel and textile sourcing opportunities.',
+      'From exquisite silk sarees and traditional handloom fabrics to contemporary apparel and home textiles, discover India\'s diverse textile craftsmanship and sourcing opportunities for international markets.',
     sourcingPhilosophy:
-      'Connecting international buyers with premier textile mills, garment assemblies, master handloom weavers and spinning clusters across Tirupur, Coimbatore, Karur, Surat and Bengaluru.',
+      'Connecting international importers and fashion houses with premier silk saree weavers in Kanchipuram and Varanasi, regional handloom clusters, certified organic block printers, and automated textile mills.',
     featuredImage: apparelHeroImg,
-    badge: 'Comprehensive Textile & Apparel Portfolio',
+    badge: 'Indian Textile Heritage & Apparel',
     procurementLens: {
       title: 'What Buyers Can Define',
       description:
         'Textile and apparel contracts are customized to global manufacturing, retail, and commercial specifications:',
       definableFields: [
-        'Category Vertical (Fabrics & Materials, Finished Apparel & Garments, Home Textiles, Handloom & Traditional, Yarns & Components, Made-ups)',
-        'Fiber Composition (100% Cotton, Linen, Polyester, Viscose, Modal, Elastane blends)',
-        'Fabric Construction (Plain weave, poplin, twill, oxford, single jersey, interlock, terry, jacquard)',
+        'Category Vertical (Silk Sarees, Handlooms, Cotton & Linen, Block Prints, Apparel & Garments, Home Textiles, Yarns)',
+        'Saree Specifications (Kanjivaram/Banarasi, Korvai contrast border, zari grade, warp/weft density)',
+        'Fiber Composition (Mulberry Silk, Linen, 100% Combed Cotton, Viscose, Modal, Organic Cotton)',
+        'Fabric Construction & GSM (Plain weave, poplin, twill, single jersey, terry, hand-block printing)',
         'Garment Specifications (Tech-pack development, sizing runs, private-label branding, trims & hardware)',
         'Home Textile Specifications (Thread counts 200-800 TC, hospitality terry towel GSM, dimension ranges)',
-        'Yarn Parameters (Count ranges Ne 10s to 100s, ring spun, compact, open-end, multifold twists)',
-        'Finishing & Dyeing (Piece dyed, yarn dyed, Mercerized, bio-polished, reactive print, digital print)',
         'Export Packaging (Rolls with core protectors, hanger/flat garment polybags, moisture-barrier master cartons)',
       ],
     },
