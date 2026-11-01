@@ -2,12 +2,16 @@ import React, { useState, useRef, useEffect, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowUpRight, Check, Sparkles, Globe, ShieldCheck } from 'lucide-react';
+import { submitConsultationBooking } from '../services/consultationService';
 
 const HlsVideoBg = lazy(() => import('./HlsVideoBg'));
 
 export default function CtaFooter() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [submittedEmail, setSubmittedEmail] = useState('');
+  const [referenceId, setReferenceId] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
   const footerRef = useRef<HTMLElement>(null);
 
@@ -26,18 +30,28 @@ export default function CtaFooter() {
     return () => observer.disconnect();
   }, []);
 
-  const handleBookCallSubmit = (e: React.FormEvent) => {
+  const handleBookCallSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !email.includes('@')) {
       setStatus('error');
-      setTimeout(() => setStatus('idle'), 3000);
+      setErrorMessage('Please enter an authentic, valid corporate email address.');
+      setTimeout(() => setStatus('idle'), 4000);
       return;
     }
     setStatus('loading');
-    setTimeout(() => {
+    setErrorMessage('');
+    try {
+      const result = await submitConsultationBooking(email);
+      setSubmittedEmail(email);
+      setReferenceId(result.referenceId);
       setStatus('success');
       setEmail('');
-    }, 1500);
+    } catch (err: any) {
+      console.error('Consultation booking error:', err);
+      setStatus('error');
+      setErrorMessage(err.message || 'Unable to submit inquiry. Please try again.');
+      setTimeout(() => setStatus('idle'), 4000);
+    }
   };
 
   const currentYear = new Date().getFullYear();
@@ -144,11 +158,32 @@ export default function CtaFooter() {
               initial={{ opacity: 0, y: 10, filter: 'blur(5px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               exit={{ opacity: 0, y: -10, filter: 'blur(5px)' }}
-              className="flex items-center gap-2 text-[#fbfbeb] bg-white/5 border border-[#dcb782]/20 rounded-full px-5 py-2.5 text-xs font-body backdrop-blur-lg mt-1 shadow-lg"
+              className="flex flex-col sm:flex-row items-center gap-3 text-[#fbfbeb] bg-white/5 border border-[#dcb782]/40 rounded-2xl px-6 py-4 text-xs font-body backdrop-blur-xl mt-3 shadow-[0_10px_35px_rgba(0,0,0,0.8)] max-w-xl text-center sm:text-left"
               id="cta-success-message"
             >
-              <Sparkles className="h-3.5 w-3.5 text-[#dcb782] animate-pulse" />
-              <span>Inquiry received. A trade desk officer will review your message and contact you promptly during business hours.</span>
+              <div className="h-9 w-9 rounded-full bg-[#dcb782]/20 border border-[#dcb782]/40 flex items-center justify-center shrink-0">
+                <Check className="h-5 w-5 text-[#dcb782]" />
+              </div>
+              <div className="flex-1 flex flex-col gap-1">
+                <span className="font-heading font-medium text-white text-sm">
+                  We received your inquiry.
+                </span>
+                <span className="text-[#dfd1b9]/85 font-light leading-relaxed">
+                  Thank you! Our trade desk officer has been notified and will review your consultation request and contact you at <strong className="text-white font-mono">{submittedEmail}</strong> promptly.
+                </span>
+                {referenceId && (
+                  <span className="text-[10px] font-mono text-[#dcb782] pt-1 tracking-wider uppercase font-semibold">
+                    Docket Reference: {referenceId}
+                  </span>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => setStatus('idle')}
+                className="text-[11px] font-mono text-[#dcb782] hover:text-white underline cursor-pointer shrink-0 mt-2 sm:mt-0 sm:ml-2"
+              >
+                Submit another
+              </button>
             </motion.div>
           )}
           {status === 'error' && (
@@ -159,7 +194,7 @@ export default function CtaFooter() {
               className="text-red-300 bg-red-500/10 border border-red-500/20 rounded-full px-5 py-2 text-xs font-body backdrop-blur-lg mt-1"
               id="cta-error-message"
             >
-              Please enter an authentic, valid corporate email.
+              {errorMessage || 'Please enter an authentic, valid corporate email.'}
             </motion.div>
           )}
         </AnimatePresence>
