@@ -38,7 +38,7 @@ function RouteLoadingFallback() {
         <div className="absolute top-0 bottom-0 left-0 bg-[#dcb782] w-1/2 animate-pulse" />
       </div>
       <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-[#dfd1b9]/40">
-        Aura Global Trade
+        Aura Exports
       </span>
     </div>
   );

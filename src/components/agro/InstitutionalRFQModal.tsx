@@ -240,7 +240,7 @@ export default function InstitutionalRFQModal({
           <div>
             {/* Eyebrow */}
             <span className="text-[11px] font-mono tracking-[0.25em] text-[#D8AB64] uppercase font-bold block mb-3">
-              AURA GLOBAL TRADE
+              AURA EXPORTS
             </span>
 
             {/* Title */}

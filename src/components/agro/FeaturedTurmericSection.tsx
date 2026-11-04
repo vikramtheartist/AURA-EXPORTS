@@ -28,7 +28,7 @@ export default function FeaturedTurmericSection({ onOpenEnquiry }: FeaturedTurme
             <div className="lg:col-span-5 rounded-2xl overflow-hidden aspect-[4/3] relative border border-white/10 bg-[#0A0A0B] shadow-xl group">
               <img
                 src={turmericImg}
-                alt="AURA Global Trade - Erode & Salem Turmeric Sourcing"
+                alt="Aura Exports - Erode & Salem Turmeric Sourcing"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 loading="lazy"
               />

@@ -15,7 +15,7 @@ interface BreadcrumbsProps {
 
 export default function Breadcrumbs({
   items,
-  backLink = { label: 'GLOBAL TRADE HOME', href: '/' },
+  backLink = { label: 'AURA EXPORTS HOME', href: '/' },
   className = '',
 }: BreadcrumbsProps) {
   // Schema.org BreadcrumbList JSON-LD

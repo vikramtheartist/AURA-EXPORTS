@@ -12,12 +12,12 @@ export default function AboutPage() {
       <nav aria-label="Breadcrumb" className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-8 flex items-center justify-between text-xs font-mono tracking-wider text-[#ab8558]/80 font-bold">
         <Link to="/" className="flex items-center gap-1.5 hover:text-white transition-colors">
           <ArrowLeft className="h-3.5 w-3.5" />
-          <span>GLOBAL TRADE HOME</span>
+          <span>AURA EXPORTS HOME</span>
         </Link>
         <div className="flex items-center gap-2">
           <span>ENTERPRISE</span>
           <ChevronRight className="h-3 w-3" />
-          <span className="text-white">ABOUT AURA</span>
+          <span className="text-white">ABOUT AURA EXPORTS</span>
         </div>
       </nav>
 
@@ -33,7 +33,7 @@ export default function AboutPage() {
           Premium Indian Sourcing for <span className="text-[#dcb782] italic font-normal">Global Enterprise.</span>
         </h1>
         <p className="text-[#D5C8B7] font-body text-base md:text-xl max-w-3xl font-light leading-relaxed">
-          Aura Global Trade (OPC) Private Limited is an Indian export and global sourcing enterprise operating from Chennai. We bridge international procurement organizations with vetted regional supply ecosystems across agricultural botanicals, contemporary fashion jewelry, and sustainable textiles.
+          Aura Exports is an Indian export and global sourcing enterprise operating from Chennai. We bridge international procurement organizations with vetted regional supply ecosystems across agricultural botanicals, contemporary fashion jewelry, and sustainable textiles.
         </p>
       </header>
 
@@ -45,7 +45,7 @@ export default function AboutPage() {
               <span className="text-[11px] font-mono text-[#dcb782] uppercase tracking-wider block mb-1">01 / WHO WE ARE</span>
               <h2 className="text-lg font-heading text-white font-medium mb-2">Registered Entity</h2>
               <p className="text-xs text-[#dfd1b9]/75 font-light leading-relaxed">
-                Incorporated in India as <strong>Aura Global Trade (OPC) Private Limited</strong>, dedicated to institutional cross-border B2B commerce and transparent trade governance.
+                Operating as <strong>Aura Exports</strong> (Incorporated as AURA ENTERPRISE EXPORTS (OPC) PVT LTD), dedicated to institutional cross-border B2B commerce and transparent trade governance.
               </p>
             </div>
             <span className="text-[10px] font-mono text-[#ab8558] block pt-3 border-t border-white/5">
@@ -168,7 +168,7 @@ export default function AboutPage() {
               <div className="overflow-hidden rounded-xl border border-white/5 relative aspect-[4/5] max-w-[420px]">
                 <img
                   src={philosophyImg}
-                  alt="Aura Global Trade Wisdom Philosophy - South Indian Heritage stone craftsmanship"
+                  alt="Aura Exports Wisdom Philosophy - South Indian Heritage stone craftsmanship"
                   className="w-full h-full object-cover filter grayscale contrast-125"
                   loading="lazy"
                   decoding="async"
@@ -204,7 +204,7 @@ export default function AboutPage() {
             </p>
 
             <p className="text-[#D5C8B7]/90 font-body text-sm md:text-base leading-relaxed font-light">
-              At Aura Global Trade, this is not mere poetic sentiment; it is our operational compass. In an industry often troubled by speculative brokers and opaque intermediaries, we operate with transparent contracts, documented specifications, and mutual accountability.
+              At Aura Exports, this is not mere poetic sentiment; it is our operational compass. In an industry often troubled by speculative brokers and opaque intermediaries, we operate with transparent contracts, documented specifications, and mutual accountability.
             </p>
 
             {/* Verified Capability Metrics */}
@@ -228,7 +228,7 @@ export default function AboutPage() {
         {/* Layer 4: Clear Commercial Pathways */}
         <section aria-labelledby="about-pathways-heading" className="border-t border-white/10 pt-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
-            <h3 id="about-pathways-heading" className="text-xl font-heading text-white font-semibold">Engage with Aura Global Trade</h3>
+            <h3 id="about-pathways-heading" className="text-xl font-heading text-white font-semibold">Engage with Aura Exports</h3>
             <p className="text-xs text-[#dfd1b9]/70 font-light mt-1">Review our verification credentials, explore our export workflow, or initiate a commercial RFQ.</p>
           </div>
           <div className="flex flex-wrap gap-4">

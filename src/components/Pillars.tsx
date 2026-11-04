@@ -121,7 +121,7 @@ export default function Pillars() {
                   <div className="overflow-hidden rounded-[1.4rem] aspect-[4/3] w-full relative">
                     <img
                       src={pillar.image}
-                      alt={`AURA Global Trade Pillar - ${pillar.title}`}
+                      alt={`Aura Exports Pillar - ${pillar.title}`}
                       className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out hover:scale-105 filter brightness-95"
                       loading="lazy"
                       decoding="async"

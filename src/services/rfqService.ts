@@ -1,5 +1,5 @@
 /**
- * AURA Global Trade - RFQ Commercial Intake Adapter Service
+ * Aura Exports - RFQ Commercial Intake Adapter Service
  * Phase 4: Clean Integration Boundary for CRM / API / Email Dispatch
  */
 

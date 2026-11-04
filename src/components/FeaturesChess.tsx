@@ -17,7 +17,7 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
       title: 'Agro Products',
       keywords: 'Spices | Turmeric | Chillies | Fresh Produce | Moringa | Grains & Pulses',
       description1:
-        "From India's renowned agricultural regions to international markets, AURA Global Trade connects buyers with quality agricultural products, diverse processing formats and flexible sourcing solutions tailored to global business requirements.",
+        "From India's renowned agricultural regions to international markets, Aura Exports connects buyers with quality agricultural products, diverse processing formats and flexible sourcing solutions tailored to global business requirements.",
       description2:
         'Origin-led sourcing from Erode, Salem, Kerala and Guntur, offering whole rhizomes, cold-milled powders, standardized pastes, and tailored bulk or private-label packaging.',
       ctaText: 'Explore Agro Products',
@@ -94,7 +94,7 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
             Connecting India&apos;s Finest Products <span className="text-[#dcb782] italic font-normal">to Global Markets.</span>
           </h2>
           <p className="text-sm md:text-base text-[#D5C8B7] font-light max-w-2xl leading-relaxed">
-            From agricultural commodities and premium spices to fashion accessories and comprehensive apparel & textiles, AURA Global Trade connects diverse product categories with international sourcing opportunities.
+            From agricultural commodities and premium spices to fashion accessories and comprehensive apparel & textiles, Aura Exports connects diverse product categories with international sourcing opportunities.
           </p>
           <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#dcb782]/30 to-transparent mt-2" />
         </div>
@@ -129,7 +129,7 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
                   <div className="rounded-[2rem] overflow-hidden aspect-[4/5] relative">
                     <img
                       src={product.image}
-                      alt={`AURA Global Trade - ${product.title}`}
+                      alt={`Aura Exports - ${product.title}`}
                       className="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-105"
                       loading="lazy"
                       id={`product-${product.id}-img`}

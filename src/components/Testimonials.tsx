@@ -65,7 +65,7 @@ export default function Testimonials() {
             Built on <span className="text-[#dcb782] italic font-normal">Integrity & Discretion</span>
           </h2>
           <p className="text-[#D5C8B7]/80 text-sm md:text-base font-light max-w-2xl">
-            Why international procurement managers trust Aura Global Trade with strategic sourcing relationships.
+            Why international procurement managers trust Aura Exports with strategic sourcing relationships.
           </p>
         </div>
 

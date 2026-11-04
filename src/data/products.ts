@@ -1,5 +1,5 @@
 /**
- * AURA Global Trade - Master Product Catalog & Procurement Store
+ * Aura Exports - Master Product Catalog & Procurement Store
  * Phase 4: Procurement Intelligence, Technical Specifications, and Explicit Data States
  */
 

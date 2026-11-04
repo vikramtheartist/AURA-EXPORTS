@@ -53,7 +53,7 @@ export default function ProductsPage() {
                 <div className="rounded-2xl overflow-hidden aspect-[16/10] mb-6 border border-white/5 relative">
                   <img
                     src={category.featuredImage}
-                    alt={`AURA Global Trade - ${category.name} Wholesale Export Portfolio`}
+                    alt={`Aura Exports - ${category.name} Wholesale Export Portfolio`}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
                     decoding="async"

@@ -56,7 +56,7 @@ export default function Philosophy() {
               <div className="overflow-hidden rounded-lg border border-white/5 relative aspect-[4/5] max-w-[420px]">
                 <img
                   src={philosophyImg}
-                  alt="Aura Global Trade Wisdom Philosophy - South Indian Heritage stone craftsmanship"
+                  alt="Aura Exports Wisdom Philosophy - South Indian Heritage stone craftsmanship"
                   className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105 filter grayscale contrast-125"
                   loading="lazy"
                   decoding="async"

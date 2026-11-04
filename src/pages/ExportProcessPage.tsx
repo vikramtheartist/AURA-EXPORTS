@@ -178,7 +178,7 @@ export default function ExportProcessPage() {
       <nav aria-label="Breadcrumb" className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-8 flex items-center justify-between text-xs font-mono tracking-wider text-[#ab8558]/80 font-bold">
         <Link to="/" className="flex items-center gap-1.5 hover:text-white transition-colors">
           <ArrowLeft className="h-3.5 w-3.5" />
-          <span>GLOBAL TRADE HOME</span>
+          <span>AURA EXPORTS HOME</span>
         </Link>
         <div className="flex items-center gap-2">
           <span>OPERATIONS</span>
@@ -199,7 +199,7 @@ export default function ExportProcessPage() {
           Structured <span className="text-[#dcb782] italic font-normal">Export Workflow</span>
         </h1>
         <p className="text-[#D5C8B7] font-body text-base md:text-lg max-w-3xl font-light leading-relaxed">
-          International sourcing demands predictability at every milestone. Aura Global Trade structures cross-border transactions through a transparent 6-stage operational protocol, eliminating ambiguities between order initiation and port arrival.
+          International sourcing demands predictability at every milestone. Aura Exports structures cross-border transactions through a transparent 6-stage operational protocol, eliminating ambiguities between order initiation and port arrival.
         </p>
       </header>
 
@@ -335,7 +335,7 @@ export default function ExportProcessPage() {
               Chennai, India — Aura's Operating Gateway
             </h2>
             <p className="text-sm text-[#dfd1b9]/80 font-light leading-relaxed">
-              Chennai serves as Aura Global Trade’s operational and trade desk gateway. Situated on the southeastern coast of India, Chennai provides direct maritime coordination with major container terminals at Chennai Port (INMAA) and Tuticorin (INTUT), alongside air freight connectivity via Chennai International Airport (MAA).
+              Chennai serves as Aura Exports’ operational and trade desk gateway. Situated on the southeastern coast of India, Chennai provides direct maritime coordination with major container terminals at Chennai Port (INMAA) and Tuticorin (INTUT), alongside air freight connectivity via Chennai International Airport (MAA).
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
               <div className="p-4 rounded-xl bg-black/40 border border-white/5">
@@ -390,7 +390,7 @@ export default function ExportProcessPage() {
               Statutory Documentation Accompanying Every Consignment
             </h2>
             <p className="text-sm text-[#dfd1b9]/70 font-light max-w-2xl">
-              Frictionless international customs clearance requires institutional documentation. Every export shipment dispatched by Aura Global Trade is backed by an authentic statutory dossier:
+              Frictionless international customs clearance requires institutional documentation. Every export shipment dispatched by Aura Exports is backed by an authentic statutory dossier:
             </p>
           </div>
 

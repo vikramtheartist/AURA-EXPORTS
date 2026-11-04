@@ -227,7 +227,7 @@ export default function ContactPage() {
                 <CheckCircle2 className="h-12 w-12 text-emerald-400" />
                 <h3 className="text-xl font-heading text-white font-medium">Message Logged with Trade Desk</h3>
                 <p className="text-xs text-[#dfd1b9]/80 font-light max-w-md leading-relaxed">
-                  Thank you for contacting Aura Global Trade. Your correspondence has been logged with our Chennai desk. An officer will review and reply to {formData.corporateEmail} within standard business hours.
+                  Thank you for contacting Aura Exports. Your correspondence has been logged with our Chennai desk. An officer will review and reply to {formData.corporateEmail} within standard business hours.
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}

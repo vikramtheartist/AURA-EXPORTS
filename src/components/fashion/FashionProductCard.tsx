@@ -27,7 +27,7 @@ export default function FashionProductCard({
         >
           <img
             src={product.image}
-            alt={`AURA Global Trade - ${product.cardTitle} Artisanal Jewellery Export`}
+            alt={`Aura Exports - ${product.cardTitle} Artisanal Jewellery Export`}
             className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             loading="lazy"
             decoding="async"

@@ -6,7 +6,7 @@ export default function NotFoundPage() {
   return (
     <div className="w-full min-h-[75vh] flex flex-col items-center justify-center text-center px-6 py-32 relative select-none">
       <SEOHead
-        title="404 — Route Not Found | Aura Global Trade"
+        title="404 — Route Not Found | Aura Exports"
         description="The requested route does not exist in our global trade directory."
       />
 
@@ -41,7 +41,7 @@ export default function NotFoundPage() {
             className="bg-gradient-to-r from-[#dcb782] to-[#ab8558] hover:from-[#fbf3db] hover:to-[#dcb782] text-black font-body font-bold rounded-xl px-7 py-3.5 text-xs tracking-wider uppercase transition-all shadow-lg hover:scale-[1.02] flex items-center justify-center gap-2 cursor-pointer"
           >
             <ArrowLeft className="h-4 w-4" />
-            <span>Return to Global Trade Home</span>
+            <span>Return to Aura Exports Home</span>
           </Link>
 
           <Link

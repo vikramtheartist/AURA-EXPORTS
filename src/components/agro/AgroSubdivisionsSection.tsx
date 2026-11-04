@@ -274,7 +274,7 @@ export default function AgroSubdivisionsSection({ onOpenEnquiry }: AgroSubdivisi
                   <div className="rounded-2xl overflow-hidden aspect-[16/10] mb-6 relative border border-white/5 bg-black">
                     <img
                       src={item.image}
-                      alt={`AURA Global Trade - ${item.title}`}
+                      alt={`Aura Exports - ${item.title}`}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       loading="lazy"
                     />

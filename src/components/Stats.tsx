@@ -53,7 +53,7 @@ export default function Stats() {
       ref={sectionRef}
       className="relative w-full overflow-hidden bg-black py-24 select-none min-h-[360px]"
       id="stats-section"
-      aria-label="Aura Trade Operational Parameters"
+      aria-label="Aura Exports Operational Parameters"
     >
       {/* Background desaturated HLS video (Lazy mounted on approach) */}
       <div className="absolute inset-0 w-full h-full z-0 bg-black pointer-events-none" aria-hidden="true">

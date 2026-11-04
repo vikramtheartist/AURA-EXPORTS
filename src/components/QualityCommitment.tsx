@@ -91,7 +91,7 @@ export default function QualityCommitment({ onNavigate }: QualityCommitmentProps
           </div>
 
           <p className="text-[#D5C8B7] font-body text-base md:text-lg leading-relaxed font-light max-w-xl">
-            At AURA Global Trade, quality is our cornerstone. We ensure that every shipment and premium product meets the most stringent international standards through methodical testing, strict inspections, and continuous global network improvements.
+            At Aura Exports, quality is our cornerstone. We ensure that every shipment and premium product meets the most stringent international standards through methodical testing, strict inspections, and continuous global network improvements.
           </p>
 
           {/* Pillars List */}
@@ -148,7 +148,7 @@ export default function QualityCommitment({ onNavigate }: QualityCommitmentProps
           
           <img
             src={commitmentImg}
-            alt="AURA Global Trade - Indian export quality testing and supply chain verification"
+            alt="Aura Exports - Indian export quality testing and supply chain verification"
             loading="lazy"
             decoding="async"
             className="w-full max-w-[400px] lg:max-w-none h-auto aspect-[3/4] object-cover rounded-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative z-10 transition-transform duration-700 group-hover:scale-[1.02]"

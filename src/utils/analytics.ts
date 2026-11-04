@@ -1,5 +1,5 @@
 /**
- * AURA Global Trade - Enterprise B2B Analytics & Google Analytics 4 (GA4) Integration
+ * Aura Exports - Enterprise B2B Analytics & Google Analytics 4 (GA4) Integration
  * Strictly privacy-compliant: Zero PII, no unverified fallbacks, exactly one page view per route.
  */
 

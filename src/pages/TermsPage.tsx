@@ -6,15 +6,15 @@ export default function TermsPage() {
   return (
     <div className="w-full pt-28 pb-20">
       <SEOHead
-        title="Terms of Use | Aura Global Trade"
-        description="Website terms and digital platform governance for Aura Global Trade (OPC) Private Limited."
+        title="Terms of Use | Aura Exports"
+        description="Website terms and digital platform governance for Aura Exports."
         canonical="https://auraexport.co/terms"
       />
 
       <nav aria-label="Breadcrumb" className="max-w-4xl mx-auto px-6 mb-8 flex items-center justify-between text-xs font-mono tracking-wider text-[#ab8558]/80 font-bold">
         <Link to="/" className="flex items-center gap-1.5 hover:text-white transition-colors">
           <ArrowLeft className="h-3.5 w-3.5" />
-          <span>GLOBAL TRADE HOME</span>
+          <span>AURA EXPORTS HOME</span>
         </Link>
         <div className="flex items-center gap-2">
           <span>LEGAL</span>
@@ -35,7 +35,7 @@ export default function TermsPage() {
             Terms of Use
           </h1>
           <p className="text-sm font-body text-[#dfd1b9]/70 font-light">
-            Entity: <strong>Aura Global Trade (OPC) Private Limited</strong> | Operating Base: Chennai, Tamil Nadu, India
+            Entity: <strong>Aura Exports</strong> (Statutory: AURA ENTERPRISE EXPORTS (OPC) PVT LTD) | Operating Base: Chennai, Tamil Nadu, India
           </p>
         </header>
 
@@ -43,14 +43,14 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-heading text-white font-semibold mb-3">1. Scope of Digital Storefront</h2>
             <p>
-              This website is an institutional B2B trade portal published by Aura Global Trade (OPC) Private Limited. Content presented—including product descriptions, category classifications, and technical assay summaries—is provided for commercial procurement scoping and does not constitute a self-executing commercial offer until a formal Proforma Invoice or Sale Contract is issued.
+              This website is an institutional B2B trade portal published by Aura Exports (AURA ENTERPRISE EXPORTS (OPC) PVT LTD). Content presented—including product descriptions, category classifications, and technical assay summaries—is provided for commercial procurement scoping and does not constitute a self-executing commercial offer until a formal Proforma Invoice or Sale Contract is issued.
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-heading text-white font-semibold mb-3">2. Intellectual Property & Brand Assets</h2>
             <p>
-              All proprietary brand marks, typography, editorial imagery, and technical dossiers published on auraexport.co are the exclusive property of Aura Global Trade (OPC) Private Limited.
+              All proprietary brand marks, typography, editorial imagery, and technical dossiers published on auraexport.co are the exclusive property of Aura Exports (AURA ENTERPRISE EXPORTS (OPC) PVT LTD).
             </p>
           </section>
 

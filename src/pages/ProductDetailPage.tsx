@@ -87,7 +87,7 @@ export default function ProductDetailPage() {
     category: `${product.category} / ${product.subcategory}`,
     brand: {
       '@type': 'Brand',
-      name: 'AURA Global Trade',
+      name: 'Aura Exports',
     },
     countryOfOrigin: {
       '@type': 'Country',
@@ -98,7 +98,7 @@ export default function ProductDetailPage() {
   return (
     <div className="w-full pt-28 pb-24" id="product-detail-view">
       <SEOHead 
-        title={`${product.name} Wholesale Exporter India | ${product.subcategory} | AURA Global Trade`}
+        title={`${product.name} Wholesale Exporter India | ${product.subcategory} | Aura Exports`}
         description={product.description}
         canonical={`https://auraexport.co/products/${product.categorySlug}/${product.slug}`}
         breadcrumbs={breadcrumbs}
@@ -135,7 +135,7 @@ export default function ProductDetailPage() {
             <div className="relative rounded-[2.2rem] overflow-hidden border border-white/10 bg-[#121211] shadow-[0_30px_70px_rgba(0,0,0,0.9)] aspect-[4/3] w-full">
               <img
                 src={product.image}
-                alt={`AURA Global Trade - ${product.name}`}
+                alt={`Aura Exports - ${product.name}`}
                 className="w-full h-full object-cover"
                 loading="eager"
               />
@@ -490,7 +490,7 @@ export default function ProductDetailPage() {
                     <div className="rounded-2xl overflow-hidden aspect-[16/10] mb-4 border border-white/5">
                       <img
                         src={rel.image}
-                        alt={`AURA Global Trade - ${rel.name}`}
+                        alt={`Aura Exports - ${rel.name}`}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
                       />

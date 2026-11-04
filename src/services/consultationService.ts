@@ -1,5 +1,5 @@
 /**
- * AURA Global Trade - Consultation Intake & Email Dispatch Service
+ * Aura Exports - Consultation Intake & Email Dispatch Service
  * Dispatches consultation bookings to the Trade Desk mailbox (contact.auraexport.co@gmail.com)
  */
 

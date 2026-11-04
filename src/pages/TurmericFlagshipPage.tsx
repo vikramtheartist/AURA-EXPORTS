@@ -75,7 +75,7 @@ export default function TurmericFlagshipPage() {
             <div className="inline-flex items-center gap-2 bg-white/5 border border-[#dcb782]/25 rounded-full px-4 py-1.5 w-fit shadow-sm">
               <MapPin className="h-3.5 w-3.5 text-[#dcb782]" />
               <span className="text-[11px] font-mono text-[#dcb782] tracking-[0.2em] uppercase font-bold">
-                AURA GLOBAL TRADE / TAMIL NADU / INDIA
+                AURA EXPORTS / TAMIL NADU / INDIA
               </span>
             </div>
 
@@ -132,7 +132,7 @@ export default function TurmericFlagshipPage() {
             <div className="relative rounded-[2.2rem] overflow-hidden border border-white/15 shadow-[0_30px_70px_rgba(0,0,0,0.95)] aspect-[4/3] w-full bg-[#121211]">
               <img
                 src={bannerImg}
-                alt="AURA Global Trade - Harvested Erode Turmeric Rhizomes and Fingers"
+                alt="Aura Exports - Harvested Erode Turmeric Rhizomes and Fingers"
                 className="w-full h-full object-cover"
                 loading="eager"
               />
@@ -290,7 +290,7 @@ export default function TurmericFlagshipPage() {
               <div className="rounded-2xl overflow-hidden aspect-[4/3] relative border border-white/10 bg-black">
                 <img
                   src={activeForm.image}
-                  alt={`AURA Global Trade - ${activeForm.name}`}
+                  alt={`Aura Exports - ${activeForm.name}`}
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />

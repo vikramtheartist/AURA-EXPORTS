@@ -79,7 +79,7 @@ export default function AgroProductsPage() {
             <div className="inline-flex items-center gap-2 bg-white/5 border border-[#dcb782]/25 rounded-full px-4 py-1.5 w-fit shadow-sm">
               <Sprout className="h-3.5 w-3.5 text-[#dcb782]" />
               <span className="text-[11px] font-mono text-[#dcb782] tracking-[0.2em] uppercase font-bold">
-                AURA GLOBAL TRADE / AGRO PRODUCTS
+                AURA EXPORTS / AGRO PRODUCTS
               </span>
             </div>
 
@@ -136,7 +136,7 @@ export default function AgroProductsPage() {
             <div className="relative rounded-[2.2rem] overflow-hidden border border-white/10 shadow-[0_30px_70px_rgba(0,0,0,0.9)] aspect-[4/3] w-full bg-[#121211]">
               <img
                 src={agroHeroImg}
-                alt="AURA Global Trade - Indian Agricultural Products Export Assortment"
+                alt="Aura Exports - Indian Agricultural Products Export Assortment"
                 className="w-full h-full object-cover"
                 loading="eager"
               />

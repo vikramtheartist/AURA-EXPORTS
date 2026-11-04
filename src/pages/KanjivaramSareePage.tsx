@@ -118,7 +118,7 @@ export default function KanjivaramSareePage() {
             <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-[#121211] aspect-[4/5] shadow-2xl group">
               <img
                 src={activeImage}
-                alt="Kanjivaram Silk Saree - AURA Global Trade"
+                alt="Kanjivaram Silk Saree - Aura Exports"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />

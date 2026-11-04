@@ -142,7 +142,7 @@ export default function SpicesCategoryPage() {
                 <div className="rounded-2xl overflow-hidden aspect-[4/3] border border-white/10 relative shadow-2xl">
                   <img
                     src={turmericImg}
-                    alt="AURA Global Trade - Premium Indian Turmeric"
+                    alt="Aura Exports - Premium Indian Turmeric"
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />

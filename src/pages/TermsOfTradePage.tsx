@@ -6,15 +6,15 @@ export default function TermsOfTradePage() {
   return (
     <div className="w-full pt-28 pb-20">
       <SEOHead
-        title="Terms of Trade | Commercial Export Governance | Aura Global Trade"
-        description="Standard international trade terms, Incoterms governance, sampling protocols, and payment mechanisms for Aura Global Trade (OPC) Private Limited."
+        title="Terms of Trade | Commercial Export Governance | Aura Exports"
+        description="Standard international trade terms, Incoterms governance, sampling protocols, and payment mechanisms for Aura Exports."
         canonical="https://auraexport.co/terms-of-trade"
       />
 
       <nav aria-label="Breadcrumb" className="max-w-4xl mx-auto px-6 mb-8 flex items-center justify-between text-xs font-mono tracking-wider text-[#ab8558]/80 font-bold">
         <Link to="/" className="flex items-center gap-1.5 hover:text-white transition-colors">
           <ArrowLeft className="h-3.5 w-3.5" />
-          <span>GLOBAL TRADE HOME</span>
+          <span>AURA EXPORTS HOME</span>
         </Link>
         <div className="flex items-center gap-2">
           <span>COMMERCIAL</span>
@@ -35,7 +35,7 @@ export default function TermsOfTradePage() {
             Commercial Terms of Trade
           </h1>
           <p className="text-sm font-body text-[#dfd1b9]/70 font-light">
-            Entity: <strong>Aura Global Trade (OPC) Private Limited</strong> | Operating Corridor: Chennai / Tuticorin Seaports, India
+            Entity: <strong>Aura Exports</strong> (Statutory: AURA ENTERPRISE EXPORTS (OPC) PVT LTD) | Operating Corridor: Chennai / Tuticorin Seaports, India
           </p>
         </header>
 
@@ -43,7 +43,7 @@ export default function TermsOfTradePage() {
           <section>
             <h2 className="text-xl font-heading text-white font-semibold mb-3">1. International Incoterms Structure</h2>
             <p>
-              Aura Global Trade quotes international export shipments under ICC Incoterms® 2020 rules. Primary trading bases:
+              Aura Exports quotes international export shipments under ICC Incoterms® 2020 rules. Primary trading bases:
             </p>
             <ul className="list-disc pl-5 mt-2 space-y-1.5 text-sm text-[#dfd1b9]/80">
               <li><strong>FOB (Free On Board):</strong> Chennai Seaport / V.O. Chidambaranar Port (Tuticorin), Tamil Nadu, India. Includes customs clearance, export loading, and port terminal handling.</li>

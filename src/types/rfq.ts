@@ -1,5 +1,5 @@
 /**
- * AURA Global Trade - RFQ Architecture Types
+ * Aura Exports - RFQ Architecture Types
  * Phase 4: Two-Stage B2B Trade Intake & Procurement Schemas
  */
 

@@ -27,7 +27,7 @@ export default function TextileProductCard({
         >
           <img
             src={product.image}
-            alt={`AURA Global Trade - ${product.cardTitle} Indian Handloom Textile Export`}
+            alt={`Aura Exports - ${product.cardTitle} Indian Handloom Textile Export`}
             className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             loading="lazy"
             decoding="async"

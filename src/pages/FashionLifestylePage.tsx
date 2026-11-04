@@ -185,7 +185,7 @@ export default function FashionLifestylePage() {
             <div className="inline-flex items-center gap-2 bg-[#141416] border border-[#D4AF37]/30 rounded-full px-4 py-1.5 w-fit shadow-sm">
               <Crown className="h-3.5 w-3.5 text-[#D4AF37]" />
               <span className="text-[11px] font-mono text-[#D4AF37] tracking-[0.2em] uppercase font-bold">
-                AURA GLOBAL TRADE / FASHION & LIFESTYLE
+                AURA EXPORTS / FASHION & LIFESTYLE
               </span>
             </div>
 
@@ -245,7 +245,7 @@ export default function FashionLifestylePage() {
             <div className="relative rounded-[2.2rem] overflow-hidden border border-white/10 shadow-[0_30px_70px_rgba(0,0,0,0.9)] aspect-[4/3] w-full bg-[#121211]">
               <img
                 src={heroImg}
-                alt="AURA Global Trade - Indian Artisanal Craft and Fashion Jewellery Assortment"
+                alt="Aura Exports - Indian Artisanal Craft and Fashion Jewellery Assortment"
                 className="w-full h-full object-cover"
                 loading="eager"
               />
@@ -392,7 +392,7 @@ export default function FashionLifestylePage() {
               <div className="lg:col-span-5 rounded-2xl overflow-hidden aspect-[4/3] relative border border-white/10 bg-[#0A0A0B] shadow-xl group">
                 <img
                   src={kundanImg}
-                  alt="AURA Global Trade - Jaipur Jadau Kundan and Meenakari Craft"
+                  alt="Aura Exports - Jaipur Jadau Kundan and Meenakari Craft"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                 />

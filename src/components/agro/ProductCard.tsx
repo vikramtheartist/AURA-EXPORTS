@@ -28,7 +28,7 @@ export default function ProductCard({
         >
           <img
             src={product.image}
-            alt={`AURA Global Trade - ${product.cardTitle} Indian Export Commodity`}
+            alt={`Aura Exports - ${product.cardTitle} Indian Export Commodity`}
             className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             loading="lazy"
             decoding="async"

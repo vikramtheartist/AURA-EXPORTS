@@ -1,5 +1,5 @@
 /**
- * AURA Global Trade - Agro Products Origin-to-Market Export Types
+ * Aura Exports - Agro Products Origin-to-Market Export Types
  * Structured for international B2B importers, wholesalers, extractors, and food manufacturers
  */
 

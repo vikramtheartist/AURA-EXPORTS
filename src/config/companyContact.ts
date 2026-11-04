@@ -1,10 +1,10 @@
 /**
- * AURA Global Trade - Verified Company Contact Configuration
+ * Aura Exports - Verified Company Contact Configuration
  * Single Source of Truth for Enterprise B2B Communications
  */
 
 export const COMPANY_CONTACT = {
-  brandName: 'AURA Global Trade',
+  brandName: 'Aura Exports',
   legalEntity: 'AURA ENTERPRISE EXPORTS (OPC) PVT LTD',
   corporateEmail: 'contact@auraexport.co',
   tradeDeskEmail: 'trade@auraexport.co',
@@ -29,7 +29,7 @@ export const COMPANY_CONTACT = {
   
   // Helpers to construct contextual deep links
   getWhatsAppUrl: (productName?: string, origin?: string, quantity?: string) => {
-    let text = `Hello AURA Global Trade,\nI am interested in sourcing ${productName || 'Agricultural Commodities'}.\n`;
+    let text = `Hello Aura Exports,\nI am interested in sourcing ${productName || 'Agricultural Commodities'}.\n`;
     if (productName) text += `Product: ${productName}\n`;
     if (origin) text += `Origin: ${origin}\n`;
     if (quantity && quantity !== 'Not yet decided') text += `Estimated Quantity: ${quantity}\n`;
@@ -39,7 +39,7 @@ export const COMPANY_CONTACT = {
 
   getMailtoUrl: (productName?: string, origin?: string, quantity?: string) => {
     const subject = `Export Enquiry — ${productName || 'Agricultural Commodity Sourcing'}`;
-    let body = `Hello AURA Export Desk,\n\nI would like to request an export quotation and explore product availability.\n\n`;
+    let body = `Hello Aura Exports Desk,\n\nI would like to request an export quotation and explore product availability.\n\n`;
     if (productName) body += `Product of Interest: ${productName}\n`;
     if (origin) body += `Target Origin: ${origin}\n`;
     if (quantity && quantity !== 'Not yet decided') body += `Estimated Volume: ${quantity}\n`;

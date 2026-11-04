@@ -1,4 +1,4 @@
-# robots.txt for AURA Global Trade (https://auraexport.co)
+# robots.txt for Aura Exports (https://auraexport.co)
 # AURA ENTERPRISE EXPORTS (OPC) PRIVATE LIMITED · Chennai, Tamil Nadu, India
 
 User-agent: *

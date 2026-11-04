@@ -83,12 +83,12 @@ export default function Navbar({ onNavigate }: NavbarProps) {
           onClick={() => handleLinkClick('/', 'home')}
           className="flex items-center cursor-pointer group shrink-0"
           id="nav-logo-container"
-          aria-label="Aura Global Trade Home"
+          aria-label="Aura Exports Home"
         >
           {!useFallbackSvg ? (
             <img
               src={logoPath}
-              alt="Aura Global Trade - Indian Export Company & Wholesale Sourcing Partner"
+              alt="Aura Exports - Indian Export Company & Wholesale Sourcing Partner"
               onError={handleLogoError}
               referrerPolicy="no-referrer"
               className="h-[44px] md:h-[48px] w-auto object-contain transition-transform duration-500 group-hover:scale-[1.03]"
@@ -474,7 +474,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
           <div className="flex flex-col items-center gap-4 w-full max-w-sm">
             <div className="flex flex-col items-center mb-2">
               <span className="font-heading italic text-4xl text-[#dcb782] tracking-widest font-bold">Λ U R Λ</span>
-              <span className="font-body text-[10px] tracking-[0.3em] text-[#ab8558] uppercase font-bold mt-1">GLOBAL TRADE</span>
+              <span className="font-body text-[10px] tracking-[0.3em] text-[#ab8558] uppercase font-bold mt-1">EXPORTS</span>
             </div>
 
             {navLinks.map((link) => {

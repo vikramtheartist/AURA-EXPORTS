@@ -217,7 +217,7 @@ export default function CtaFooter() {
           {/* Entity Identification */}
           <div className="flex flex-col gap-1 select-text">
             <span className="text-[#dfd1b9]/70 font-body font-normal text-xs">
-              © {currentYear} Aura Global Trade (OPC) Private Limited.
+              © {currentYear} Aura Exports.
             </span>
             <span className="text-[#dfd1b9]/40 font-mono font-light text-[11px]">
               Operating Base: Chennai, Tamil Nadu, India | Port Corridors: Chennai & Tuticorin

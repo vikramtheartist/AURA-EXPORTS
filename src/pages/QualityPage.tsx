@@ -46,8 +46,8 @@ const VERIFICATION_DOCS: VerificationDoc[] = [
     issuerOrScope: 'Ministry of Corporate Affairs (MCA), Government of India',
     status: 'AVAILABLE',
     statusText: 'AVAILABLE',
-    description: 'Statutory incorporation confirmation of Aura Global Trade (OPC) Private Limited as an incorporated private enterprise under the Companies Act.',
-    verifiedDetails: 'Legal Entity: Aura Global Trade (OPC) Private Limited | Base: Chennai, Tamil Nadu, India'
+    description: 'Statutory incorporation confirmation of Aura Exports (AURA ENTERPRISE EXPORTS (OPC) PVT LTD) as an incorporated private enterprise under the Companies Act.',
+    verifiedDetails: 'Legal Entity: AURA ENTERPRISE EXPORTS (OPC) PVT LTD | Brand: Aura Exports | Base: Chennai, Tamil Nadu, India'
   },
   {
     id: 'comp-cin-gst',
@@ -221,7 +221,7 @@ export default function QualityPage() {
       <nav aria-label="Breadcrumb" className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-8 flex items-center justify-between text-xs font-mono tracking-wider text-[#ab8558]/80 font-bold">
         <Link to="/" className="flex items-center gap-1.5 hover:text-white transition-colors">
           <ArrowLeft className="h-3.5 w-3.5" />
-          <span>GLOBAL TRADE HOME</span>
+          <span>AURA EXPORTS HOME</span>
         </Link>
         <div className="flex items-center gap-2">
           <span>ASSURANCE</span>
@@ -242,7 +242,7 @@ export default function QualityPage() {
           Quality, Compliance & <span className="text-[#dcb782] italic font-normal">Evidence Architecture</span>
         </h1>
         <p className="text-[#D5C8B7] font-body text-base md:text-lg max-w-3xl font-light leading-relaxed">
-          International procurement requires evidence over marketing. Aura Global Trade operates a transparent compliance protocol designed to give overseas buyers verifiable confidence in our legal standing, testing methodology, origin authenticity, and statutory export documentation.
+          International procurement requires evidence over marketing. Aura Exports operates a transparent compliance protocol designed to give overseas buyers verifiable confidence in our legal standing, testing methodology, origin authenticity, and statutory export documentation.
         </p>
       </header>
 
@@ -485,7 +485,7 @@ export default function QualityPage() {
               <span className="text-xs font-mono text-[#dcb782] font-bold block mb-2">07 / BUYER VERIFICATION PROTOCOL</span>
               <h3 className="text-white text-base font-semibold mb-2">Independent Container Pre-Shipment Inspection (PSI) Welcomed</h3>
               <p className="text-xs text-[#dfd1b9]/70 font-light leading-relaxed">
-                Aura Global Trade welcomes overseas buyers to designate third-party inspection agencies (e.g. SGS, Bureau Veritas, Intertek) to conduct pre-shipment inspections, seal checks, and container stuffing audits at the loading port prior to departure.
+                Aura Exports welcomes overseas buyers to designate third-party inspection agencies (e.g. SGS, Bureau Veritas, Intertek) to conduct pre-shipment inspections, seal checks, and container stuffing audits at the loading port prior to departure.
               </p>
             </div>
           </div>

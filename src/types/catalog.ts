@@ -1,5 +1,5 @@
 /**
- * AURA Global Trade - Product Catalog & Information Architecture Types
+ * Aura Exports - Product Catalog & Information Architecture Types
  * Scalable schema supporting multi-category international commodity export
  */
 

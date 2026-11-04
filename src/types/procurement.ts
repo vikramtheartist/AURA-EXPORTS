@@ -1,5 +1,5 @@
 /**
- * AURA Global Trade - Procurement & Catalog Data Types
+ * Aura Exports - Procurement & Catalog Data Types
  * Phase 4 Architecture: Strict Data States & Procurement Schema
  */
 
