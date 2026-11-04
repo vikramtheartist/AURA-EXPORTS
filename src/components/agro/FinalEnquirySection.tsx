@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   Send, 
   CheckCircle2, 
   ShieldCheck, 
   Globe, 
   FlaskConical,
-  FileCheck2
+  FileCheck2,
+  AlertCircle
 } from 'lucide-react';
 import { submitRFQ } from '../../services/rfqService';
+import { trackContactEvent } from '../../utils/analytics';
 
 interface FinalEnquirySectionProps {
   onOpenModal?: (inquiryType: 'quotation' | 'specifications' | 'sample') => void;
@@ -33,15 +35,28 @@ export default function FinalEnquirySection({ onOpenModal }: FinalEnquirySection
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [referenceId, setReferenceId] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const hasTriggeredFormStart = useRef(false);
+
+  const handleFormInteraction = () => {
+    if (!hasTriggeredFormStart.current) {
+      hasTriggeredFormStart.current = true;
+      trackContactEvent('enquiry_form_started', {
+        productName: formData.productOfInterest,
+        vertical: 'agro',
+      });
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage(null);
     setIsSubmitting(true);
 
     try {
       const payload = {
         productCategory: 'Agro Products',
-        productRequirement: `[${enquiryMode.toUpperCase()}] Product: ${formData.productOfInterest} | Form: ${formData.productForm} | Packaging: ${formData.preferredPackaging} | Specs: ${formData.technicalRequirements || 'Standard institutional export quality'}`,
+        productRequirement: `[${enquiryMode.toUpperCase()}] Product: ${formData.productOfInterest} | Form: ${formData.productForm} | Packaging: ${formData.preferredPackaging} | Specs: ${formData.technicalRequirements || 'Standard export quality'}`,
         quantity: enquiryMode === 'sample' ? 'Sample lot (eval)' : (formData.estimatedQuantity || 'Commercial lot to be advised'),
         destinationCountry: formData.country,
         destinationPort: formData.destinationPort,
@@ -55,15 +70,20 @@ export default function FinalEnquirySection({ onOpenModal }: FinalEnquirySection
       };
 
       const result = await submitRFQ(payload);
-      if (result.success && result.referenceId) {
+      if (result && result.success && result.referenceId) {
         setReferenceId(result.referenceId);
+        setIsSuccess(true);
+        trackContactEvent('enquiry_submitted', {
+          productName: formData.productOfInterest,
+          vertical: 'agro',
+          referenceId: result.referenceId,
+          mode: enquiryMode,
+        });
       } else {
-        setReferenceId(`AURA-AGRO-${Date.now().toString().slice(-6)}`);
+        setErrorMessage(result?.message || 'Submission could not be completed.');
       }
-      setIsSuccess(true);
-    } catch {
-      setReferenceId(`AURA-AGRO-${Date.now().toString().slice(-6)}`);
-      setIsSuccess(true);
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Submission failed. Please check your information or contact our Trade Desk.');
     } finally {
       setIsSubmitting(false);
     }
@@ -191,7 +211,13 @@ export default function FinalEnquirySection({ onOpenModal }: FinalEnquirySection
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} onFocus={handleFormInteraction} className="space-y-6">
+                {errorMessage && (
+                  <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4 shrink-0" />
+                    <span>{errorMessage}</span>
+                  </div>
+                )}
                 
                 {/* Row 1: Contact Details */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

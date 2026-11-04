@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { trackContactEvent } from '../utils/analytics';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -51,6 +52,16 @@ export default function ProductDetailPage() {
     setModalInquiryType(inquiryType);
     setIsModalOpen(true);
   };
+
+  useEffect(() => {
+    if (product && product.name) {
+      trackContactEvent('view_product_detail', {
+        productName: product.name,
+        category: product.category,
+        vertical: product.categorySlug,
+      });
+    }
+  }, [product?.id]);
 
   return (
     <div className="w-full pt-28 pb-24" id="product-detail-view">

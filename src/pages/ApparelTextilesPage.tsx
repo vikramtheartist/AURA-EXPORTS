@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Shirt, 
@@ -28,6 +28,7 @@ import { institutionalTextileProducts, TextileProductSpec } from '../data/instit
 import apparelHeroImg from '../assets/images/apparel_textiles_hero_heritage.jpg';
 import kanjivaramHero from '../assets/images/saree_kanjivaram_hero.jpg';
 import { submitRFQ } from '../services/rfqService';
+import { trackContactEvent } from '../utils/analytics';
 
 export default function ApparelTextilesPage() {
   // Drawer & Modal States
@@ -57,6 +58,18 @@ export default function ApparelTextilesPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [referenceId, setReferenceId] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const hasTriggeredFormStart = useRef(false);
+
+  const handleFormInteraction = () => {
+    if (!hasTriggeredFormStart.current) {
+      hasTriggeredFormStart.current = true;
+      trackContactEvent('enquiry_form_started', {
+        productName: formData.productOfInterest,
+        vertical: 'textiles',
+      });
+    }
+  };
 
   const filterTabs = [
     { id: 'all', label: 'All Textiles', count: institutionalTextileProducts.length },
@@ -91,7 +104,7 @@ export default function ApparelTextilesPage() {
       corridor: 'Kanchipuram Silk Belt',
       state: 'Tamil Nadu',
       craft: 'Traditional 3-Shuttle Korvai Interlocking Weaving & Petni Pallu Joinery',
-      products: 'Pure Mulberry Silk Sarees, Heavy Zari Bridal Weaves & Contrast Borders',
+      products: 'Silk Sarees, Heritage Weaves & Contrast Borders',
     },
     {
       id: 'telangana-odisha',
@@ -104,13 +117,14 @@ export default function ApparelTextilesPage() {
       id: 'tamilnadu-gujarat',
       corridor: 'Tamil Nadu & Gujarat Sustainable Hub',
       state: 'Tamil Nadu & Gujarat',
-      craft: 'GOTS Certified Organic Spinning, Sanforization & Low-Impact Reactive Dyeing',
+      craft: 'Organic Spinning, Sanforization & Low-Impact Dyeing',
       products: 'Organic Cotton Poplin, Khadi Slub Weaves & Natural Linen Blends',
     },
   ];
 
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage(null);
     setIsSubmitting(true);
     try {
       const payload = {
@@ -128,11 +142,20 @@ export default function ApparelTextilesPage() {
       };
 
       const result = await submitRFQ(payload);
-      setReferenceId(result.referenceId || `AURA-TEX-${Date.now().toString(36).toUpperCase()}`);
-      setIsSuccess(true);
-    } catch {
-      setReferenceId(`AURA-TEX-${Date.now().toString(36).toUpperCase()}`);
-      setIsSuccess(true);
+      if (result && result.success && result.referenceId) {
+        setReferenceId(result.referenceId);
+        setIsSuccess(true);
+        trackContactEvent('enquiry_submitted', {
+          productName: formData.productOfInterest,
+          vertical: 'textiles',
+          referenceId: result.referenceId,
+          mode: enquiryMode,
+        });
+      } else {
+        setErrorMessage(result?.message || 'Submission could not be completed.');
+      }
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Submission failed. Please check your details or contact our Trade Desk.');
     } finally {
       setIsSubmitting(false);
     }
@@ -657,7 +680,13 @@ export default function ApparelTextilesPage() {
                   </div>
                 </div>
 
-                <form onSubmit={handleFinalSubmit} className="space-y-6">
+                <form onSubmit={handleFinalSubmit} onFocus={handleFormInteraction} className="space-y-6">
+                  {errorMessage && (
+                    <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2">
+                      <X className="h-4 w-4 shrink-0" />
+                      <span>{errorMessage}</span>
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                       <label className="block text-xs font-mono text-[#A5A19A] uppercase mb-1.5">Full Name *</label>

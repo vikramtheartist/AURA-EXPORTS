@@ -46,8 +46,8 @@ export default function KanjivaramSareePage() {
   ];
 
   const specifications = [
-    { param: 'Silk Composition', spec: '100% Pure Mulberry Silk (Silk Mark verifiable upon request) or Premium Art Silk option', note: 'Batch tested' },
-    { param: 'Zari Composition', spec: 'Tested metallic zari wire (copper core with silver/gold electroplate) or traditional zari', note: 'Assay verified' },
+    { param: 'Silk Composition', spec: 'Pure Silk or Blended Silk option based on buyer procurement requirements', note: 'Standard specification' },
+    { param: 'Zari Composition', spec: 'Metallic zari wire or traditional zari weave', note: 'Standard commercial specification' },
     { param: 'Total Saree Length', spec: '6.2 Meters total length (inclusive of 80 cm unstitched matching blouse fabric)', note: 'Standard export' },
     { param: 'Fabric Width', spec: '48 inches (122 cm)', note: 'Tolerance ± 0.5"' },
     { param: 'Saree Weight', spec: '750g to 950g per unit (reflecting heavy, authentic 3-ply silk construction)', note: 'Heavyweight class' },
@@ -231,8 +231,8 @@ export default function KanjivaramSareePage() {
             <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 text-xs text-[#dfd1b9]/70 flex items-start gap-3">
               <Info className="h-4 w-4 text-[#dcb782] shrink-0 mt-0.5" />
               <p className="leading-relaxed">
-                <strong className="text-white font-semibold">Authenticity Note: </strong>
-                We source directly from certified master weaver societies. We distinguish pure mulberry silk with tested zari from art silk and blended options to guarantee complete commercial transparency.
+                <strong className="text-white font-semibold">Sourcing Transparency: </strong>
+                We source through established regional weaving centers in Tamil Nadu. We clearly distinguish pure silk and blended options to guarantee complete commercial transparency.
               </p>
             </div>
           </div>

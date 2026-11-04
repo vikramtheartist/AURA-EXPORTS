@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { ChevronRight, ArrowLeft, ArrowRight, ShieldCheck, Check, Globe, HelpCircle, FileText, Send, AlertCircle } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import Breadcrumbs from '../components/procurement/Breadcrumbs';
 import { submitRFQ, validateRFQ } from '../services/rfqService';
 import { RFQRequest, RFQSubmissionResult } from '../types/rfq';
+import { trackContactEvent } from '../utils/analytics';
 
 export default function RequestQuotePage() {
   const [searchParams] = useSearchParams();
@@ -133,6 +134,16 @@ export default function RequestQuotePage() {
     window.scrollTo({ top: 300, behavior: 'smooth' });
   };
 
+  const hasTriggeredFormStart = useRef(false);
+  const handleFormInteraction = () => {
+    if (!hasTriggeredFormStart.current) {
+      hasTriggeredFormStart.current = true;
+      trackContactEvent('enquiry_form_started', {
+        productName: formData.productCategory || 'General Sourcing',
+      });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (honeypot) {
@@ -150,7 +161,17 @@ export default function RequestQuotePage() {
     setIsSubmitting(true);
     try {
       const res = await submitRFQ(formData);
-      setSubmittedResult(res);
+      if (res && res.success) {
+        setSubmittedResult(res);
+        trackContactEvent('enquiry_submitted', {
+          productName: formData.productCategory,
+          referenceId: res.referenceId,
+          vertical: formData.productCategory,
+          mode: 'quotation',
+        });
+      } else {
+        setErrorMsg(res?.message || 'Submission could not be completed.');
+      }
       setIsSubmitting(false);
       window.scrollTo({ top: 200, behavior: 'smooth' });
     } catch (err: any) {
@@ -345,7 +366,7 @@ export default function RequestQuotePage() {
 
             {/* STEP 1: REQUIREMENT (Section 25) */}
             {step === 1 && (
-              <form onSubmit={handleStep1Continue} className="flex flex-col gap-6" id="rfq-step-1">
+              <form onSubmit={handleStep1Continue} onFocus={handleFormInteraction} className="flex flex-col gap-6" id="rfq-step-1">
                 <div>
                   <label htmlFor="rfq-category" className="block text-xs font-mono text-[#dfd1b9]/80 mb-2 font-bold uppercase">
                     Product / Category *
@@ -476,7 +497,7 @@ export default function RequestQuotePage() {
 
             {/* STEP 2: BUYER DETAILS & COMMERCIALS (Section 26) */}
             {step === 2 && (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-6" id="rfq-step-2">
+              <form onSubmit={handleSubmit} onFocus={handleFormInteraction} className="flex flex-col gap-6" id="rfq-step-2">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="rfq-name" className="block text-xs font-mono text-[#dfd1b9]/80 mb-2 font-bold uppercase">

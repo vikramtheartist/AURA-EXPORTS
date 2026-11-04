@@ -1,4 +1,5 @@
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useRef } from 'react';
+import { trackContactEvent } from '../utils/analytics';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -27,10 +28,24 @@ export default function ContactPage() {
     inquiryType: 'Corporate Trade Inquiries',
     message: ''
   });
+  const hasTriggeredFormStart = useRef(false);
+
+  const handleFormInteraction = () => {
+    if (!hasTriggeredFormStart.current) {
+      hasTriggeredFormStart.current = true;
+      trackContactEvent('enquiry_form_started', {
+        productName: formData.inquiryType,
+      });
+    }
+  };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
+    trackContactEvent('enquiry_submitted', {
+      productName: formData.inquiryType,
+      mode: 'correspondence',
+    });
   };
 
   return (
@@ -118,7 +133,11 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <span className="text-xs font-mono text-[#ab8558] uppercase font-bold block mb-0.5">Trade Desk Correspondence</span>
-                  <a href="mailto:contact@auraexport.co" className="text-white text-sm font-mono font-medium hover:text-[#dcb782] transition-colors block">
+                  <a 
+                    href="mailto:contact@auraexport.co" 
+                    onClick={() => trackContactEvent('email_clicked')}
+                    className="text-white text-sm font-mono font-medium hover:text-[#dcb782] transition-colors block"
+                  >
                     contact@auraexport.co
                   </a>
                   <p className="text-xs text-[#dfd1b9]/50 font-light mt-0.5">Primary verified correspondence mailbox</p>
@@ -132,7 +151,11 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <span className="text-xs font-mono text-[#ab8558] uppercase font-bold block mb-0.5">Direct Telephone / Trade Line</span>
-                  <a href="tel:+919361990229" className="text-white text-sm font-mono font-medium hover:text-[#dcb782] transition-colors block">
+                  <a 
+                    href="tel:+919361990229" 
+                    onClick={() => trackContactEvent('phone_call_clicked')}
+                    className="text-white text-sm font-mono font-medium hover:text-[#dcb782] transition-colors block"
+                  >
                     +91 9361990229
                   </a>
                   <p className="text-xs text-[#dfd1b9]/50 font-light mt-0.5">Chennai Trade Desk Official Representative Line</p>
@@ -214,7 +237,7 @@ export default function ContactPage() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              <form onSubmit={handleSubmit} onFocus={handleFormInteraction} className="flex flex-col gap-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="flex flex-col gap-2">
                     <label htmlFor="fullName" className="text-xs font-mono uppercase tracking-wider text-[#dfd1b9]/80 font-medium">

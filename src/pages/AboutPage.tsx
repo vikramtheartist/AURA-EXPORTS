@@ -202,14 +202,14 @@ export default function AboutPage() {
             </p>
 
             <p className="text-[#D5C8B7]/90 font-body text-sm md:text-base leading-relaxed font-light">
-              At Aura Global Trade, this is not mere poetic sentiment; it is our operational compass. In an industry often troubled by speculative brokers and opaque intermediaries, we operate with transparent contracts, lab-verified assays, and mutual accountability.
+              At Aura Global Trade, this is not mere poetic sentiment; it is our operational compass. In an industry often troubled by speculative brokers and opaque intermediaries, we operate with transparent contracts, documented specifications, and mutual accountability.
             </p>
 
             {/* Verified Capability Metrics */}
             <div className="grid grid-cols-3 gap-6 w-full pt-6 mt-4 border-t border-white/10 text-xs font-mono">
               <div>
-                <span className="text-[#dcb782] text-xl font-heading font-bold block">Verified</span>
-                <span className="text-[#dfd1b9]/50 uppercase text-[10px]">Lab Assay Protocol</span>
+                <span className="text-[#dcb782] text-xl font-heading font-bold block">Structured</span>
+                <span className="text-[#dfd1b9]/50 uppercase text-[10px]">Quality Protocol</span>
               </div>
               <div>
                 <span className="text-[#dcb782] text-xl font-heading font-bold block">Direct</span>

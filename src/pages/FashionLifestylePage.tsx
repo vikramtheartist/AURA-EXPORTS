@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Sparkles, 
@@ -28,6 +28,7 @@ import { institutionalFashionProducts, FashionProductSpec } from '../data/instit
 import heroImg from '../assets/images/fashion_lifestyle_hero.jpg';
 import kundanImg from '../assets/images/jewelry_kundan.jpg';
 import { submitRFQ } from '../services/rfqService';
+import { trackContactEvent } from '../utils/analytics';
 
 export default function FashionLifestylePage() {
   // Drawer & Modal States
@@ -57,6 +58,18 @@ export default function FashionLifestylePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [referenceId, setReferenceId] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const hasTriggeredFormStart = useRef(false);
+
+  const handleFormInteraction = () => {
+    if (!hasTriggeredFormStart.current) {
+      hasTriggeredFormStart.current = true;
+      trackContactEvent('enquiry_form_started', {
+        productName: formData.productOfInterest,
+        vertical: 'jewellery',
+      });
+    }
+  };
 
   const filterTabs = [
     { id: 'all', label: 'All Collections', count: institutionalFashionProducts.length },
@@ -111,6 +124,7 @@ export default function FashionLifestylePage() {
 
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage(null);
     setIsSubmitting(true);
     try {
       const payload = {
@@ -128,11 +142,20 @@ export default function FashionLifestylePage() {
       };
 
       const result = await submitRFQ(payload);
-      setReferenceId(result.referenceId || `AURA-JEWEL-${Date.now().toString(36).toUpperCase()}`);
-      setIsSuccess(true);
-    } catch {
-      setReferenceId(`AURA-JEWEL-${Date.now().toString(36).toUpperCase()}`);
-      setIsSuccess(true);
+      if (result && result.success && result.referenceId) {
+        setReferenceId(result.referenceId);
+        setIsSuccess(true);
+        trackContactEvent('enquiry_submitted', {
+          productName: formData.productOfInterest,
+          vertical: 'jewellery',
+          referenceId: result.referenceId,
+          mode: enquiryMode,
+        });
+      } else {
+        setErrorMessage(result?.message || 'Submission could not be completed.');
+      }
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Submission failed. Please check your details or contact our Trade Desk.');
     } finally {
       setIsSubmitting(false);
     }
@@ -657,7 +680,13 @@ export default function FashionLifestylePage() {
                   </div>
                 </div>
 
-                <form onSubmit={handleFinalSubmit} className="space-y-6">
+                <form onSubmit={handleFinalSubmit} onFocus={handleFormInteraction} className="space-y-6">
+                  {errorMessage && (
+                    <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2">
+                      <X className="h-4 w-4 shrink-0" />
+                      <span>{errorMessage}</span>
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                       <label className="block text-xs font-mono text-[#A5A19A] uppercase mb-1.5">Full Name *</label>

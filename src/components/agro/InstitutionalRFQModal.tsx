@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   X, 
   Send, 
@@ -73,6 +73,7 @@ export default function InstitutionalRFQModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedRef, setSubmittedRef] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const hasTriggeredFormStart = useRef(false);
 
   // Sync state on modal open
   useEffect(() => {
@@ -80,6 +81,7 @@ export default function InstitutionalRFQModal({
       document.body.style.overflow = 'hidden';
       setSubmittedRef(null);
       setErrorMessage(null);
+      hasTriggeredFormStart.current = false;
       setQuantityUnit(vertical === 'agro' ? 'Metric Tons' : vertical === 'textiles' ? 'Metres' : 'Pieces');
       trackContactEvent('rfq_modal_opened', {
         productName,
@@ -93,6 +95,14 @@ export default function InstitutionalRFQModal({
       document.body.style.overflow = 'unset';
     };
   }, [isOpen, productName, productOrigin, vertical]);
+
+  // Track form interaction when buyer starts typing or focusing
+  const handleFormInteraction = () => {
+    if (!hasTriggeredFormStart.current) {
+      hasTriggeredFormStart.current = true;
+      trackContactEvent('enquiry_form_started', { productName, vertical });
+    }
+  };
 
   // Keyboard navigation: Escape key closes modal
   useEffect(() => {
@@ -147,7 +157,6 @@ export default function InstitutionalRFQModal({
     }
 
     setIsSubmitting(true);
-    trackContactEvent('enquiry_form_started', { productName, channel: 'form', vertical });
 
     try {
       const advancedNotes = [
@@ -175,22 +184,20 @@ export default function InstitutionalRFQModal({
       };
 
       const result = await submitRFQ(payload);
-      const generatedRef = result.referenceId || `AURA-RFQ-${Date.now().toString(36).toUpperCase()}`;
-      setSubmittedRef(generatedRef);
-      trackContactEvent('enquiry_submitted', {
-        productName,
-        referenceId: generatedRef,
-        vertical,
-      });
-    } catch {
-      // Fallback: Generate valid local reference so buyer is never blocked
-      const fallbackRef = `AURA-RFQ-${Date.now().toString(36).toUpperCase()}`;
-      setSubmittedRef(fallbackRef);
-      trackContactEvent('enquiry_submitted', {
-        productName,
-        referenceId: fallbackRef,
-        vertical,
-      });
+      if (result && result.success) {
+        const generatedRef = result.referenceId || `AURA-RFQ-${Date.now().toString(36).toUpperCase()}`;
+        setSubmittedRef(generatedRef);
+        trackContactEvent('enquiry_submitted', {
+          productName,
+          referenceId: generatedRef,
+          vertical,
+          mode: 'quotation',
+        });
+      } else {
+        setErrorMessage(result?.message || 'Submission could not be completed.');
+      }
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Submission failed. Please verify your details or contact the Trade Desk directly.');
     } finally {
       setIsSubmitting(false);
     }
@@ -353,7 +360,7 @@ export default function InstitutionalRFQModal({
               </div>
 
               {/* Form with 4 Primary Fields */}
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} onFocus={handleFormInteraction} className="space-y-4">
                 {errorMessage && (
                   <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2">
                     <X className="h-4 w-4 shrink-0" />
