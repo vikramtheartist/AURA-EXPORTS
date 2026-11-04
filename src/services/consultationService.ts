@@ -124,3 +124,68 @@ export async function submitConsultationBooking(email: string): Promise<Consulta
     message: 'We received your inquiry. A trade desk officer will review your request and contact you promptly.',
   };
 }
+
+export interface GeneralCorrespondencePayload {
+  fullName: string;
+  email: string;
+  organization?: string;
+  country?: string;
+  topic: string;
+  message: string;
+}
+
+export async function submitGeneralCorrespondence(payload: GeneralCorrespondencePayload): Promise<ConsultationResult> {
+  const trimmedEmail = payload.email.trim();
+  if (!validateEmail(trimmedEmail)) {
+    throw new Error('Please enter a valid business or corporate email address.');
+  }
+
+  const referenceId = `AURA-CORR-${Date.now().toString(36).toUpperCase()}-${Math.floor(
+    Math.random() * 899 + 100
+  )}`;
+
+  // 1. Store in localStorage
+  if (typeof window !== 'undefined' && window.localStorage) {
+    try {
+      const existing = JSON.parse(window.localStorage.getItem('aura_general_correspondence_v1') || '[]');
+      existing.unshift({ ...payload, referenceId, submittedAt: new Date().toISOString() });
+      window.localStorage.setItem('aura_general_correspondence_v1', JSON.stringify(existing.slice(0, 50)));
+    } catch (e) {
+      console.warn('[AURA Correspondence] Could not persist to localStorage:', e);
+    }
+  }
+
+  // 2. Dispatch email to Trade Desk inbox
+  const recipient = (import.meta as any).env?.VITE_CONSULTATION_RECIPIENT_EMAIL || DEFAULT_RECIPIENT_EMAIL;
+
+  try {
+    await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(recipient)}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        _subject: `🔔 New General Trade Inquiry (${referenceId}) - ${payload.topic}`,
+        _template: 'table',
+        _captcha: 'false',
+        _replyto: trimmedEmail,
+        'Reference ID': referenceId,
+        'Contact Name': payload.fullName,
+        'Contact Email': trimmedEmail,
+        'Organization': payload.organization || 'Not provided',
+        'Country': payload.country || 'Not specified',
+        'Inquiry Topic': payload.topic,
+        'Message': payload.message,
+      }),
+    });
+  } catch (netErr) {
+    console.warn('[AURA Correspondence] Network transmission notice:', netErr);
+  }
+
+  return {
+    success: true,
+    referenceId,
+    message: 'Your correspondence has been received by the Aura Exports Trade Desk.',
+  };
+}

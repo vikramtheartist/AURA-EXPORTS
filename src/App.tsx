@@ -4,6 +4,8 @@ import Navbar from './components/Navbar';
 import CtaFooter from './components/CtaFooter';
 import ScrollToTop from './components/ScrollToTop';
 import AnalyticsProvider from './components/AnalyticsProvider';
+import { QuoteModalProvider } from './context/QuoteModalContext';
+import RequestQuoteModal from './components/procurement/RequestQuoteModal';
 
 import HomePage from './pages/HomePage';
 const AboutPage = lazy(() => import('./pages/AboutPage'));
@@ -46,68 +48,73 @@ function RouteLoadingFallback() {
 
 export default function App() {
   return (
-    <div className="relative w-full min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden" id="app-root-container">
-      {/* Background spatial aesthetic */}
-      <div className="absolute inset-0 bg-[radial-gradient(#ffffff08_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-30" />
-      <div className="absolute top-[20%] left-[-10%] w-[50vw] h-[50vw] bg-neutral-900/40 rounded-full blur-[160px] pointer-events-none" />
-      <div className="absolute top-[60%] right-[-10%] w-[50vw] h-[50vw] bg-neutral-900/30 rounded-full blur-[160px] pointer-events-none" />
+    <QuoteModalProvider>
+      <div className="relative w-full min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden" id="app-root-container">
+        {/* Background spatial aesthetic */}
+        <div className="absolute inset-0 bg-[radial-gradient(#ffffff08_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-30" />
+        <div className="absolute top-[20%] left-[-10%] w-[50vw] h-[50vw] bg-neutral-900/40 rounded-full blur-[160px] pointer-events-none" />
+        <div className="absolute top-[60%] right-[-10%] w-[50vw] h-[50vw] bg-neutral-900/30 rounded-full blur-[160px] pointer-events-none" />
 
-      {/* Core layout */}
-      <div className="relative z-10 flex flex-col w-full">
-        <ScrollToTop />
-        <AnalyticsProvider />
-        <Navbar />
+        {/* Global Request a Quote Modal */}
+        <RequestQuoteModal />
 
-        <div className="w-full flex-grow">
-          <Suspense fallback={<RouteLoadingFallback />}>
-            <Routes>
-              {/* Primary Canonical Pages */}
-              <Route path="/" element={<HomePage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/products" element={<ProductsPage />} />
-              <Route path="/products/agro-products" element={<AgroProductsPage />} />
-              <Route path="/products/agro-products/turmeric" element={<TurmericFlagshipPage />} />
-              <Route path="/products/agro-products/:productSlug" element={<ProductDetailPage />} />
-              <Route path="/products/fashion-lifestyle" element={<FashionLifestylePage />} />
-              <Route path="/products/fashion-lifestyle/:productSlug" element={<ProductDetailPage />} />
-              <Route path="/products/apparel-textiles" element={<ApparelTextilesPage />} />
-              <Route path="/products/apparel-textiles/kanjivaram-silk-saree" element={<KanjivaramSareePage />} />
-              <Route path="/products/apparel-textiles/:productSlug" element={<ProductDetailPage />} />
-              <Route path="/products/:categorySlug/:productSlug" element={<ProductDetailPage />} />
-              <Route path="/products/spices" element={<Navigate to="/products/agro-products" replace />} />
-              <Route path="/products/spices/turmeric" element={<TurmericFlagshipPage />} />
-              <Route path="/products/jewelry" element={<Navigate to="/products/fashion-lifestyle" replace />} />
-              <Route path="/products/textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
-              <Route path="/quality-compliance" element={<QualityPage />} />
-              <Route path="/export-process" element={<ExportProcessPage />} />
-              <Route path="/faqs" element={<FaqsPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/request-quote" element={<RequestQuotePage />} />
+        {/* Core layout */}
+        <div className="relative z-10 flex flex-col w-full">
+          <ScrollToTop />
+          <AnalyticsProvider />
+          <Navbar />
 
-              {/* Legal & Governance Routes */}
-              <Route path="/privacy" element={<PrivacyPolicyPage />} />
-              <Route path="/terms" element={<TermsPage />} />
-              <Route path="/terms-of-trade" element={<TermsOfTradePage />} />
+          <div className="w-full flex-grow">
+            <Suspense fallback={<RouteLoadingFallback />}>
+              <Routes>
+                {/* Primary Canonical Pages */}
+                <Route path="/" element={<HomePage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/products" element={<ProductsPage />} />
+                <Route path="/products/agro-products" element={<AgroProductsPage />} />
+                <Route path="/products/agro-products/turmeric" element={<TurmericFlagshipPage />} />
+                <Route path="/products/agro-products/:productSlug" element={<ProductDetailPage />} />
+                <Route path="/products/fashion-lifestyle" element={<FashionLifestylePage />} />
+                <Route path="/products/fashion-lifestyle/:productSlug" element={<ProductDetailPage />} />
+                <Route path="/products/apparel-textiles" element={<ApparelTextilesPage />} />
+                <Route path="/products/apparel-textiles/kanjivaram-silk-saree" element={<KanjivaramSareePage />} />
+                <Route path="/products/apparel-textiles/:productSlug" element={<ProductDetailPage />} />
+                <Route path="/products/:categorySlug/:productSlug" element={<ProductDetailPage />} />
+                <Route path="/products/spices" element={<Navigate to="/products/agro-products" replace />} />
+                <Route path="/products/spices/turmeric" element={<TurmericFlagshipPage />} />
+                <Route path="/products/jewelry" element={<Navigate to="/products/fashion-lifestyle" replace />} />
+                <Route path="/products/textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
+                <Route path="/quality-compliance" element={<QualityPage />} />
+                <Route path="/export-process" element={<ExportProcessPage />} />
+                <Route path="/faqs" element={<FaqsPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/request-quote" element={<RequestQuotePage />} />
 
-              {/* Canonical Redirects / Aliases */}
-              <Route path="/agro-products" element={<Navigate to="/products/agro-products" replace />} />
-              <Route path="/spices" element={<Navigate to="/products/agro-products" replace />} />
-              <Route path="/products/turmeric" element={<Navigate to="/products/agro-products/turmeric" replace />} />
-              <Route path="/turmeric" element={<Navigate to="/products/agro-products/turmeric" replace />} />
-              <Route path="/fashion-lifestyle" element={<Navigate to="/products/fashion-lifestyle" replace />} />
-              <Route path="/jewelry" element={<Navigate to="/products/fashion-lifestyle" replace />} />
-              <Route path="/textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
-              <Route path="/apparel-textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
-              <Route path="/quality" element={<Navigate to="/quality-compliance" replace />} />
+                {/* Legal & Governance Routes */}
+                <Route path="/privacy" element={<PrivacyPolicyPage />} />
+                <Route path="/terms" element={<TermsPage />} />
+                <Route path="/terms-of-trade" element={<TermsOfTradePage />} />
 
-              {/* 404 Fallback */}
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </Suspense>
+                {/* Canonical Redirects / Aliases */}
+                <Route path="/agro-products" element={<Navigate to="/products/agro-products" replace />} />
+                <Route path="/spices" element={<Navigate to="/products/agro-products" replace />} />
+                <Route path="/products/turmeric" element={<Navigate to="/products/agro-products/turmeric" replace />} />
+                <Route path="/turmeric" element={<Navigate to="/products/agro-products/turmeric" replace />} />
+                <Route path="/fashion-lifestyle" element={<Navigate to="/products/fashion-lifestyle" replace />} />
+                <Route path="/jewelry" element={<Navigate to="/products/fashion-lifestyle" replace />} />
+                <Route path="/textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
+                <Route path="/apparel-textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
+                <Route path="/quality" element={<Navigate to="/quality-compliance" replace />} />
+
+                {/* 404 Fallback */}
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </Suspense>
+          </div>
+
+          <CtaFooter />
         </div>
-
-        <CtaFooter />
       </div>
-    </div>
+    </QuoteModalProvider>
   );
 }

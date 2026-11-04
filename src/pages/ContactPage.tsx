@@ -1,9 +1,5 @@
-import { useState, FormEvent, useRef } from 'react';
-import { trackContactEvent } from '../utils/analytics';
-import { Link } from 'react-router-dom';
+import React, { useState, FormEvent, useRef } from 'react';
 import {
-  ArrowLeft,
-  ChevronRight,
   Globe,
   Mail,
   MapPin,
@@ -13,339 +9,537 @@ import {
   Send,
   CheckCircle2,
   Building2,
-  ShieldCheck
+  ShieldCheck,
+  Zap,
+  Layers,
+  ChevronDown,
+  ChevronUp,
+  ArrowRight,
+  Calendar,
+  CalendarDays,
+  Loader2,
 } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
-import Breadcrumbs from '../components/procurement/Breadcrumbs';
+import { COMPANY_CONTACT } from '../config/companyContact';
+import { useQuoteModal } from '../context/QuoteModalContext';
+import { trackContactEvent } from '../utils/analytics';
+import { submitGeneralCorrespondence } from '../services/consultationService';
 
 export default function ContactPage() {
-  const [submitted, setSubmitted] = useState(false);
+  const { openQuoteModal } = useQuoteModal();
+
+  // Accordion state for credentials in Card 1
+  const [isCredentialsOpen, setIsCredentialsOpen] = useState(false);
+
+  // Toggle state for General Inquiry Form in Card 3
+  const [isGeneralFormOpen, setIsGeneralFormOpen] = useState(false);
+
+  // General Correspondence Form State
   const [formData, setFormData] = useState({
     fullName: '',
-    corporateEmail: '',
+    email: '',
     organization: '',
     country: '',
-    inquiryType: 'Corporate Trade Inquiries',
-    message: ''
+    topic: 'Bilateral Trade Partnership',
+    message: '',
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
   const hasTriggeredFormStart = useRef(false);
 
   const handleFormInteraction = () => {
     if (!hasTriggeredFormStart.current) {
       hasTriggeredFormStart.current = true;
       trackContactEvent('enquiry_form_started', {
-        productName: formData.inquiryType,
+        productName: formData.topic,
+        mode: 'general_correspondence',
       });
     }
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleGeneralSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    trackContactEvent('enquiry_submitted', {
-      productName: formData.inquiryType,
-      mode: 'correspondence',
-    });
+    setSubmitError(null);
+
+    if (!formData.fullName.trim()) {
+      setSubmitError('Please enter your full name.');
+      return;
+    }
+    if (!formData.email.trim() || !formData.email.includes('@')) {
+      setSubmitError('Please enter a valid email address.');
+      return;
+    }
+    if (!formData.message.trim() || formData.message.trim().length < 5) {
+      setSubmitError('Please enter your message (minimum 5 characters).');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await submitGeneralCorrespondence({
+        fullName: formData.fullName,
+        email: formData.email,
+        organization: formData.organization,
+        country: formData.country,
+        topic: formData.topic,
+        message: formData.message,
+      });
+
+      setSubmitted(true);
+      trackContactEvent('enquiry_submitted', {
+        productName: formData.topic,
+        mode: 'general_correspondence',
+      });
+    } catch (err: any) {
+      setSubmitError(err.message || 'Submission failed. Please email us directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="w-full pt-28 pb-20">
+    <div className="w-full pt-28 pb-24" id="contact-page-view">
       <SEOHead pageKey="contact" />
 
-      {/* Breadcrumbs */}
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Contact', href: '/contact' },
-        ]}
-      />
-
-      {/* Page Header */}
+      {/* Header Section */}
       <header className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-14">
-        <div className="inline-flex items-center gap-2 bg-white/5 border border-[#dcb782]/20 rounded-full px-4 py-1.5 mb-6">
-          <Globe className="h-3.5 w-3.5 text-[#dcb782]" />
-          <span className="text-xs font-mono text-[#dcb782] tracking-wider uppercase font-semibold">
-            CORPORATE CORRESPONDENCE DESK
-          </span>
+        {/* Eyebrow */}
+        <div className="inline-flex items-center gap-2 text-xs font-mono text-[#dcb782] tracking-widest uppercase font-semibold mb-4">
+          <Globe className="h-4 w-4 text-[#dcb782]" />
+          <span>CONTACT & OPERATIONS</span>
         </div>
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading text-white tracking-tight leading-[1.05] font-normal mb-4">
-          Aura Trade Desk <span className="text-[#dcb782] italic font-normal">& Communications</span>
-        </h1>
-        <p className="text-[#D5C8B7] font-body text-base md:text-lg max-w-3xl font-light leading-relaxed">
-          Direct bilateral communication with our trade desk officers in Chennai, India. For corporate partnerships, vendor collective registrations, and institutional correspondence.
-        </p>
+
+        {/* 2-Column Split: Title & Intro Description */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          <div className="lg:col-span-7">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading text-white tracking-tight leading-[1.05] font-normal">
+              Get in Touch with <br className="hidden sm:inline" />
+              <span className="text-[#dfd1b9]">Aura Exports</span>
+            </h1>
+          </div>
+
+          <div className="lg:col-span-5 flex flex-col gap-4 lg:border-l lg:border-white/10 lg:pl-8">
+            <p className="text-sm md:text-base text-[#dfd1b9]/80 font-light leading-relaxed">
+              Your direct point of contact for trade enquiries, partnerships, sourcing, documentation, and operational support.
+            </p>
+
+            {/* 3 Inline Capability Badges */}
+            <div className="flex flex-wrap items-center gap-4 pt-1 text-xs">
+              <div className="inline-flex items-center gap-2 text-[#dcb782]">
+                <Zap className="h-4 w-4 shrink-0 text-[#dcb782]" />
+                <span className="text-white text-[11px] font-medium">Responsive & Direct Communication</span>
+              </div>
+
+              <div className="inline-flex items-center gap-2 text-[#dcb782]">
+                <ShieldCheck className="h-4 w-4 shrink-0 text-[#dcb782]" />
+                <span className="text-white text-[11px] font-medium">Verified & Trade Compliant</span>
+              </div>
+
+              <div className="inline-flex items-center gap-2 text-[#dcb782]">
+                <Layers className="h-4 w-4 shrink-0 text-[#dcb782]" />
+                <span className="text-white text-[11px] font-medium">End-to-End Trade Support</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 flex flex-col gap-16">
+      {/* Main Content Area */}
+      <main className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 flex flex-col gap-8">
+        {/* CARD 1: OUR TRADE DESK */}
+        <section
+          aria-labelledby="trade-desk-heading"
+          className="rounded-[2rem] bg-[#0c0c0b] border border-white/10 overflow-hidden relative shadow-2xl"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-12">
+            {/* Left Column (5 cols) */}
+            <div className="lg:col-span-5 relative p-8 md:p-12 bg-gradient-to-br from-[#221a11] via-[#14120f] to-[#0c0c0b] flex flex-col justify-start overflow-hidden border-b lg:border-b-0 lg:border-r border-white/10">
+              {/* Warm top-left glow */}
+              <div className="absolute -top-24 -left-24 w-72 h-72 bg-[#dcb782]/20 rounded-full blur-[80px] pointer-events-none" />
 
-        {/* Commercial RFQ Pathway Separation Banner (Section 30) */}
-        <div className="p-6 md:p-8 rounded-3xl bg-gradient-to-r from-[#1c1a16] via-[#151412] to-[#0e0e0c] border border-[#dcb782]/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-2xl">
-          <div className="flex items-start gap-4">
-            <div className="h-12 w-12 rounded-2xl bg-white/5 border border-[#dcb782]/25 flex items-center justify-center shrink-0">
+              <div className="relative z-10">
+                <span className="text-[10px] font-mono tracking-[0.25em] text-[#dcb782] uppercase font-bold">
+                  CONTACT & OPERATIONS
+                </span>
+
+                <h2
+                  id="trade-desk-heading"
+                  className="text-3xl md:text-4xl font-heading text-white font-normal mt-3 mb-4"
+                >
+                  Our Trade Desk
+                </h2>
+
+                <p className="text-sm text-[#dfd1b9]/75 font-light leading-relaxed">
+                  Reach us directly through your preferred channel. Our team in Chennai is available to support your business enquiries, coordination, and documentation needs.
+                </p>
+              </div>
+            </div>
+
+            {/* Right Column: 4 Channels (7 cols) */}
+            <div className="lg:col-span-7 p-6 sm:p-8 md:p-10 flex flex-col gap-5 bg-[#0e0e0d]">
+              {/* Row 1: Operating Gateway */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors gap-4">
+                <div className="flex items-start gap-4">
+                  <div className="h-11 w-11 rounded-2xl bg-white/5 border border-[#dcb782]/25 flex items-center justify-center shrink-0">
+                    <MapPin className="h-5 w-5 text-[#dcb782]" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-white">Operating Gateway</h3>
+                    <p className="text-xs text-[#dfd1b9]/80 mt-0.5">{COMPANY_CONTACT.operatingLocation}</p>
+                    <p className="text-[11px] text-[#dfd1b9]/50 font-mono mt-0.5">
+                      Maritime Corridor: {COMPANY_CONTACT.maritimeCorridors}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 2: Trade Desk Correspondence */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors gap-4">
+                <div className="flex items-start gap-4">
+                  <div className="h-11 w-11 rounded-2xl bg-white/5 border border-[#dcb782]/25 flex items-center justify-center shrink-0">
+                    <Mail className="h-5 w-5 text-[#dcb782]" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-white">Trade Desk Correspondence</h3>
+                    <p className="text-xs text-[#dcb782] font-mono mt-0.5">{COMPANY_CONTACT.corporateEmail}</p>
+                    <p className="text-[11px] text-[#dfd1b9]/50 font-light mt-0.5">
+                      Primary verified correspondence mailbox
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href={`mailto:${COMPANY_CONTACT.corporateEmail}`}
+                  className="self-start sm:self-center border border-[#dcb782]/35 hover:border-[#dcb782] text-white hover:text-[#dcb782] px-4 py-2 rounded-xl text-xs font-mono flex items-center gap-2 transition-all bg-white/[0.02]"
+                >
+                  <Mail className="h-3.5 w-3.5" />
+                  <span>Email Us</span>
+                </a>
+              </div>
+
+              {/* Row 3: Direct Telephone / Trade Line */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors gap-4">
+                <div className="flex items-start gap-4">
+                  <div className="h-11 w-11 rounded-2xl bg-white/5 border border-[#dcb782]/25 flex items-center justify-center shrink-0">
+                    <Phone className="h-5 w-5 text-[#dcb782]" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-white">Direct Telephone / Trade Line</h3>
+                    <p className="text-xs text-[#dfd1b9]/80 font-mono mt-0.5">{COMPANY_CONTACT.phoneDisplay}</p>
+                    <p className="text-[11px] text-[#dfd1b9]/50 font-light mt-0.5">
+                      Chennai Trade Desk Official Representative Line
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href={`tel:${COMPANY_CONTACT.phoneTel}`}
+                  className="self-start sm:self-center border border-[#dcb782]/35 hover:border-[#dcb782] text-white hover:text-[#dcb782] px-4 py-2 rounded-xl text-xs font-mono flex items-center gap-2 transition-all bg-white/[0.02]"
+                >
+                  <Phone className="h-3.5 w-3.5" />
+                  <span>Call Now</span>
+                </a>
+              </div>
+
+              {/* Row 4: Operating Desk Hours */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors gap-4">
+                <div className="flex items-start gap-4">
+                  <div className="h-11 w-11 rounded-2xl bg-white/5 border border-[#dcb782]/25 flex items-center justify-center shrink-0">
+                    <Clock className="h-5 w-5 text-[#dcb782]" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-white">Operating Desk Hours</h3>
+                    <p className="text-xs text-[#dfd1b9]/80 font-mono mt-0.5">{COMPANY_CONTACT.deskHours}</p>
+                    <p className="text-[11px] text-[#dfd1b9]/50 font-light mt-0.5">
+                      {COMPANY_CONTACT.operatingDays}
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href={COMPANY_CONTACT.getWhatsAppUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="self-start sm:self-center border border-[#dcb782]/35 hover:border-[#dcb782] text-white hover:text-[#dcb782] px-4 py-2 rounded-xl text-xs font-mono flex items-center gap-2 transition-all bg-white/[0.02]"
+                >
+                  <CalendarDays className="h-3.5 w-3.5 text-[#dcb782]" />
+                  <span>Schedule a Call</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Statutory Registration Credentials Accordion Bar */}
+          <div className="border-t border-white/10 bg-[#090908]">
+            <button
+              type="button"
+              onClick={() => setIsCredentialsOpen(!isCredentialsOpen)}
+              className="w-full px-6 md:px-10 py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-left hover:bg-white/[0.02] transition-colors cursor-pointer"
+            >
+              <div className="flex items-center gap-3">
+                <div className="h-8 w-8 rounded-xl bg-white/5 border border-[#dcb782]/20 flex items-center justify-center shrink-0">
+                  <Building2 className="h-4 w-4 text-[#dcb782]" />
+                </div>
+                <span className="text-xs font-semibold text-white">
+                  Statutory Registration Credentials
+                </span>
+              </div>
+
+              <div className="flex items-center gap-3 text-[11px] font-mono text-[#dfd1b9]/70 flex-wrap">
+                <span className="text-white font-bold">{COMPANY_CONTACT.legalEntity}</span>
+                <span className="hidden sm:inline text-white/30">|</span>
+                <span>CIN: {COMPANY_CONTACT.cin}</span>
+                <span className="hidden sm:inline text-white/30">|</span>
+                <span>IEC: {COMPANY_CONTACT.iec}</span>
+                <span className="hidden sm:inline text-white/30">|</span>
+                <span>GSTIN: Available</span>
+                <div className="ml-2 text-[#dcb782]">
+                  {isCredentialsOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                </div>
+              </div>
+            </button>
+
+            {/* Expanded Credentials Drawer */}
+            {isCredentialsOpen && (
+              <div className="px-6 md:px-10 pb-6 pt-2 border-t border-white/5 text-xs text-[#dfd1b9]/80 font-light flex flex-col gap-2 animate-fade-in">
+                <p>
+                  <strong>Registered Office:</strong> {COMPANY_CONTACT.registeredAddress}
+                </p>
+                <p>
+                  <strong>Corporate Authority:</strong> Ministry of Corporate Affairs (MCA), Government of India.
+                </p>
+                <p>
+                  <strong>Trade Directorate:</strong> Directorate General of Foreign Trade (DGFT), Ministry of Commerce and Industry, Government of India.
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* CARD 2: REQUEST A TRADE QUOTE */}
+        <section
+          aria-labelledby="card-quote-heading"
+          className="rounded-[2rem] bg-gradient-to-r from-[#1d1710] via-[#12110f] to-[#0c0c0b] border border-white/10 p-6 sm:p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden shadow-2xl"
+        >
+          {/* Subtle gold glow */}
+          <div className="absolute -top-16 -left-16 w-52 h-52 bg-[#dcb782]/15 rounded-full blur-[60px] pointer-events-none" />
+
+          <div className="flex items-start gap-4 sm:gap-5 relative z-10 max-w-2xl">
+            <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-2xl bg-white/5 border border-[#dcb782]/25 flex items-center justify-center shrink-0">
               <FileText className="h-6 w-6 text-[#dcb782]" />
             </div>
             <div>
-              <span className="text-xs font-mono text-[#dcb782] uppercase font-bold tracking-wider block mb-1">
-                COMMERCIAL INQUIRY OR CONTAINER PRICING?
+              <span className="text-[10px] font-mono tracking-widest text-[#dcb782] uppercase font-bold block mb-1">
+                COMMERCIAL INQUIRY OR CONTAINER PRICING
               </span>
-              <h2 className="text-xl font-heading text-white font-medium mb-1">
-                For Formal Quotations & Product Inquiries, Use the RFQ Desk
+              <h2 id="card-quote-heading" className="text-2xl sm:text-3xl font-heading text-white font-normal mb-1">
+                Request a Trade Quote
               </h2>
-              <p className="text-xs text-[#dfd1b9]/70 font-light max-w-2xl leading-relaxed">
-                If you require container load pricing (FCL/LCL), specific Curcumin assays, custom packaging specifications, or Incoterm quotations, please submit your requirements through our structured RFQ intake portal.
+              <p className="text-xs sm:text-sm text-[#dfd1b9]/70 font-light leading-relaxed">
+                For formal quotations, container load pricing (FCL/LCL), specific curcumin assays, custom packaging, or Incoterm quotations.
               </p>
             </div>
           </div>
-          <Link
-            to="/request-quote"
-            className="shrink-0 bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl hover:from-white hover:to-[#dcb782] transition-all shadow-md flex items-center gap-2"
-          >
-            <span>Request a Quote →</span>
-          </Link>
-        </div>
 
-        {/* 2-Column: Trade Desk Coordinates & General Inquiry Form */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          <div className="relative z-10 shrink-0 w-full md:w-auto">
+            <button
+              type="button"
+              onClick={() => openQuoteModal()}
+              className="w-full md:w-auto bg-gradient-to-r from-[#dcb782] to-[#ab8558] hover:from-[#fbf3db] hover:to-[#dcb782] text-black font-body font-bold text-xs tracking-wider uppercase px-8 py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] transition-all cursor-pointer"
+            >
+              <span>REQUEST A QUOTE</span>
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+        </section>
 
-          {/* Left Column: Trade Desk Information & Verified Coordinates (Section 30 & 68) */}
-          <div className="lg:col-span-5 flex flex-col gap-6">
-            <div className="p-8 rounded-3xl bg-[#121210] border border-white/10 flex flex-col gap-6 shadow-xl">
-              <span className="text-xs font-mono text-[#dcb782] uppercase tracking-widest font-bold">
-                OPERATIONAL COORDINATES
-              </span>
+        {/* CARD 3: SUBMIT GENERAL CORRESPONDENCE */}
+        <section
+          aria-labelledby="card-general-heading"
+          className="rounded-[2rem] bg-gradient-to-r from-[#1d1710] via-[#12110f] to-[#0c0c0b] border border-white/10 p-6 sm:p-8 md:p-10 flex flex-col gap-6 relative overflow-hidden shadow-2xl"
+        >
+          {/* Subtle gold glow */}
+          <div className="absolute -top-16 -left-16 w-52 h-52 bg-[#dcb782]/15 rounded-full blur-[60px] pointer-events-none" />
 
-              {/* Operating Base */}
-              <div className="flex items-start gap-4 pb-5 border-b border-white/5">
-                <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-                  <MapPin className="h-5 w-5 text-[#dcb782]" />
-                </div>
-                <div>
-                  <span className="text-xs font-mono text-[#ab8558] uppercase font-bold block mb-0.5">Operating Gateway</span>
-                  <p className="text-white text-sm font-body font-medium">Chennai, Tamil Nadu, India</p>
-                  <p className="text-xs text-[#dfd1b9]/50 font-light mt-0.5">Maritime Corridor: Chennai Port (INMAA) & Tuticorin (INTUT)</p>
-                </div>
+          {/* Top Bar / Header */}
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
+            <div className="flex items-start gap-4 sm:gap-5 max-w-2xl">
+              <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-2xl bg-white/5 border border-[#dcb782]/25 flex items-center justify-center shrink-0">
+                <Send className="h-6 w-6 text-[#dcb782]" />
               </div>
-
-              {/* Corporate Email */}
-              <div className="flex items-start gap-4 pb-5 border-b border-white/5">
-                <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-                  <Mail className="h-5 w-5 text-[#dcb782]" />
-                </div>
-                <div>
-                  <span className="text-xs font-mono text-[#ab8558] uppercase font-bold block mb-0.5">Trade Desk Correspondence</span>
-                  <a 
-                    href="mailto:contact@auraexport.co" 
-                    onClick={() => trackContactEvent('email_clicked')}
-                    className="text-white text-sm font-mono font-medium hover:text-[#dcb782] transition-colors block"
-                  >
-                    contact@auraexport.co
-                  </a>
-                  <p className="text-xs text-[#dfd1b9]/50 font-light mt-0.5">Primary verified correspondence mailbox</p>
-                </div>
-              </div>
-
-              {/* Telephone */}
-              <div className="flex items-start gap-4 pb-5 border-b border-white/5">
-                <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-                  <Phone className="h-5 w-5 text-[#dcb782]" />
-                </div>
-                <div>
-                  <span className="text-xs font-mono text-[#ab8558] uppercase font-bold block mb-0.5">Direct Telephone / Trade Line</span>
-                  <a 
-                    href="tel:+919361990229" 
-                    onClick={() => trackContactEvent('phone_call_clicked')}
-                    className="text-white text-sm font-mono font-medium hover:text-[#dcb782] transition-colors block"
-                  >
-                    +91 9361990229
-                  </a>
-                  <p className="text-xs text-[#dfd1b9]/50 font-light mt-0.5">Chennai Trade Desk Official Representative Line</p>
-                </div>
-              </div>
-
-              {/* Desk Hours */}
-              <div className="flex items-start gap-4">
-                <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-                  <Clock className="h-5 w-5 text-[#dcb782]" />
-                </div>
-                <div>
-                  <span className="text-xs font-mono text-[#ab8558] uppercase font-bold block mb-0.5">Operating Desk Hours</span>
-                  <p className="text-white text-sm font-body font-medium">9:00 AM – 6:00 PM IST (UTC +5:30)</p>
-                  <p className="text-xs text-[#dfd1b9]/50 font-light mt-0.5">Monday through Saturday</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Confirmed Corporate Registration & Entity Credentials */}
-            <div className="p-6 rounded-2xl bg-[#121210] border border-white/10 flex flex-col gap-4 shadow-xl">
-              <div className="flex items-center gap-2">
-                <Building2 className="h-4 w-4 text-[#dcb782]" />
-                <span className="text-xs font-mono text-[#dcb782] font-bold uppercase tracking-wider">
-                  STATUTORY REGISTRATION CREDENTIALS
+              <div>
+                <span className="text-[10px] font-mono tracking-widest text-[#dcb782] uppercase font-bold block mb-1">
+                  GENERAL TRADE INQUIRY
                 </span>
-              </div>
-              <div className="flex flex-col gap-2 text-xs">
-                <div className="flex justify-between border-b border-white/5 pb-1.5">
-                  <span className="text-[#ab8558] font-mono">Entity:</span>
-                  <span className="text-white font-medium text-right">AURA ENTERPRISE EXPORTS (OPC) PVT LTD</span>
-                </div>
-                <div className="flex justify-between border-b border-white/5 pb-1.5">
-                  <span className="text-[#ab8558] font-mono">CIN:</span>
-                  <span className="text-white font-mono font-medium">U46411TN2026OPC194827</span>
-                </div>
-                <div className="flex justify-between border-b border-white/5 pb-1.5">
-                  <span className="text-[#ab8558] font-mono">IEC:</span>
-                  <span className="text-white font-mono font-medium">ABGCA0520R</span>
-                </div>
-                <div className="flex justify-between border-b border-white/5 pb-1.5">
-                  <span className="text-[#ab8558] font-mono">GSTIN:</span>
-                  <span className="text-[#dfd1b9]/75 font-mono text-xs">Available in statutory verification dossier</span>
-                </div>
-                <div className="pt-1 text-[11px] text-[#dfd1b9]/60 leading-relaxed font-light">
-                  <span className="text-[#ab8558] font-mono uppercase block text-[10px]">Registered Office:</span>
-                  No 11/1A, VOC Street, Pattukottai Muthu Kumaraswamy Street, Baby Nagar, Velachery, Chennai Corp. Ward - 178, Chennai, Tamil Nadu, 600042
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column: General Corporate Inquiry Form */}
-          <div className="lg:col-span-7 p-8 md:p-10 rounded-3xl bg-[#121210] border border-white/10 shadow-xl">
-            <div className="flex flex-col gap-2 mb-8">
-              <span className="text-xs font-mono text-[#dcb782] uppercase tracking-widest font-bold">
-                GENERAL TRADE INQUIRY
-              </span>
-              <h2 className="text-2xl font-heading text-white font-medium">
-                Submit General Correspondence
-              </h2>
-              <p className="text-xs text-[#dfd1b9]/70 font-light">
-                For bilateral partnership inquiries, vendor applications, or non-commercial correspondence:
-              </p>
-            </div>
-
-            {submitted ? (
-              <div className="p-8 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex flex-col items-center text-center gap-4">
-                <CheckCircle2 className="h-12 w-12 text-emerald-400" />
-                <h3 className="text-xl font-heading text-white font-medium">Message Logged with Trade Desk</h3>
-                <p className="text-xs text-[#dfd1b9]/80 font-light max-w-md leading-relaxed">
-                  Thank you for contacting Aura Exports. Your correspondence has been logged with our Chennai desk. An officer will review and reply to {formData.corporateEmail} within standard business hours.
+                <h2 id="card-general-heading" className="text-2xl sm:text-3xl font-heading text-white font-normal mb-1">
+                  Submit General Correspondence
+                </h2>
+                <p className="text-xs sm:text-sm text-[#dfd1b9]/70 font-light leading-relaxed">
+                  For bilateral partnership enquiries, vendor applications, or non-commercial correspondence.
                 </p>
-                <button
-                  onClick={() => setSubmitted(false)}
-                  className="mt-2 text-xs font-mono text-[#dcb782] underline uppercase tracking-wider cursor-pointer"
-                >
-                  Send another inquiry
-                </button>
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} onFocus={handleFormInteraction} className="flex flex-col gap-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="flex flex-col gap-2">
-                    <label htmlFor="fullName" className="text-xs font-mono uppercase tracking-wider text-[#dfd1b9]/80 font-medium">
-                      Full Name *
-                    </label>
-                    <input
-                      id="fullName"
-                      required
-                      type="text"
-                      value={formData.fullName}
-                      onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                      placeholder="e.g. David Vance"
-                      className="px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-white text-sm focus:outline-none focus:border-[#dcb782]"
-                    />
-                  </div>
+            </div>
 
-                  <div className="flex flex-col gap-2">
-                    <label htmlFor="corporateEmail" className="text-xs font-mono uppercase tracking-wider text-[#dfd1b9]/80 font-medium">
-                      Corporate Email *
-                    </label>
-                    <input
-                      id="corporateEmail"
-                      required
-                      type="email"
-                      value={formData.corporateEmail}
-                      onChange={(e) => setFormData({ ...formData, corporateEmail: e.target.value })}
-                      placeholder="e.g. corporate@company.com"
-                      className="px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-white text-sm focus:outline-none focus:border-[#dcb782]"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="flex flex-col gap-2">
-                    <label htmlFor="organization" className="text-xs font-mono uppercase tracking-wider text-[#dfd1b9]/80 font-medium">
-                      Company / Organization *
-                    </label>
-                    <input
-                      id="organization"
-                      required
-                      type="text"
-                      value={formData.organization}
-                      onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
-                      placeholder="e.g. Vance Global Imports LLC"
-                      className="px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-white text-sm focus:outline-none focus:border-[#dcb782]"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <label htmlFor="country" className="text-xs font-mono uppercase tracking-wider text-[#dfd1b9]/80 font-medium">
-                      Country of Operation *
-                    </label>
-                    <input
-                      id="country"
-                      required
-                      type="text"
-                      value={formData.country}
-                      onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                      placeholder="e.g. United Kingdom"
-                      className="px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-white text-sm focus:outline-none focus:border-[#dcb782]"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="inquiryType" className="text-xs font-mono uppercase tracking-wider text-[#dfd1b9]/80 font-medium">
-                    Nature of Inquiry
-                  </label>
-                  <select
-                    id="inquiryType"
-                    value={formData.inquiryType}
-                    onChange={(e) => setFormData({ ...formData, inquiryType: e.target.value })}
-                    className="px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-white text-sm focus:outline-none focus:border-[#dcb782] cursor-pointer"
-                  >
-                    <option value="Corporate Trade Inquiries">Corporate Trade & Executive Inquiry</option>
-                    <option value="Vendor / Producer Registration">Vendor / Producer Collective Registration</option>
-                    <option value="Trade Compliance & Verification">Trade Compliance & Verification Dossier</option>
-                    <option value="Media & Institutional Communications">Media & Institutional Communications</option>
-                  </select>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="message" className="text-xs font-mono uppercase tracking-wider text-[#dfd1b9]/80 font-medium">
-                    Message Details *
-                  </label>
-                  <textarea
-                    id="message"
-                    required
-                    rows={4}
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Provide context regarding your organization, inquiry, and trade objectives..."
-                    className="px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-white text-sm focus:outline-none focus:border-[#dcb782] resize-none"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="mt-2 w-full py-3.5 rounded-xl bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold text-xs uppercase tracking-wider hover:from-white hover:to-[#dcb782] transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <Send className="h-4 w-4" /> Transmit General Inquiry
-                </button>
-              </form>
-            )}
+            <button
+              type="button"
+              onClick={() => setIsGeneralFormOpen(!isGeneralFormOpen)}
+              className="w-full md:w-auto border border-[#dcb782]/40 hover:border-[#dcb782] text-white hover:text-[#dcb782] font-body font-bold text-xs tracking-wider uppercase px-7 py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer bg-white/[0.02]"
+            >
+              <span>{isGeneralFormOpen ? 'CLOSE INQUIRY FORM' : 'OPEN INQUIRY FORM'}</span>
+              {isGeneralFormOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </button>
           </div>
 
-        </div>
+          {/* Expandable Correspondence Form */}
+          {isGeneralFormOpen && (
+            <div className="relative z-10 pt-6 border-t border-white/10 animate-fade-in">
+              {submitted ? (
+                <div className="p-8 rounded-2xl bg-white/[0.02] border border-[#dcb782]/30 flex flex-col items-center text-center max-w-md mx-auto">
+                  <CheckCircle2 className="h-12 w-12 text-[#dcb782] mb-3" />
+                  <h3 className="text-xl font-heading text-white font-medium mb-2">
+                    Correspondence Received
+                  </h3>
+                  <p className="text-xs text-[#dfd1b9]/80 font-light leading-relaxed mb-4">
+                    Thank you for contacting Aura Exports. Your inquiry has been routed to our Trade Desk team. We typically respond within one business day.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSubmitted(false);
+                      setIsGeneralFormOpen(false);
+                      setFormData({
+                        fullName: '',
+                        email: '',
+                        organization: '',
+                        country: '',
+                        topic: 'Bilateral Trade Partnership',
+                        message: '',
+                      });
+                    }}
+                    className="text-xs font-mono text-[#dcb782] hover:underline"
+                  >
+                    Send another inquiry
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleGeneralSubmit} onFocus={handleFormInteraction} className="flex flex-col gap-4">
+                  {submitError && (
+                    <div className="p-3.5 rounded-xl bg-red-950/40 border border-red-500/30 text-red-200 text-xs">
+                      {submitError}
+                    </div>
+                  )}
 
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                        Full Name <span className="text-[#dcb782]">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.fullName}
+                        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                        placeholder="e.g. Eleanor Vance"
+                        className="w-full rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 p-3 text-white text-xs placeholder:text-[#dfd1b9]/30 focus:outline-none transition-colors"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                        Corporate / Personal Email <span className="text-[#dcb782]">*</span>
+                      </label>
+                      <input
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        placeholder="e.g. eleanor.vance@vancetrade.com"
+                        className="w-full rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 p-3 text-white text-xs placeholder:text-[#dfd1b9]/30 focus:outline-none transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                        Company / Organization
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.organization}
+                        onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
+                        placeholder="e.g. Vance Trading Collective"
+                        className="w-full rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 p-3 text-white text-xs placeholder:text-[#dfd1b9]/30 focus:outline-none transition-colors"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                        Country
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.country}
+                        onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                        placeholder="e.g. United Kingdom"
+                        className="w-full rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 p-3 text-white text-xs placeholder:text-[#dfd1b9]/30 focus:outline-none transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                      Inquiry Scope / Topic
+                    </label>
+                    <select
+                      value={formData.topic}
+                      onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
+                      className="w-full rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 p-3 text-white text-xs focus:outline-none cursor-pointer transition-colors"
+                    >
+                      <option value="Bilateral Trade Partnership">Bilateral Trade Partnership</option>
+                      <option value="Supplier / Artisan Collective Registration">Supplier / Artisan Collective Registration</option>
+                      <option value="Maritime Freight & Logistics Coordination">Maritime Freight & Logistics Coordination</option>
+                      <option value="Institutional Compliance & Certification">Institutional Compliance & Certification</option>
+                      <option value="General Corporate Correspondence">General Corporate Correspondence</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                      Message / Subject of Discussion <span className="text-[#dcb782]">*</span>
+                    </label>
+                    <textarea
+                      rows={4}
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      placeholder="Outline your inquiry, proposal, or operational matter..."
+                      className="w-full rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 p-3 text-white text-xs placeholder:text-[#dfd1b9]/30 focus:outline-none resize-none transition-colors leading-relaxed"
+                    />
+                  </div>
+
+                  <div className="flex justify-end pt-2">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#dcb782] to-[#ab8558] hover:from-[#fbf3db] hover:to-[#dcb782] text-black font-body font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer disabled:opacity-50"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin text-black" />
+                          <span>TRANSMITTING...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>TRANSMIT GENERAL CORRESPONDENCE</span>
+                          <Send className="h-3.5 w-3.5" />
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          )}
+        </section>
       </main>
     </div>
   );

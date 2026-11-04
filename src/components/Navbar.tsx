@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowUpRight, Menu, X, ChevronDown, Sparkles } from 'lucide-react';
 import logoImg from '../assets/images/regenerated_image_1783707679777.png';
+import { useQuoteModal } from '../context/QuoteModalContext';
 
 interface NavbarProps {
   onNavigate?: (sectionId: string) => void;
@@ -18,6 +19,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const { openQuoteModal } = useQuoteModal();
 
   const handleLogoError = () => {
     setUseFallbackSvg(true);
@@ -412,13 +414,16 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                         >
                           Explore Full Catalog →
                         </Link>
-                        <Link
-                          to="/request-quote"
-                          onClick={() => setIsProductsDropdownOpen(false)}
-                          className="bg-[#dcb782] text-black px-4 py-1.5 rounded-lg font-bold font-body uppercase text-[11px] hover:bg-white transition-colors"
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsProductsDropdownOpen(false);
+                            openQuoteModal();
+                          }}
+                          className="bg-[#dcb782] text-black px-4 py-1.5 rounded-lg font-bold font-body uppercase text-[11px] hover:bg-white transition-colors cursor-pointer"
                         >
                           Request Sourcing RFQ
-                        </Link>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -444,14 +449,15 @@ export default function Navbar({ onNavigate }: NavbarProps) {
 
         {/* Right Side: Primary B2B CTA "Request a Quote" */}
         <div className="hidden lg:flex items-center gap-3 ml-5">
-          <Link
-            to="/request-quote"
+          <button
+            type="button"
+            onClick={() => openQuoteModal()}
             className="flex items-center gap-2 bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black rounded-xl px-5 py-2.5 hover:from-[#fbf3db] hover:to-[#dcb782] transition-all shadow-md cursor-pointer hover:scale-[1.02] text-xs font-bold font-body tracking-wider uppercase"
             id="nav-request-quote"
           >
             <span>Request a Quote</span>
             <ArrowUpRight className="h-3.5 w-3.5" />
-          </Link>
+          </button>
         </div>
 
         {/* Mobile Hamburger toggle */}
@@ -573,14 +579,17 @@ export default function Navbar({ onNavigate }: NavbarProps) {
               );
             })}
 
-            <Link
-              to="/request-quote"
-              onClick={() => setIsOpen(false)}
-              className="mt-4 w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold rounded-xl py-3.5 text-xs tracking-wider uppercase shadow-lg"
+            <button
+              type="button"
+              onClick={() => {
+                setIsOpen(false);
+                openQuoteModal();
+              }}
+              className="mt-4 w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold rounded-xl py-3.5 text-xs tracking-wider uppercase shadow-lg cursor-pointer"
             >
               <span>Request a Quote</span>
               <ArrowUpRight className="h-4 w-4" />
-            </Link>
+            </button>
           </div>
         </div>
       )}

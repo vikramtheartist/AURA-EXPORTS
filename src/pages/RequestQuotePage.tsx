@@ -1,189 +1,169 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
-import { ChevronRight, ArrowLeft, ArrowRight, ShieldCheck, Check, Globe, HelpCircle, FileText, Send, AlertCircle } from 'lucide-react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import {
+  Package,
+  PenLine,
+  Calendar,
+  MapPin,
+  Anchor,
+  User,
+  Building2,
+  Mail,
+  Phone,
+  Scale,
+  Globe,
+  ArrowRight,
+  ArrowLeft,
+  ShieldCheck,
+  Leaf,
+  Layers,
+  CheckCircle2,
+  Loader2,
+  ChevronDown,
+} from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import Breadcrumbs from '../components/procurement/Breadcrumbs';
-import { submitRFQ, validateRFQ } from '../services/rfqService';
-import { RFQRequest, RFQSubmissionResult } from '../types/rfq';
+import { submitRFQ } from '../services/rfqService';
+import { RFQRequest } from '../types/rfq';
+import { COMPANY_CONTACT } from '../config/companyContact';
 import { trackContactEvent } from '../utils/analytics';
+
+const CATEGORY_OPTIONS = [
+  { value: 'Agro Products (Comprehensive Agricultural Portfolio)', label: 'Agro Products (Comprehensive Agricultural Portfolio)' },
+  { value: 'Spices & Botanicals (Turmeric, Pepper, Cardamom, Cumin, Chilli)', label: 'Spices & Botanicals (Turmeric, Pepper, Cardamom, Cumin, Chilli)' },
+  { value: 'Moringa & Natural Plant Extracts', label: 'Moringa & Natural Plant Extracts' },
+  { value: 'Fresh Agricultural Produce & Drumsticks', label: 'Fresh Agricultural Produce & Drumsticks' },
+  { value: 'Grains & Pulses (Basmati & Non-Basmati Rice)', label: 'Grains & Pulses (Basmati & Non-Basmati Rice)' },
+  { value: 'Fashion & Lifestyle (Indian Artisanal Craft & Jewellery)', label: 'Fashion & Lifestyle (Indian Artisanal Craft & Jewellery)' },
+  { value: 'Apparel & Textiles (Heritage Handloom, Kanjivaram Silk, Fabrics)', label: 'Apparel & Textiles (Heritage Handloom, Kanjivaram Silk, Fabrics)' },
+];
 
 export default function RequestQuotePage() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const preselectedProduct = searchParams.get('product') || '';
   const preselectedCategory = searchParams.get('category') || '';
-  const preselectedForm = searchParams.get('form') || '';
   const preselectedRequirement = searchParams.get('requirement') || '';
 
   const [step, setStep] = useState<1 | 2>(1);
-
-  // Initializing state with intelligent defaults from URL query parameters
-  const [formData, setFormData] = useState<RFQRequest>({
-    productCategory: 'turmeric',
-    productRequirement: '',
-    quantity: '',
-    destinationCountry: '',
-    destinationPort: '',
-    timeline: '',
-    buyerName: '',
-    companyName: '',
-    businessEmail: '',
-    phone: '',
-    website: '',
-    procurementType: 'Importer',
-    incoterm: 'FOB',
-    additionalRequirements: '',
-  });
-
-  // Honeypot for spam prevention
-  const [honeypot, setHoneypot] = useState('');
-
-  // Submission state
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submittedResult, setSubmittedResult] = useState<RFQSubmissionResult | null>(null);
+  const [submittedResult, setSubmittedResult] = useState<{ referenceId: string } | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  // Form State
+  const [category, setCategory] = useState(CATEGORY_OPTIONS[0].value);
+  const [requirementDescription, setRequirementDescription] = useState('');
+  const [estimatedQuantity, setEstimatedQuantity] = useState('');
+  const [targetTimeline, setTargetTimeline] = useState('');
+  const [destinationCountry, setDestinationCountry] = useState('');
+  const [destinationPort, setDestinationPort] = useState('');
+
+  // Step 2 State
+  const [buyerName, setBuyerName] = useState('');
+  const [companyName, setCompanyName] = useState('');
+  const [businessEmail, setBusinessEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [incoterm, setIncoterm] = useState('FOB (Chennai / Tuticorin)');
+  const [website, setWebsite] = useState('');
+  const [additionalRequirements, setAdditionalRequirements] = useState('');
+
+  const hasTriggeredFormStart = useRef(false);
+
   useEffect(() => {
-    let cat = 'agro-products';
-    let req = '';
-
-    if (preselectedCategory === 'agro-products' || preselectedCategory === 'spices' || preselectedProduct.includes('turmeric') || preselectedProduct.includes('pepper') || preselectedProduct.includes('chilli') || preselectedProduct.includes('moringa') || preselectedProduct.includes('drumstick') || preselectedProduct.includes('rice')) {
-      cat = 'agro-products';
-      req = preselectedRequirement || (preselectedProduct 
-        ? `Sourcing quotation and specification request for ${preselectedProduct.replace(/-/g, ' ')}.` 
-        : 'Agro products bulk sourcing requirement (Spices, commodities or fresh produce).');
-    } else if (
-      preselectedCategory === 'apparel-textiles' ||
-      preselectedCategory === 'textiles' ||
-      preselectedCategory === 'fabrics' ||
-      preselectedCategory === 'garments' ||
-      preselectedCategory === 'home-textiles' ||
-      preselectedProduct.includes('cotton') ||
-      preselectedProduct.includes('linen') ||
-      preselectedProduct.includes('fabric') ||
-      preselectedProduct.includes('apparel') ||
-      preselectedProduct.includes('shirt') ||
-      preselectedProduct.includes('dress') ||
-      preselectedProduct.includes('towel') ||
-      preselectedProduct.includes('handloom') ||
-      preselectedProduct.includes('saree') ||
-      preselectedProduct.includes('yarn') ||
-      preselectedProduct.includes('scarf') ||
-      preselectedProduct.includes('canvas')
-    ) {
-      cat = 'apparel-textiles';
-      req = preselectedRequirement || (preselectedProduct 
-        ? `Commercial quotation and specification inquiry for ${preselectedProduct.replace(/-/g, ' ')}.` 
-        : 'Apparel & Textiles sourcing inquiry (Fabrics, garments, home textiles, or yarns).');
-    } else if (preselectedProduct === 'turmeric') {
-      cat = 'turmeric';
-      req = preselectedForm
-        ? `Turmeric (${preselectedForm}) specification for global procurement.`
-        : 'Turmeric whole fingers / fine powder sourcing requirement.';
-    } else if (
-      preselectedProduct === 'fashion-lifestyle' || 
-      preselectedCategory === 'fashion-lifestyle' ||
-      preselectedProduct === 'jewelry' || 
-      preselectedCategory === 'jewelry'
-    ) {
-      cat = 'fashion-lifestyle';
-      req = preselectedForm
-        ? `Fashion jewelry & lifestyle collection (${preselectedForm}) sourcing inquiry.`
-        : 'Indian fashion jewelry, handcrafted accessories or lifestyle products sourcing requirement.';
-    } else if (
-      preselectedProduct === 'kanjivaram-silk-saree' ||
-      preselectedRequirement?.toLowerCase().includes('kanjivaram')
-    ) {
-      cat = 'textiles-kanjivaram';
-      req = 'Wholesale proforma quotation request for authentic Kanjivaram Silk Sarees with Zari borders.';
-    } else if (preselectedProduct === 'apparel-textiles' || preselectedCategory === 'apparel-textiles' || preselectedProduct === 'textiles' || preselectedCategory === 'textiles') {
-      cat = 'apparel-textiles';
-      req = preselectedForm
-        ? `Apparel & textile sourcing (${preselectedForm}) order inquiry.`
-        : 'Fabric yardage, silk sarees or apparel sourcing requirement.';
+    if (preselectedCategory) {
+      const match = CATEGORY_OPTIONS.find(c =>
+        c.value.toLowerCase().includes(preselectedCategory.toLowerCase())
+      );
+      if (match) setCategory(match.value);
+    }
+    if (preselectedProduct || preselectedRequirement) {
+      setRequirementDescription(
+        preselectedRequirement || `Sourcing quotation and specification inquiry for ${preselectedProduct.replace(/-/g, ' ')}.`
+      );
     }
 
-    if (preselectedRequirement) {
-      req = preselectedRequirement;
+    if (!hasTriggeredFormStart.current) {
+      hasTriggeredFormStart.current = true;
+      trackContactEvent('enquiry_form_started', {
+        productName: preselectedProduct || 'Trade Quote RFQ Page',
+        mode: 'page',
+      });
     }
+  }, [preselectedCategory, preselectedProduct, preselectedRequirement]);
 
-    setFormData((prev) => ({
-      ...prev,
-      productCategory: cat,
-      productRequirement: req || prev.productRequirement,
-    }));
-  }, [preselectedProduct, preselectedCategory, preselectedForm, preselectedRequirement]);
-
-  const handleStep1Continue = (e: React.FormEvent) => {
+  const handleNextStep = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
 
-    if (!formData.productCategory) {
-      setErrorMsg('Please select a product category.');
-      return;
-    }
-    if (!formData.productRequirement || formData.productRequirement.trim().length < 5) {
+    if (!requirementDescription.trim() || requirementDescription.trim().length < 5) {
       setErrorMsg('Please describe your product requirement (minimum 5 characters).');
       return;
     }
-    if (!formData.destinationCountry) {
-      setErrorMsg('Please specify the destination country.');
+
+    if (!destinationCountry.trim()) {
+      setErrorMsg('Please enter your destination country.');
       return;
     }
 
     setStep(2);
-    window.scrollTo({ top: 300, behavior: 'smooth' });
-  };
-
-  const hasTriggeredFormStart = useRef(false);
-  const handleFormInteraction = () => {
-    if (!hasTriggeredFormStart.current) {
-      hasTriggeredFormStart.current = true;
-      trackContactEvent('enquiry_form_started', {
-        productName: formData.productCategory || 'General Sourcing',
-      });
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (honeypot) {
-      // Silently discard spam
+    setErrorMsg(null);
+
+    if (!buyerName.trim()) {
+      setErrorMsg('Please enter your full name or representative title.');
       return;
     }
 
-    setErrorMsg(null);
-    const validation = validateRFQ(formData);
-    if (!validation.valid) {
-      setErrorMsg(validation.errors[0] || 'Please complete all required fields.');
+    if (!companyName.trim()) {
+      setErrorMsg('Please enter your company or organization name.');
+      return;
+    }
+
+    if (!businessEmail.trim() || !businessEmail.includes('@')) {
+      setErrorMsg('Please provide a valid corporate email address.');
       return;
     }
 
     setIsSubmitting(true);
+
     try {
-      const res = await submitRFQ(formData);
-      if (res && res.success) {
-        setSubmittedResult(res);
-        trackContactEvent('enquiry_submitted', {
-          productName: formData.productCategory,
-          referenceId: res.referenceId,
-          vertical: formData.productCategory,
-          mode: 'quotation',
-        });
-      } else {
-        setErrorMsg(res?.message || 'Submission could not be completed.');
-      }
-      setIsSubmitting(false);
-      window.scrollTo({ top: 200, behavior: 'smooth' });
+      const payload: RFQRequest = {
+        productCategory: category,
+        productRequirement: requirementDescription,
+        quantity: estimatedQuantity || 'Not specified',
+        timeline: targetTimeline || 'Standard scheduling',
+        destinationCountry,
+        destinationPort: destinationPort || 'Unspecified port',
+        buyerName,
+        companyName,
+        businessEmail,
+        phone,
+        incoterm,
+        website,
+        additionalRequirements,
+        procurementType: 'Institutional Importer',
+      };
+
+      const result = await submitRFQ(payload);
+
+      setSubmittedResult({ referenceId: result.referenceId });
+      trackContactEvent('enquiry_submitted', {
+        productName: category,
+        mode: 'quote_page',
+      });
     } catch (err: any) {
+      setErrorMsg(err.message || 'Submission failed. Please try again or contact our trade desk.');
+    } finally {
       setIsSubmitting(false);
-      setErrorMsg(
-        err.message || 'We could not submit the request right now. Please try again or contact the AURA Trade Desk directly.'
-      );
     }
   };
 
   return (
-    <div className="w-full pt-28 pb-20" id="aura-rfq-gateway">
+    <div className="w-full pt-28 pb-24" id="request-quote-page-view">
       <SEOHead pageKey="requestQuote" />
 
       {/* Semantic Breadcrumbs */}
@@ -194,470 +174,460 @@ export default function RequestQuotePage() {
         ]}
       />
 
-      {/* Header (Section 24) */}
-      <header className="max-w-4xl mx-auto px-6 text-center flex flex-col items-center gap-4 mb-12">
-        <div className="inline-flex items-center gap-2 bg-white/5 border border-[#dcb782]/20 rounded-full px-4 py-1.5">
-          <Globe className="h-3.5 w-3.5 text-[#dcb782]" />
-          <span className="text-xs font-mono text-[#dcb782] tracking-wider uppercase font-semibold">
-            INSTITUTIONAL B2B TRADE DESK
-          </span>
-        </div>
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading text-white font-medium tracking-tight">
-          Request a Trade Quote
-        </h1>
-        <p className="text-xl text-[#dcb782] font-heading italic font-light">
-          Tell us what you are sourcing.
-        </p>
-        <p className="text-[#D5C8B7] font-body text-sm md:text-base max-w-2xl font-light leading-relaxed">
-          We&apos;ll structure the requirement around product, quantity, destination and commercial terms. Sourcing contracts are customized to your technical specification and compliance needs.
-        </p>
-        <div className="flex items-center gap-2 text-xs text-[#dfd1b9]/50 font-light mt-1">
-          <span>Looking for non-commercial corporate or legal inquiries?</span>
-          <Link to="/contact" className="text-[#dcb782] hover:underline font-normal">
-            General Contact Desk →
-          </Link>
-        </div>
-      </header>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 mt-4">
+        {/* Exact 2-Column Institutional RFQ Card */}
+        <div className="relative w-full rounded-[1.8rem] md:rounded-[2.2rem] bg-[#0c0c0b] border border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.95)] overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+          {/* Left Column (5 cols) */}
+          <div className="lg:col-span-5 relative p-7 sm:p-9 md:p-10 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1c1811] via-[#100f0d] to-[#0a0a09] border-b lg:border-b-0 lg:border-r border-white/10">
+            {/* Subtle Warm Top-Left Amber Glow */}
+            <div className="absolute -top-28 -left-28 w-80 h-80 bg-[#dcb782]/20 rounded-full blur-[90px] pointer-events-none" />
 
-      {/* Main RFQ Form Experience */}
-      <main className="max-w-3xl mx-auto px-6">
-        {submittedResult ? (
-          /* Confirmation Screen (Section 22 & 23 Transparent Delivery Architecture) */
-          <div className="rounded-3xl border border-[#dcb782]/30 bg-[#121211] p-8 md:p-12 text-center flex flex-col items-center gap-6 shadow-2xl">
-            <div className="h-16 w-16 rounded-full bg-[#dcb782]/10 border border-[#dcb782]/40 flex items-center justify-center">
-              <Check className="h-8 w-8 text-[#dcb782]" />
-            </div>
+            <div className="relative z-10 flex flex-col">
+              <span className="text-[10px] font-mono tracking-[0.25em] text-[#dcb782] uppercase font-bold">
+                INSTITUTIONAL B2B TRADE DESK
+              </span>
 
-            {submittedResult.isLiveDelivery ? (
-              <>
-                <span className="text-xs font-mono tracking-widest text-[#dcb782] uppercase font-bold">
-                  COMMERCIAL INTAKE TRANSMITTED
-                </span>
-                <h2 className="text-3xl md:text-4xl font-heading text-white font-medium">
-                  Your requirement has been received.
-                </h2>
-                <p className="text-sm md:text-base text-[#D5C8B7] font-light max-w-xl leading-relaxed">
-                  AURA Trade Desk will review your requirement and confirm the relevant product, sourcing pathway and commercial details.
-                </p>
-              </>
-            ) : (
-              <>
-                <span className="text-xs font-mono tracking-widest text-[#dcb782] uppercase font-bold">
-                  REQUIREMENT CAPTURED LOCALLY · PREVIEW MODE
-                </span>
-                <h2 className="text-3xl md:text-4xl font-heading text-white font-medium">
-                  Requirement Captured Locally
-                </h2>
-                <p className="text-sm md:text-base text-[#D5C8B7] font-light max-w-xl leading-relaxed">
-                  This preview environment does not yet deliver RFQs to the AURA Trade Desk server. Your requirement has been validated and recorded to the local audit docket.
-                </p>
-              </>
-            )}
+              <h1 className="text-3xl md:text-4xl font-heading text-white font-normal tracking-tight mt-3 mb-2 leading-tight">
+                Request a <br className="hidden sm:inline" />
+                Trade Quote
+              </h1>
 
-            {submittedResult.referenceId && (
-              <div className="p-4 rounded-xl bg-white/5 border border-white/10 font-mono text-xs text-[#dfd1b9] flex flex-col sm:flex-row items-center gap-2">
-                <span className="text-[#ab8558]">Docket Reference ID:</span>
-                <span className="text-white font-bold">{submittedResult.referenceId}</span>
-              </div>
-            )}
+              <p className="text-lg md:text-xl font-heading italic text-[#dcb782] font-normal mb-5">
+                Tell us what you are sourcing.
+              </p>
 
-            {!submittedResult.isLiveDelivery && (
-              <div className="p-4 rounded-2xl bg-[#dcb782]/5 border border-[#dcb782]/20 text-xs text-[#dfd1b9] max-w-lg leading-relaxed text-left flex items-start gap-3">
-                <HelpCircle className="h-5 w-5 text-[#dcb782] shrink-0 mt-0.5" />
-                <div>
-                  <strong className="text-white font-semibold block mb-1">Direct Trade Desk Dispatch:</strong>
-                  To immediately initiate this sourcing inquiry with our trade desk officers, email this requirement with Docket Reference{' '}
-                  <code className="text-[#dcb782] font-mono">{submittedResult.referenceId}</code> directly to{' '}
-                  <a href={`mailto:contact@auraexport.co?subject=Trade%20Desk%20Requirement%20${submittedResult.referenceId}&body=Docket%20Reference:%20${submittedResult.referenceId}%0AProduct:%20${encodeURIComponent(formData.productCategory)}%0ARequirement:%20${encodeURIComponent(formData.productRequirement)}%0ADestination:%20${encodeURIComponent(formData.destinationCountry || '')}`} className="text-[#dcb782] underline font-medium">
-                    contact@auraexport.co
-                  </a>{' '}
-                  or contact our desk at <span className="text-white font-medium">+91 9361990229</span>.
+              <p className="text-xs text-[#dfd1b9]/70 leading-relaxed font-light mb-8">
+                We'll structure the requirement around product, quantity, destination and commercial terms. Sourcing contracts are customized to your technical specification and compliance <strong className="text-white font-medium">needs.</strong>
+              </p>
+
+              {/* 3 Core Value Props */}
+              <div className="flex flex-col gap-5 pt-2 border-t border-white/5">
+                <div className="flex items-start gap-3.5">
+                  <div className="h-9 w-9 rounded-xl bg-white/5 border border-[#dcb782]/20 flex items-center justify-center shrink-0">
+                    <Leaf className="h-4 w-4 text-[#dcb782]" />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-semibold text-white">Wide product portfolio</h3>
+                    <p className="text-[11px] text-[#dfd1b9]/60 font-light mt-0.5 leading-snug">
+                      Spices, agro commodities, textiles & more
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3.5">
+                  <div className="h-9 w-9 rounded-xl bg-white/5 border border-[#dcb782]/20 flex items-center justify-center shrink-0">
+                    <ShieldCheck className="h-4 w-4 text-[#dcb782]" />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-semibold text-white">Quality & compliance ready</h3>
+                    <p className="text-[11px] text-[#dfd1b9]/60 font-light mt-0.5 leading-snug">
+                      Meet global market and safety standards
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3.5">
+                  <div className="h-9 w-9 rounded-xl bg-white/5 border border-[#dcb782]/20 flex items-center justify-center shrink-0">
+                    <Layers className="h-4 w-4 text-[#dcb782]" />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-semibold text-white">Flexible & scalable supply</h3>
+                    <p className="text-[11px] text-[#dfd1b9]/60 font-light mt-0.5 leading-snug">
+                      From trial orders to large-volume contracts
+                    </p>
+                  </div>
                 </div>
               </div>
-            )}
-
-            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 text-xs text-[#dfd1b9]/70 max-w-lg leading-relaxed text-left flex items-start gap-3">
-              <ShieldCheck className="h-5 w-5 text-[#dcb782] shrink-0 mt-0.5" />
-              <div>
-                <strong className="text-white font-semibold">Verification & Sourcing Review: </strong>
-                A designated trade officer in Chennai verifies raw material availability, applicable testing documentation, and container loading schedules before issuing formal proforma commercial terms.
-              </div>
             </div>
 
-            <div className="flex flex-wrap gap-4 mt-4">
-              <Link
-                to="/products"
-                className="bg-[#dcb782] text-black hover:bg-white transition-all font-body font-bold text-xs tracking-wider uppercase px-6 py-3.5 rounded-xl shadow-lg"
+            {/* Footer Routing */}
+            <div className="relative z-10 pt-8 mt-6 border-t border-white/5 text-[11px]">
+              <span className="text-[#dfd1b9]/50 block mb-1">
+                Looking for non-commercial inquiries?
+              </span>
+              <button
+                type="button"
+                onClick={() => navigate('/contact')}
+                className="text-xs font-mono text-[#dcb782] hover:text-white transition-colors cursor-pointer inline-flex items-center gap-1 font-semibold group"
               >
-                Return to Product Catalog
-              </Link>
-              <Link
-                to="/quality-compliance"
-                className="border border-white/10 hover:border-white text-white text-xs font-body font-bold tracking-wider uppercase px-6 py-3.5 rounded-xl hover:bg-white/5 transition-all"
-              >
-                Explore Quality Architecture
-              </Link>
+                <span>General Contact Desk</span>
+                <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+              </button>
             </div>
           </div>
-        ) : (
-          /* Multi-Step RFQ Intake Container */
-          <div className="rounded-3xl border border-white/10 bg-[#121211] p-8 md:p-12 shadow-2xl relative">
-            {/* Step Progress Indicator (Section 57) */}
-            <div className="flex items-center justify-between pb-6 mb-8 border-b border-white/10">
-              <div className="flex items-center gap-3">
-                <div
-                  className={`h-8 w-8 rounded-full flex items-center justify-center font-mono text-xs font-bold transition-all ${
-                    step === 1
-                      ? 'bg-[#dcb782] text-black'
-                      : 'bg-emerald-950 text-emerald-400 border border-emerald-500/30'
-                  }`}
-                >
-                  {step === 1 ? '1' : <Check className="h-4 w-4" />}
+
+          {/* Right Column (7 cols) */}
+          <div className="lg:col-span-7 p-7 sm:p-9 md:p-10 flex flex-col justify-between relative bg-[#0e0e0d]">
+            {submittedResult ? (
+              <div className="my-auto py-8 flex flex-col items-center text-center">
+                <div className="h-16 w-16 rounded-full bg-[#dcb782]/10 border border-[#dcb782]/40 flex items-center justify-center mb-6 text-[#dcb782]">
+                  <CheckCircle2 className="h-8 w-8" />
                 </div>
-                <div>
-                  <span className="text-[10px] font-mono uppercase text-[#ab8558] block">STEP 01</span>
-                  <span className={`text-xs font-bold ${step === 1 ? 'text-white' : 'text-white/60'}`}>
-                    Procurement Requirement
-                  </span>
+                <span className="text-[10px] font-mono tracking-widest text-[#dcb782] uppercase font-bold mb-2">
+                  RFQ REGISTERED ON TRADE DESK
+                </span>
+                <h3 className="text-2xl md:text-3xl font-heading text-white font-normal mb-3">
+                  Commercial Inquiry Transmitted
+                </h3>
+                <p className="text-xs md:text-sm text-[#dfd1b9]/80 font-light max-w-md leading-relaxed mb-6">
+                  Your procurement parameters have been routed to our export trade desk in Chennai. An export coordinator will review product assays, volume feasibility, and dispatch pricing within 24 business hours.
+                </p>
+
+                <div className="p-4 rounded-xl bg-black/60 border border-white/10 font-mono text-xs text-[#dcb782] mb-8">
+                  Reference ID: <strong className="text-white">{submittedResult.referenceId}</strong>
                 </div>
-              </div>
 
-              <div className="h-[1px] flex-1 max-w-[80px] bg-white/10 mx-4 hidden sm:block" />
-
-              <div className="flex items-center gap-3">
-                <div
-                  className={`h-8 w-8 rounded-full flex items-center justify-center font-mono text-xs font-bold transition-all ${
-                    step === 2
-                      ? 'bg-[#dcb782] text-black'
-                      : 'bg-white/5 text-white/40 border border-white/10'
-                  }`}
-                >
-                  2
-                </div>
-                <div>
-                  <span className="text-[10px] font-mono uppercase text-[#ab8558] block">STEP 02</span>
-                  <span className={`text-xs font-bold ${step === 2 ? 'text-white' : 'text-white/40'}`}>
-                    Buyer Credentials & Commercials
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Error Notification */}
-            {errorMsg && (
-              <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-xs text-red-200 flex items-start gap-2.5">
-                <AlertCircle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
-                <span>{errorMsg}</span>
-              </div>
-            )}
-
-            {/* Honeypot Field (Invisible to users, traps bots) */}
-            <div className="hidden" aria-hidden="true">
-              <label htmlFor="rfq-company-fax">Company Fax</label>
-              <input
-                id="rfq-company-fax"
-                type="text"
-                tabIndex={-1}
-                autoComplete="off"
-                value={honeypot}
-                onChange={(e) => setHoneypot(e.target.value)}
-              />
-            </div>
-
-            {/* STEP 1: REQUIREMENT (Section 25) */}
-            {step === 1 && (
-              <form onSubmit={handleStep1Continue} onFocus={handleFormInteraction} className="flex flex-col gap-6" id="rfq-step-1">
-                <div>
-                  <label htmlFor="rfq-category" className="block text-xs font-mono text-[#dfd1b9]/80 mb-2 font-bold uppercase">
-                    Product / Category *
-                  </label>
-                  <select
-                    id="rfq-category"
-                    required
-                    value={formData.productCategory}
-                    onChange={(e) => setFormData({ ...formData, productCategory: e.target.value })}
-                    className="w-full bg-[#181816] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#dcb782] cursor-pointer"
+                <div className="flex flex-col sm:flex-row gap-3 w-full max-w-sm">
+                  <a
+                    href={COMPANY_CONTACT.getWhatsAppUrl(category)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 border border-[#dcb782]/30 text-xs font-mono text-[#dcb782] flex items-center justify-center gap-2 transition-all"
                   >
-                    <option value="agro-products">Agro Products (Comprehensive Agricultural Portfolio)</option>
-                    <option value="spices">Spices & Seasonings (Black Pepper, Cardamom, Cloves, Cinnamon)</option>
-                    <option value="turmeric">Turmeric (Whole Fingers / Cold-Milled Powder / Extracts)</option>
-                    <option value="chillies">Chillies & Chilli Products (Dried Whole / Powder / Flakes)</option>
-                    <option value="fresh-produce">Fresh Agricultural Produce (Drumsticks, Onions, Tomatoes)</option>
-                    <option value="moringa">Moringa & Botanical Ingredients (Powder / Leaves)</option>
-                    <option value="grains-pulses">Grains & Pulses (Basmati & Non-Basmati Rice, Millets)</option>
-                    <option value="fashion-lifestyle">Fashion & Lifestyle (Indian Craftsmanship & Accessories Portfolio)</option>
-                    <option value="jewelry-temple">Temple & Traditional Jewelry (Antique-Finish, Jhumkas & Bangles)</option>
-                    <option value="jewelry-kundan">Kundan, Meenakari & Polki-Inspired Sets (Bridal & Occasion)</option>
-                    <option value="jewelry-oxidized">Oxidized & Tribal Jewelry (Silver-Tone, Bohemian Necklaces)</option>
-                    <option value="jewelry-contemporary">Contemporary Fashion Jewelry (Everyday Minimal, Steel, Brass)</option>
-                    <option value="jewelry-accessories">Handcrafted Fashion Accessories (Potli Bags, Scarves, Stoles)</option>
-                    <option value="jewelry-lifestyle">Indian Lifestyle & Artisan Products (Handmade Decor & Artifacts)</option>
-                    <option value="apparel-textiles">Apparel & Textiles (Comprehensive Sourcing Portfolio)</option>
-                    <option value="textiles-kanjivaram">Kanjivaram Silk Sarees & Traditional Silk (Hero Collection)</option>
-                    <option value="textiles-handloom">Handloom & Regional Indian Textiles (Ikat, Chanderi, Maheshwari)</option>
-                    <option value="textiles-fabrics">Cotton, Linen & Everyday Fabrics (Poplins, Twills, Knits)</option>
-                    <option value="textiles-block-print">Hand Block Printed & Decorative Textiles (Bagru, Sanganeri)</option>
-                    <option value="textiles-apparel">Apparel & Garments (Ethnic Kurtas, Shirts & Casuals)</option>
-                    <option value="textiles-home">Home Textiles & Furnishings (Bed Linen, Towels & Throws)</option>
-                    <option value="textiles-yarns">Yarns, Fabrics & Textile Components (Spun Yarns & Threads)</option>
-                    <option value="other">Other Indian Sourcing Requirement</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label htmlFor="rfq-requirement" className="block text-xs font-mono text-[#dfd1b9]/80 mb-2 font-bold uppercase">
-                    Product Requirement Description *
-                  </label>
-                  <textarea
-                    id="rfq-requirement"
-                    required
-                    rows={3}
-                    placeholder="e.g. Turmeric fingers, premium grade for food ingredient application with certified curcumin assay."
-                    value={formData.productRequirement}
-                    onChange={(e) => setFormData({ ...formData, productRequirement: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#dcb782] resize-none"
-                  />
-                  <span className="text-[11px] text-[#dfd1b9]/50 font-light mt-1 block">
-                    Describe your required form, grade, target compound percentage, or processing application.
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="rfq-quantity" className="block text-xs font-mono text-[#dfd1b9]/80 mb-2 font-bold uppercase">
-                      Estimated Order Volume / Quantity
-                    </label>
-                    <input
-                      id="rfq-quantity"
-                      type="text"
-                      placeholder="e.g. 5 MT / 1x20ft FCL / 2,000 units"
-                      value={formData.quantity}
-                      onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#dcb782]"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="rfq-timeline" className="block text-xs font-mono text-[#dfd1b9]/80 mb-2 font-bold uppercase">
-                      Target Timeline (Optional)
-                    </label>
-                    <input
-                      id="rfq-timeline"
-                      type="text"
-                      placeholder="e.g. Q3 shipment / immediate trial"
-                      value={formData.timeline}
-                      onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#dcb782]"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="rfq-dest-country" className="block text-xs font-mono text-[#dfd1b9]/80 mb-2 font-bold uppercase">
-                      Destination Country *
-                    </label>
-                    <input
-                      id="rfq-dest-country"
-                      type="text"
-                      required
-                      placeholder="e.g. Germany, United States, Japan, UAE"
-                      value={formData.destinationCountry}
-                      onChange={(e) => setFormData({ ...formData, destinationCountry: e.target.value })}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#dcb782]"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="rfq-dest-port" className="block text-xs font-mono text-[#dfd1b9]/80 mb-2 font-bold uppercase">
-                      Destination Port (Where applicable)
-                    </label>
-                    <input
-                      id="rfq-dest-port"
-                      type="text"
-                      placeholder="e.g. Port of Rotterdam, Hamburg, Long Beach"
-                      value={formData.destinationPort}
-                      onChange={(e) => setFormData({ ...formData, destinationPort: e.target.value })}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#dcb782]"
-                    />
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-white/10 flex justify-end">
-                  <button
-                    type="submit"
-                    className="w-full sm:w-auto bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold text-xs tracking-wider uppercase px-8 py-3.5 rounded-xl hover:from-white hover:to-[#dcb782] transition-all flex items-center justify-center gap-2 shadow-lg cursor-pointer"
-                  >
-                    <span>Continue to Buyer Details</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
-                </div>
-              </form>
-            )}
-
-            {/* STEP 2: BUYER DETAILS & COMMERCIALS (Section 26) */}
-            {step === 2 && (
-              <form onSubmit={handleSubmit} onFocus={handleFormInteraction} className="flex flex-col gap-6" id="rfq-step-2">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="rfq-name" className="block text-xs font-mono text-[#dfd1b9]/80 mb-2 font-bold uppercase">
-                      Representative Name *
-                    </label>
-                    <input
-                      id="rfq-name"
-                      type="text"
-                      required
-                      placeholder="e.g. Marcus Vance"
-                      value={formData.buyerName}
-                      onChange={(e) => setFormData({ ...formData, buyerName: e.target.value })}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#dcb782]"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="rfq-company" className="block text-xs font-mono text-[#dfd1b9]/80 mb-2 font-bold uppercase">
-                      Company / Organization Name *
-                    </label>
-                    <input
-                      id="rfq-company"
-                      type="text"
-                      required
-                      placeholder="e.g. Apex Global Ingredients LLC"
-                      value={formData.companyName}
-                      onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#dcb782]"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="rfq-email" className="block text-xs font-mono text-[#dfd1b9]/80 mb-2 font-bold uppercase">
-                      Business Email Address *
-                    </label>
-                    <input
-                      id="rfq-email"
-                      type="email"
-                      required
-                      placeholder="marcus@apexingredients.com"
-                      value={formData.businessEmail}
-                      onChange={(e) => setFormData({ ...formData, businessEmail: e.target.value })}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#dcb782]"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="rfq-phone" className="block text-xs font-mono text-[#dfd1b9]/80 mb-2 font-bold uppercase">
-                      Phone / WhatsApp (Optional)
-                    </label>
-                    <input
-                      id="rfq-phone"
-                      type="tel"
-                      placeholder="+1 (555) 019-2834"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#dcb782]"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="rfq-website" className="block text-xs font-mono text-[#dfd1b9]/80 mb-2 font-bold uppercase">
-                      Company Website (Optional)
-                    </label>
-                    <input
-                      id="rfq-website"
-                      type="url"
-                      placeholder="https://apexingredients.com"
-                      value={formData.website}
-                      onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#dcb782]"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="rfq-procurement-type" className="block text-xs font-mono text-[#dfd1b9]/80 mb-2 font-bold uppercase">
-                      Procurement Role / Entity Type
-                    </label>
-                    <select
-                      id="rfq-procurement-type"
-                      value={formData.procurementType}
-                      onChange={(e) => setFormData({ ...formData, procurementType: e.target.value })}
-                      className="w-full bg-[#181816] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#dcb782] cursor-pointer"
-                    >
-                      <option value="Importer">Importer</option>
-                      <option value="Distributor">Distributor</option>
-                      <option value="Brand">Brand</option>
-                      <option value="Manufacturer">Manufacturer</option>
-                      <option value="Retailer">Retailer</option>
-                      <option value="Private Label">Private Label</option>
-                      <option value="Other">Other Institutional Buyer</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="rfq-incoterm" className="block text-xs font-mono text-[#dfd1b9]/80 mb-2 font-bold uppercase">
-                    Commercial Incoterm Preference
-                  </label>
-                  <select
-                    id="rfq-incoterm"
-                    value={formData.incoterm}
-                    onChange={(e) => setFormData({ ...formData, incoterm: e.target.value })}
-                    className="w-full bg-[#181816] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#dcb782] cursor-pointer"
-                  >
-                    <option value="FOB">FOB (Free on Board — Chennai / Tuticorin)</option>
-                    <option value="CIF">CIF (Cost, Insurance & Freight)</option>
-                    <option value="CFR">CFR (Cost & Freight)</option>
-                    <option value="Not sure">Not sure / Flexible</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label htmlFor="rfq-additional" className="block text-xs font-mono text-[#dfd1b9]/80 mb-2 font-bold uppercase">
-                    Additional Specifications & Compliance Notes
-                  </label>
-                  <textarea
-                    id="rfq-additional"
-                    rows={3}
-                    placeholder="Provide details on required private labeling, custom packaging, laboratory assays, sample requirements, or destination market regulations..."
-                    value={formData.additionalRequirements}
-                    onChange={(e) => setFormData({ ...formData, additionalRequirements: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#dcb782] resize-none"
-                  />
-                </div>
-
-                <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <span>Connect on WhatsApp</span>
+                  </a>
                   <button
                     type="button"
-                    onClick={() => setStep(1)}
-                    className="flex items-center gap-1.5 text-xs font-mono uppercase text-[#dfd1b9]/70 hover:text-white transition-colors"
+                    onClick={() => {
+                      setSubmittedResult(null);
+                      setStep(1);
+                    }}
+                    className="flex-1 py-3 px-4 rounded-xl bg-[#dcb782] text-black font-body font-bold text-xs uppercase tracking-wider hover:bg-white transition-all cursor-pointer"
                   >
-                    <ArrowLeft className="h-3.5 w-3.5" />
-                    <span>Back to Requirement</span>
-                  </button>
-
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full sm:w-auto bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold text-xs tracking-wider uppercase px-8 py-3.5 rounded-xl hover:from-white hover:to-[#dcb782] transition-all flex items-center justify-center gap-2 shadow-xl cursor-pointer disabled:opacity-50"
-                  >
-                    {isSubmitting ? (
-                      <span className="h-4 w-4 border-2 border-black border-t-transparent animate-spin rounded-full" />
-                    ) : (
-                      <>
-                        <Send className="h-3.5 w-3.5" />
-                        <span>Submit RFQ to Trade Desk</span>
-                      </>
-                    )}
+                    New Request
                   </button>
                 </div>
-              </form>
+              </div>
+            ) : (
+              <div>
+                {/* Stepper Navigation */}
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="flex items-center gap-2.5">
+                    <span
+                      className={`w-7 h-7 rounded-full text-xs font-mono font-bold flex items-center justify-center transition-colors ${
+                        step === 1 ? 'bg-[#dcb782] text-black' : 'bg-white/10 text-white'
+                      }`}
+                    >
+                      1
+                    </span>
+                    <span
+                      className={`text-xs ${
+                        step === 1 ? 'font-semibold text-white' : 'font-light text-[#dfd1b9]/60'
+                      }`}
+                    >
+                      Procurement Requirement
+                    </span>
+                  </div>
+
+                  <div className="w-10 sm:w-16 h-[1px] bg-white/15" />
+
+                  <div className="flex items-center gap-2.5">
+                    <span
+                      className={`w-7 h-7 rounded-full text-xs font-mono font-bold flex items-center justify-center border transition-colors ${
+                        step === 2
+                          ? 'bg-[#dcb782] text-black border-[#dcb782]'
+                          : 'bg-white/5 border-white/15 text-[#dfd1b9]/50'
+                      }`}
+                    >
+                      2
+                    </span>
+                    <span
+                      className={`text-xs ${
+                        step === 2 ? 'font-semibold text-white' : 'font-light text-[#dfd1b9]/50'
+                      }`}
+                    >
+                      Buyer Credentials & Commercials
+                    </span>
+                  </div>
+                </div>
+
+                {/* Error Alert */}
+                {errorMsg && (
+                  <div className="mb-6 p-3.5 rounded-xl bg-red-950/40 border border-red-500/30 text-red-200 text-xs flex items-center gap-2">
+                    <span>{errorMsg}</span>
+                  </div>
+                )}
+
+                {/* STEP 1 */}
+                {step === 1 && (
+                  <form onSubmit={handleNextStep} className="flex flex-col gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                        Product / Category <span className="text-[#dcb782]">*</span>
+                      </label>
+                      <div className="relative rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 transition-colors flex items-center">
+                        <div className="pl-3.5 text-[#dcb782] pointer-events-none">
+                          <Package className="h-4 w-4" />
+                        </div>
+                        <select
+                          value={category}
+                          onChange={(e) => setCategory(e.target.value)}
+                          className="w-full bg-transparent text-white text-xs py-3.5 pl-3 pr-10 appearance-none focus:outline-none cursor-pointer"
+                        >
+                          {CATEGORY_OPTIONS.map((opt) => (
+                            <option key={opt.value} value={opt.value} className="bg-[#141413] text-white">
+                              {opt.label}
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDown className="h-4 w-4 text-[#dfd1b9]/60 absolute right-3.5 pointer-events-none" />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                        Product Requirement Description <span className="text-[#dcb782]">*</span>
+                      </label>
+                      <div className="relative rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 transition-colors p-3 flex items-start gap-2.5">
+                        <PenLine className="h-4 w-4 text-[#dcb782] shrink-0 mt-0.5" />
+                        <textarea
+                          rows={3}
+                          value={requirementDescription}
+                          onChange={(e) => setRequirementDescription(e.target.value)}
+                          placeholder="e.g. Turmeric fingers, premium grade for food ingredient application with certified curcumin assay."
+                          className="w-full bg-transparent text-white text-xs placeholder:text-[#dfd1b9]/30 focus:outline-none resize-none leading-relaxed"
+                        />
+                      </div>
+                      <p className="text-[11px] text-[#dfd1b9]/50 font-light mt-1.5">
+                        Describe your required form, grade, target compound percentage, or processing application.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                          Estimated Order Volume / Quantity
+                        </label>
+                        <div className="rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 transition-colors flex items-center px-3.5 py-3">
+                          <Package className="h-4 w-4 text-[#dcb782] shrink-0 mr-2.5" />
+                          <input
+                            type="text"
+                            value={estimatedQuantity}
+                            onChange={(e) => setEstimatedQuantity(e.target.value)}
+                            placeholder="e.g. 5 MT / 1x20ft FCL / 2,000 units"
+                            className="w-full bg-transparent text-white text-xs placeholder:text-[#dfd1b9]/30 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                          Target Timeline (Optional)
+                        </label>
+                        <div className="rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 transition-colors flex items-center px-3.5 py-3">
+                          <Calendar className="h-4 w-4 text-[#dcb782] shrink-0 mr-2.5" />
+                          <input
+                            type="text"
+                            value={targetTimeline}
+                            onChange={(e) => setTargetTimeline(e.target.value)}
+                            placeholder="e.g. Q3 shipment / immediate trial"
+                            className="w-full bg-transparent text-white text-xs placeholder:text-[#dfd1b9]/30 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                          Destination Country <span className="text-[#dcb782]">*</span>
+                        </label>
+                        <div className="rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 transition-colors flex items-center px-3.5 py-3">
+                          <MapPin className="h-4 w-4 text-[#dcb782] shrink-0 mr-2.5" />
+                          <input
+                            type="text"
+                            value={destinationCountry}
+                            onChange={(e) => setDestinationCountry(e.target.value)}
+                            placeholder="e.g. Germany, United States, Japan, UAE"
+                            className="w-full bg-transparent text-white text-xs placeholder:text-[#dfd1b9]/30 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                          Destination Port (Where Applicable)
+                        </label>
+                        <div className="rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 transition-colors flex items-center px-3.5 py-3">
+                          <Anchor className="h-4 w-4 text-[#dcb782] shrink-0 mr-2.5" />
+                          <input
+                            type="text"
+                            value={destinationPort}
+                            onChange={(e) => setDestinationPort(e.target.value)}
+                            placeholder="e.g. Port of Rotterdam, Hamburg, Long Beach"
+                            className="w-full bg-transparent text-white text-xs placeholder:text-[#dfd1b9]/30 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full mt-4 py-4 rounded-xl bg-gradient-to-r from-[#dcb782] via-[#e2c191] to-[#ab8558] hover:from-[#fbf3db] hover:to-[#dcb782] text-black font-body font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-xl hover:scale-[1.005] transition-all cursor-pointer"
+                    >
+                      <span>CONTINUE TO BUYER DETAILS</span>
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </form>
+                )}
+
+                {/* STEP 2 */}
+                {step === 2 && (
+                  <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                    <button
+                      type="button"
+                      onClick={() => setStep(1)}
+                      className="text-xs font-mono text-[#dcb782] hover:text-white flex items-center gap-1.5 mb-1 cursor-pointer w-fit"
+                    >
+                      <ArrowLeft className="h-3.5 w-3.5" />
+                      <span>Back to Procurement Requirement</span>
+                    </button>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                          Authorized Buyer / Contact Name <span className="text-[#dcb782]">*</span>
+                        </label>
+                        <div className="rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 transition-colors flex items-center px-3.5 py-3">
+                          <User className="h-4 w-4 text-[#dcb782] shrink-0 mr-2.5" />
+                          <input
+                            type="text"
+                            value={buyerName}
+                            onChange={(e) => setBuyerName(e.target.value)}
+                            placeholder="e.g. Alexander Vance"
+                            className="w-full bg-transparent text-white text-xs placeholder:text-[#dfd1b9]/30 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                          Company Legal Name <span className="text-[#dcb782]">*</span>
+                        </label>
+                        <div className="rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 transition-colors flex items-center px-3.5 py-3">
+                          <Building2 className="h-4 w-4 text-[#dcb782] shrink-0 mr-2.5" />
+                          <input
+                            type="text"
+                            value={companyName}
+                            onChange={(e) => setCompanyName(e.target.value)}
+                            placeholder="e.g. Vance Global Commodities GmbH"
+                            className="w-full bg-transparent text-white text-xs placeholder:text-[#dfd1b9]/30 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                          Corporate Email Address <span className="text-[#dcb782]">*</span>
+                        </label>
+                        <div className="rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 transition-colors flex items-center px-3.5 py-3">
+                          <Mail className="h-4 w-4 text-[#dcb782] shrink-0 mr-2.5" />
+                          <input
+                            type="email"
+                            value={businessEmail}
+                            onChange={(e) => setBusinessEmail(e.target.value)}
+                            placeholder="e.g. a.vance@vancecommodities.com"
+                            className="w-full bg-transparent text-white text-xs placeholder:text-[#dfd1b9]/30 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                          Direct Phone / WhatsApp
+                        </label>
+                        <div className="rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 transition-colors flex items-center px-3.5 py-3">
+                          <Phone className="h-4 w-4 text-[#dcb782] shrink-0 mr-2.5" />
+                          <input
+                            type="tel"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            placeholder="e.g. +49 170 1234567"
+                            className="w-full bg-transparent text-white text-xs placeholder:text-[#dfd1b9]/30 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                          Target Incoterm
+                        </label>
+                        <div className="relative rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 transition-colors flex items-center">
+                          <div className="pl-3.5 text-[#dcb782] pointer-events-none">
+                            <Scale className="h-4 w-4" />
+                          </div>
+                          <select
+                            value={incoterm}
+                            onChange={(e) => setIncoterm(e.target.value)}
+                            className="w-full bg-transparent text-white text-xs py-3 pl-3 pr-10 appearance-none focus:outline-none cursor-pointer"
+                          >
+                            <option value="FOB (Chennai / Tuticorin)" className="bg-[#141413]">FOB (Free on Board - Chennai/Tuticorin)</option>
+                            <option value="CIF (Destination Seaport)" className="bg-[#141413]">CIF (Cost, Insurance & Freight)</option>
+                            <option value="CFR (Cost & Freight)" className="bg-[#141413]">CFR (Cost and Freight)</option>
+                            <option value="EXW (Ex-Works / Facility)" className="bg-[#141413]">EXW (Ex-Works / Sourcing Hub)</option>
+                          </select>
+                          <ChevronDown className="h-4 w-4 text-[#dfd1b9]/60 absolute right-3.5 pointer-events-none" />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                          Corporate Website (Optional)
+                        </label>
+                        <div className="rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 transition-colors flex items-center px-3.5 py-3">
+                          <Globe className="h-4 w-4 text-[#dcb782] shrink-0 mr-2.5" />
+                          <input
+                            type="url"
+                            value={website}
+                            onChange={(e) => setWebsite(e.target.value)}
+                            placeholder="e.g. https://company.com"
+                            className="w-full bg-transparent text-white text-xs placeholder:text-[#dfd1b9]/30 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-[#dfd1b9] mb-1.5">
+                        Additional Specifications or Quality Standards (Optional)
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={additionalRequirements}
+                        onChange={(e) => setAdditionalRequirements(e.target.value)}
+                        placeholder="Mention required certifications (e.g. FSSAI, Phytosanitary, NABL, OEKO-TEX, Hallmarking), packaging formats, or payment terms."
+                        className="w-full rounded-xl bg-[#141413] border border-white/10 hover:border-[#dcb782]/40 transition-colors p-3 text-white text-xs placeholder:text-[#dfd1b9]/30 focus:outline-none resize-none leading-relaxed"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full mt-4 py-4 rounded-xl bg-gradient-to-r from-[#dcb782] via-[#e2c191] to-[#ab8558] hover:from-[#fbf3db] hover:to-[#dcb782] text-black font-body font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-xl hover:scale-[1.005] transition-all cursor-pointer disabled:opacity-50"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin text-black" />
+                          <span>TRANSMITTING RFQ TO TRADE DESK...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>SUBMIT COMMERCIAL TRADE RFQ</span>
+                          <ArrowRight className="h-4 w-4" />
+                        </>
+                      )}
+                    </button>
+                  </form>
+                )}
+              </div>
             )}
           </div>
-        )}
-      </main>
+        </div>
+      </div>
     </div>
   );
 }
