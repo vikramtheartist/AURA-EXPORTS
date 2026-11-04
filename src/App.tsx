@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import CtaFooter from './components/CtaFooter';
 import ScrollToTop from './components/ScrollToTop';
+import AnalyticsProvider from './components/AnalyticsProvider';
 
 import HomePage from './pages/HomePage';
 const AboutPage = lazy(() => import('./pages/AboutPage'));
@@ -54,6 +55,7 @@ export default function App() {
       {/* Core layout */}
       <div className="relative z-10 flex flex-col w-full">
         <ScrollToTop />
+        <AnalyticsProvider />
         <Navbar />
 
         <div className="w-full flex-grow">

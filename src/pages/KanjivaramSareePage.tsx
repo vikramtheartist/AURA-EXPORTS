@@ -86,11 +86,7 @@ export default function KanjivaramSareePage() {
 
   return (
     <div className="w-full pt-28 pb-24" id="kanjivaram-product-page">
-      <SEOHead 
-        title="Kanjivaram Silk Saree Exporter | Authentic Kanchipuram Sarees | AURA Global Trade"
-        description="Source authentic Kanjivaram silk sarees from Kanchipuram, Tamil Nadu. Traditional South Indian Korvai contrast borders, tested metallic zari, and verified weaver provenance."
-        canonical="https://auraexport.co/products/apparel-textiles/kanjivaram-silk-saree"
-      />
+      <SEOHead pageKey="kanjivaramSaree" />
 
       {/* Semantic Breadcrumbs */}
       <Breadcrumbs

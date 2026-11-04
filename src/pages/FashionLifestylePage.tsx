@@ -140,11 +140,7 @@ export default function FashionLifestylePage() {
 
   return (
     <div className="w-full pt-28 pb-24 bg-[#0A0A0B] text-white" id="fashion-lifestyle-landing">
-      <SEOHead 
-        title="Indian Artisanal Craft & Fashion Jewellery Exporter | AURA Global Trade"
-        description="Discover authentic Indian temple jewellery, Jadau Kundan and Meenakari bridal suites, and contemporary fashion jewellery exported from Chennai, Jaipur, and Mumbai artisan clusters."
-        canonical="https://auraexport.co/products/fashion-lifestyle"
-      />
+      <SEOHead pageKey="fashionLifestyle" />
 
       {/* Semantic Breadcrumbs */}
       <Breadcrumbs

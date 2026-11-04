@@ -1,14 +1,11 @@
-# robots.txt for Aura Global Trade (https://auraexport.co)
+# robots.txt for AURA Global Trade (https://auraexport.co)
+# AURA ENTERPRISE EXPORTS (OPC) PRIVATE LIMITED · Chennai, Tamil Nadu, India
+
 User-agent: *
 Allow: /
 
-# Exclude internal technical fallbacks and duplicate aliases
+# Disallow technical error pages
 Disallow: /404
-Disallow: /turmeric
-Disallow: /products/turmeric
-Disallow: /jewelry
-Disallow: /textiles
-Disallow: /quality
 
-# Sitemap location
+# Sitemaps
 Sitemap: https://auraexport.co/sitemap.xml

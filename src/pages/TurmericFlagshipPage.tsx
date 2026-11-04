@@ -54,11 +54,7 @@ export default function TurmericFlagshipPage() {
 
   return (
     <div className="w-full pt-28 pb-24 bg-[#0a0a09] text-white" id="turmeric-flagship-landing">
-      <SEOHead 
-        title="Turmeric Exporter from Erode & Salem India | Whole Fingers, Powder, Paste & Extracts | AURA Global Trade"
-        description="Source premium Indian turmeric from Erode & Salem, Tamil Nadu. High-curcumin whole fingers, cold-milled powders, food-grade pastes, standardized capsules and cosmetic face packs."
-        canonical="https://auraexport.co/products/agro-products/turmeric"
-      />
+      <SEOHead pageKey="turmeric" />
 
       {/* Semantic Breadcrumbs */}
       <Breadcrumbs

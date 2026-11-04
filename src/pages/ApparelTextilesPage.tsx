@@ -140,11 +140,7 @@ export default function ApparelTextilesPage() {
 
   return (
     <div className="w-full pt-28 pb-24 bg-[#0A0A0B] text-white" id="apparel-textiles-landing">
-      <SEOHead 
-        title="Indian Textile Exporter | Silk Sarees, Handlooms, Fabrics & Apparel | AURA Global Trade"
-        description="AURA Global Trade connects international fashion brands, textile distributors and apparel buyers with India's diverse textile heritage — from Kanchipuram pure silk sarees to organic cotton and regional handlooms."
-        canonical="https://auraexport.co/products/apparel-textiles"
-      />
+      <SEOHead pageKey="apparelTextiles" />
 
       {/* Semantic Breadcrumbs */}
       <Breadcrumbs

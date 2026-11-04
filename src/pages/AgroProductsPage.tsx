@@ -57,11 +57,7 @@ export default function AgroProductsPage() {
 
   return (
     <div className="w-full pt-28 pb-24 bg-[#0a0a09] text-white" id="agro-products-landing">
-      <SEOHead 
-        title="Indian Agro Products Exporter | Spices, Turmeric, Cardamom & Produce | AURA Global Trade"
-        description="India's Finest Origins. Sourced for the World. AURA connects international B2B buyers with quality agricultural products from Erode, Salem, Kerala, Guntur and established Indian growing regions."
-        canonical="https://auraexport.co/products/agro-products"
-      />
+      <SEOHead pageKey="agroProducts" />
 
       {/* Semantic Breadcrumbs */}
       <Breadcrumbs
