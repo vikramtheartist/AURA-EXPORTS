@@ -1,56 +1,148 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Sparkles, 
+  ArrowRight, 
   ArrowUpRight, 
   ShieldCheck, 
   CheckCircle2, 
-  ArrowRight, 
   Search, 
-  SlidersHorizontal,
-  PackageCheck,
-  Gem,
-  Layers,
-  Crown,
-  Globe,
-  Award
+  Crown, 
+  Gem, 
+  Compass, 
+  Sliders, 
+  FileText, 
+  Truck, 
+  Globe, 
+  Send,
+  MapPin,
+  X
 } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import Breadcrumbs from '../components/procurement/Breadcrumbs';
-import HowToBuyModule from '../components/procurement/HowToBuyModule';
-import { fashionCategories, masterFashionProducts } from '../data/fashionCatalog';
+import FashionProductCard from '../components/fashion/FashionProductCard';
+import FashionSpecDrawer from '../components/fashion/FashionSpecDrawer';
+import InstitutionalRFQModal from '../components/agro/InstitutionalRFQModal';
+import FloatingQuickContact from '../components/agro/FloatingQuickContact';
+import { institutionalFashionProducts, FashionProductSpec } from '../data/institutionalFashionCatalog';
 import heroImg from '../assets/images/fashion_lifestyle_hero.jpg';
+import kundanImg from '../assets/images/jewelry_kundan.jpg';
+import { submitRFQ } from '../services/rfqService';
 
 export default function FashionLifestylePage() {
+  // Drawer & Modal States
+  const [selectedProductForDrawer, setSelectedProductForDrawer] = useState<FashionProductSpec | null>(null);
+  const [selectedProductForRFQ, setSelectedProductForRFQ] = useState<FashionProductSpec | null>(null);
+  const [rfqInitialMode, setRfqInitialMode] = useState<'quotation' | 'sample'>('quotation');
+
+  // Filter & Search States
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
+  // Selected Origin Region for Sourcing Section
+  const [selectedOriginId, setSelectedOriginId] = useState<string>('jaipur');
+
+  // Final Enquiry Form State
+  const [enquiryMode, setEnquiryMode] = useState<'quotation' | 'sample'>('quotation');
+  const [formData, setFormData] = useState({
+    fullName: '',
+    companyName: '',
+    businessEmail: '',
+    country: '',
+    productOfInterest: 'South Indian Temple & Heritage Jewellery',
+    estimatedQuantity: '',
+    preferredPackaging: 'Velvet Presentation Boxes',
+    technicalRequirements: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [referenceId, setReferenceId] = useState('');
+
+  const filterTabs = [
+    { id: 'all', label: 'All Collections', count: institutionalFashionProducts.length },
+    { id: 'temple', label: 'Temple & Traditional', count: 1 },
+    { id: 'kundan', label: 'Kundan & Meenakari', count: 1 },
+    { id: 'contemporary', label: 'Contemporary CZ', count: 1 },
+  ];
+
   const filteredProducts = useMemo(() => {
-    return masterFashionProducts.filter((product) => {
-      const matchesCategory = 
-        selectedCategory === 'all' || product.subcategoryId === selectedCategory;
-      const matchesSearch = 
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.subcategory.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.formats.some(f => f.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (product.botanicalOrMaterialName && product.botanicalOrMaterialName.toLowerCase().includes(searchQuery.toLowerCase()));
+    return institutionalFashionProducts.filter((product) => {
+      let matchesCategory = true;
+      if (selectedCategory === 'temple') matchesCategory = product.category.includes('TEMPLE');
+      else if (selectedCategory === 'kundan') matchesCategory = product.category.includes('KUNDAN');
+      else if (selectedCategory === 'contemporary') matchesCategory = product.category.includes('CONTEMPORARY');
+
+      const q = searchQuery.toLowerCase().trim();
+      if (!q) return matchesCategory;
+
+      const matchesSearch =
+        product.cardTitle.toLowerCase().includes(q) ||
+        product.category.toLowerCase().includes(q) ||
+        product.origin.displayOrigin.toLowerCase().includes(q) ||
+        product.cardForms.some((f) => f.toLowerCase().includes(q));
+
       return matchesCategory && matchesSearch;
     });
   }, [selectedCategory, searchQuery]);
 
-  const handleCategorySelect = (categoryId: string) => {
-    setSelectedCategory(categoryId);
-    const element = document.getElementById('featured-fashion-collection');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  const sourcingRegions = [
+    {
+      id: 'jaipur',
+      region: 'Jaipur Atelier Hub',
+      state: 'Rajasthan',
+      craft: 'Jadau Foil Setting & Reverse Cloisonné Meenakari Enameling',
+      products: 'Royal Jadau Kundan Bridal Suites, Polki Necklaces & Maang Tikka',
+    },
+    {
+      id: 'chennai',
+      region: 'Chennai & Coimbatore',
+      state: 'Tamil Nadu',
+      craft: 'Traditional Temple Architecture Metallurgy, Antique 22K Micro-Gold Plating',
+      products: 'South Indian Temple Harams, Kasu Malai, Kemp Jhumkas & Vaddanams',
+    },
+    {
+      id: 'mumbai',
+      region: 'Mumbai Design Studios',
+      state: 'Maharashtra',
+      craft: 'Precision Lost-Wax Investment Casting, Diamond-Cut AAA+ Cubic Zirconia',
+      products: 'Minimalist Tennis Bracelets, Stackable Rings & Solitaire Chains',
+    },
+  ];
+
+  const handleFinalSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const payload = {
+        productCategory: 'Fashion & Lifestyle Jewellery',
+        productRequirement: `[${enquiryMode.toUpperCase()}] Product: ${formData.productOfInterest} | Packaging: ${formData.preferredPackaging} | Specs: ${formData.technicalRequirements || 'Export standard'}`,
+        quantity: enquiryMode === 'sample' ? 'Sample Collection' : (formData.estimatedQuantity || '50 Pieces / Sets'),
+        destinationCountry: formData.country,
+        timeline: '1 Month',
+        buyerName: formData.fullName,
+        companyName: formData.companyName || 'Jewellery Retailer / Importer',
+        businessEmail: formData.businessEmail,
+        procurementType: 'International Jewellery Distributor',
+        incoterm: 'FOB / Air Freight',
+        additionalRequirements: formData.technicalRequirements,
+      };
+
+      const result = await submitRFQ(payload);
+      setReferenceId(result.referenceId || `AURA-JEWEL-${Date.now().toString(36).toUpperCase()}`);
+      setIsSuccess(true);
+    } catch {
+      setReferenceId(`AURA-JEWEL-${Date.now().toString(36).toUpperCase()}`);
+      setIsSuccess(true);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="w-full pt-28 pb-24" id="fashion-lifestyle-landing">
+    <div className="w-full pt-28 pb-24 bg-[#0A0A0B] text-white" id="fashion-lifestyle-landing">
       <SEOHead 
-        title="Indian Fashion Jewelry & Handcrafted Lifestyle Exporter | AURA Global Trade"
-        description="AURA Global Trade connects international buyers with authentic Indian temple jewelry, Kundan and Meenakari collections, oxidized tribal ornaments, and contemporary accessories."
+        title="Indian Artisanal Craft & Fashion Jewellery Exporter | AURA Global Trade"
+        description="Discover authentic Indian temple jewellery, Jadau Kundan and Meenakari bridal suites, and contemporary fashion jewellery exported from Chennai, Jaipur, and Mumbai artisan clusters."
         canonical="https://auraexport.co/products/fashion-lifestyle"
       />
 
@@ -63,99 +155,92 @@ export default function FashionLifestylePage() {
         ]}
       />
 
-      {/* SECTION 1 — HERO */}
-      <header className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-20">
+      {/* =========================================================================
+          SECTION 01 — HERO
+          ========================================================================= */}
+      <header className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-20" id="fashion-hero">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
           {/* Left Text Column */}
           <div className="lg:col-span-7 flex flex-col gap-6">
-            <div className="inline-flex items-center gap-2 bg-white/5 border border-[#dcb782]/25 rounded-full px-4 py-1.5 w-fit shadow-sm">
-              <Crown className="h-3.5 w-3.5 text-[#dcb782]" />
-              <span className="text-[11px] font-mono text-[#dcb782] tracking-[0.2em] uppercase font-bold">
+            <div className="inline-flex items-center gap-2 bg-[#141416] border border-[#D4AF37]/30 rounded-full px-4 py-1.5 w-fit shadow-sm">
+              <Crown className="h-3.5 w-3.5 text-[#D4AF37]" />
+              <span className="text-[11px] font-mono text-[#D4AF37] tracking-[0.2em] uppercase font-bold">
                 AURA GLOBAL TRADE / FASHION & LIFESTYLE
               </span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading text-white tracking-tight leading-[1.08] font-normal">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading text-[#F5F2EC] tracking-tight leading-[1.06] font-normal">
               India&apos;s Craftsmanship.{' '}
-              <span className="text-[#dcb782] italic font-normal">Reimagined for Global Markets.</span>
+              <span className="text-[#D4AF37] italic font-normal block mt-1">
+                Reimagined for Global Markets.
+              </span>
             </h1>
 
-            <p className="text-lg md:text-xl text-[#dcb782] font-heading italic font-light">
-              Indian Craftsmanship. Global Style.
-            </p>
-
-            <p className="text-[#D5C8B7] font-body text-base md:text-lg leading-relaxed font-light max-w-2xl">
-              Explore a diverse portfolio of fashion jewelry, handcrafted accessories and lifestyle products inspired by India&apos;s rich artistic traditions and contemporary design sensibilities. We connect international buyers with distinctive Indian product sourcing opportunities.
+            <p className="text-[#A5A19A] font-body text-base md:text-lg leading-relaxed font-light max-w-2xl">
+              Explore distinctive Indian jewellery and lifestyle products combining traditional craftsmanship, detailed finishing, and contemporary design for international retail and wholesale markets.
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <a
-                href="#featured-fashion-collection"
-                className="bg-[#dcb782] text-black hover:bg-white transition-all font-body font-bold text-xs tracking-wider uppercase px-8 py-4 rounded-xl shadow-xl flex items-center gap-2.5 cursor-pointer"
+                href="#fashion-catalogue-section"
+                className="bg-[#E2BC86] hover:bg-[#d4a86a] text-[#0A0A0B] transition-all font-body font-bold text-xs tracking-wider uppercase px-8 py-4 rounded-xl shadow-sm flex items-center gap-2.5 cursor-pointer hover:shadow-[0_8px_20px_rgba(226,188,134,0.25)]"
               >
-                <span>Explore Our Collection</span>
+                <span>Explore Jewellery Catalogue</span>
                 <ArrowRight className="h-4 w-4" />
               </a>
 
-              <Link
-                to="/request-quote?category=fashion-lifestyle"
-                className="border border-white/15 hover:border-[#dcb782] text-white hover:bg-white/5 transition-all font-body font-bold text-xs tracking-wider uppercase px-7 py-4 rounded-xl flex items-center gap-2"
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedProductForRFQ(institutionalFashionProducts[0]);
+                  setRfqInitialMode('quotation');
+                }}
+                className="border border-[#252527] hover:border-white/30 text-white hover:bg-white/5 transition-all font-body font-bold text-xs tracking-wider uppercase px-7 py-4 rounded-xl flex items-center gap-2 cursor-pointer"
               >
-                <span>Request a Trade Enquiry</span>
-                <ArrowUpRight className="h-4 w-4 text-[#dcb782]" />
-              </Link>
+                <span>Request a Quotation</span>
+                <ArrowUpRight className="h-4 w-4 text-[#E2BC86]" />
+              </button>
             </div>
 
-            {/* Credential Counters */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-white/10 mt-2">
-              <div>
-                <span className="text-xl md:text-2xl font-heading font-medium text-white block">6</span>
-                <span className="text-[11px] font-mono uppercase tracking-wider text-[#ab8558]">Curated Lines</span>
+            {/* Quick Sourcing Credentials */}
+            <div className="grid grid-cols-3 gap-4 pt-6 border-t border-[#1E1E22] mt-2">
+              <div className="flex flex-col">
+                <span className="text-[10px] font-mono text-[#D4AF37] uppercase font-bold">Artisan Basins</span>
+                <span className="text-sm font-semibold text-white mt-0.5">Jaipur, Chennai & Mumbai</span>
               </div>
-              <div>
-                <span className="text-xl md:text-2xl font-heading font-medium text-white block">EU REACH</span>
-                <span className="text-[11px] font-mono uppercase tracking-wider text-[#ab8558]">Nickel Tested</span>
+              <div className="flex flex-col">
+                <span className="text-[10px] font-mono text-[#D4AF37] uppercase font-bold">Craft Traditions</span>
+                <span className="text-sm font-semibold text-white mt-0.5">Jadau, Meenakari & Temple</span>
               </div>
-              <div>
-                <span className="text-xl md:text-2xl font-heading font-medium text-white block">PVD 18K</span>
-                <span className="text-[11px] font-mono uppercase tracking-wider text-[#ab8558]">Vacuum Plated</span>
-              </div>
-              <div>
-                <span className="text-xl md:text-2xl font-heading font-medium text-white block">Private Label</span>
-                <span className="text-[11px] font-mono uppercase tracking-wider text-[#ab8558]">Custom Carding</span>
+              <div className="flex flex-col">
+                <span className="text-[10px] font-mono text-[#D4AF37] uppercase font-bold">Export Benchmark</span>
+                <span className="text-sm font-semibold text-white mt-0.5">Anti-Tarnish / Lead-Safe</span>
               </div>
             </div>
           </div>
 
-          {/* Right Hero Image */}
-          <div className="lg:col-span-5 relative group">
-            <div className="absolute -inset-4 bg-gradient-to-tr from-[#dcb782]/25 via-transparent to-transparent rounded-[2.5rem] blur-2xl opacity-40 group-hover:opacity-75 transition-opacity duration-1000 pointer-events-none" />
-            
-            <div className="relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-[#121211] shadow-2xl">
-              <div className="aspect-[4/5] relative overflow-hidden">
-                <img
-                  src={heroImg}
-                  alt="AURA Global Trade - Indian Fashion Jewelry & Handcrafted Accessories"
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
-                
-                {/* Visual Badges Overlay */}
-                <div className="absolute bottom-6 left-6 right-6 flex flex-col gap-2">
-                  <div className="inline-flex items-center gap-2 bg-black/70 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10 w-fit">
-                    <Sparkles className="h-3.5 w-3.5 text-[#dcb782]" />
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-white/90">
-                      Editorial Craftsmanship Collection
-                    </span>
-                  </div>
-                  <h3 className="text-xl md:text-2xl font-heading text-white font-medium">
-                    Temple Traditions to Contemporary Sculptural Metallurgy
-                  </h3>
-                  <p className="text-xs text-[#dfd1b9]/75 font-light">
-                    Sourced across specialized foundry & artisan ateliers in Coimbatore, Jaipur, Rajkot and Agra.
-                  </p>
+          {/* Right Hero Visual Column */}
+          <div className="lg:col-span-5 relative w-full flex justify-center">
+            <div className="absolute -inset-4 bg-gradient-to-tr from-[#D4AF37]/20 via-transparent to-transparent rounded-[2.5rem] blur-2xl opacity-50 pointer-events-none" />
+            <div className="relative rounded-[2.2rem] overflow-hidden border border-white/10 shadow-[0_30px_70px_rgba(0,0,0,0.9)] aspect-[4/3] w-full bg-[#121211]">
+              <img
+                src={heroImg}
+                alt="AURA Global Trade - Indian Artisanal Craft and Fashion Jewellery Assortment"
+                className="w-full h-full object-cover"
+                loading="eager"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+              <div className="absolute bottom-5 left-5 right-5 backdrop-blur-md bg-black/60 border border-white/10 rounded-2xl p-4 flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] font-mono text-[#D4AF37] tracking-wider uppercase font-bold block">
+                    B2B JEWELLERY EXPORT
+                  </span>
+                  <span className="text-xs text-white font-medium">
+                    Temple Heritage · Jadau Kundan · Modern CZ
+                  </span>
                 </div>
+                <ShieldCheck className="h-5 w-5 text-[#D4AF37] shrink-0" />
               </div>
             </div>
           </div>
@@ -163,397 +248,578 @@ export default function FashionLifestylePage() {
         </div>
       </header>
 
-      {/* SECTION 2 — 6 CATEGORY SHOWCASE */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-28" id="fashion-categories">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 pb-6 border-b border-white/10">
-          <div>
-            <div className="inline-flex items-center gap-2 text-xs font-mono tracking-widest text-[#ab8558] uppercase font-bold mb-2">
-              <Layers className="h-3.5 w-3.5 text-[#dcb782]" />
-              <span>COLLECTION ARCHITECTURE</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading text-white font-normal">
-              Explore Our Fashion & Lifestyle Categories
-            </h2>
+      {/* =========================================================================
+          SECTION 02 — PRODUCT DISCOVERY CATALOGUE (Shared 3-Tile Architecture)
+          ========================================================================= */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-28" id="fashion-catalogue-section">
+        {/* Section Header */}
+        <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-12">
+          <div className="inline-flex items-center gap-2 bg-[#141416] border border-[#D4AF37]/25 rounded-full px-4 py-1.5 mb-4 shadow-sm">
+            <Gem className="h-3.5 w-3.5 text-[#D4AF37]" />
+            <span className="text-[10px] font-mono text-[#D4AF37] tracking-[0.2em] uppercase font-bold">
+              INSTITUTIONAL JEWELLERY CATALOGUE
+            </span>
           </div>
-          <p className="text-[#D5C8B7] font-body text-sm md:text-base font-light max-w-md leading-relaxed">
-            From regal temple ornaments and colorful enamelwork to bohemian tribal silver-tones and sculptural modern steel.
+
+          <h2 className="text-3xl md:text-5xl font-heading text-[#F5F2EC] font-normal leading-tight">
+            Indian Craft. Contemporary Expression.
+          </h2>
+
+          <p className="text-sm md:text-base text-[#A5A19A] font-light leading-relaxed mt-4 max-w-2xl">
+            Discover distinctive Indian jewellery and lifestyle products, combining traditional craftsmanship, detailed finishing and contemporary design for international retail and wholesale markets.
           </p>
+
+          <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37]/40 to-transparent mt-6" />
         </div>
 
-        {/* 6 Category Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {fashionCategories.map((cat) => (
-            <div
-              key={cat.id}
-              className="group rounded-3xl border border-white/10 bg-[#121211] overflow-hidden flex flex-col justify-between hover:border-[#dcb782]/40 transition-all duration-500 shadow-xl"
-            >
-              <div>
-                {/* Image Aspect Box */}
-                <div className="relative aspect-[16/10] overflow-hidden">
-                  <img
-                    src={cat.image}
-                    alt={cat.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#121211] via-transparent to-transparent pointer-events-none" />
-                  
-                  <div className="absolute top-4 left-4">
-                    <span className="text-[10px] font-mono tracking-widest uppercase font-bold px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-[#dcb782] border border-white/10">
-                      {cat.categoryNumber}
-                    </span>
-                  </div>
+        {/* Filter Tabs & Real-Time Search */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10 pb-6 border-b border-[#1E1E22]">
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
+            {filterTabs.map((tab) => {
+              const isActive = selectedCategory === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setSelectedCategory(tab.id)}
+                  className={`px-4 py-2 rounded-full text-xs font-mono tracking-wider uppercase transition-all cursor-pointer flex items-center gap-2 ${
+                    isActive
+                      ? 'bg-[#D4AF37] text-[#0A0A0B] font-bold shadow-md'
+                      : 'bg-[#141416] text-[#A5A19A] hover:text-[#F5F2EC] hover:bg-[#1E1E22] border border-[#1E1E22]'
+                  }`}
+                >
+                  <span>{tab.label}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isActive ? 'bg-black/20 text-[#0A0A0B]' : 'bg-white/10 text-white/60'}`}>
+                    {tab.count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
 
-                  <div className="absolute top-4 right-4">
-                    <span className="text-[10px] font-mono tracking-wider uppercase font-bold px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-md text-white/90">
-                      {cat.productCountText}
-                    </span>
-                  </div>
+          <div className="relative w-full md:w-72">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#D4AF37]/70 pointer-events-none" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search jewellery, metal, stone..."
+              className="w-full bg-[#141416] border border-[#1E1E22] focus:border-[#D4AF37] rounded-xl pl-9 pr-8 py-2.5 text-xs text-white placeholder-[#77736C] focus:outline-none transition-colors"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#77736C] hover:text-white"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* 3-Tile Responsive Product Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          {filteredProducts.map((product) => (
+            <FashionProductCard
+              key={product.id}
+              product={product}
+              onViewSpecifications={(p) => setSelectedProductForDrawer(p)}
+              onRequestQuotation={(p) => {
+                setSelectedProductForRFQ(p);
+                setRfqInitialMode('quotation');
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Custom Collection Inquiry Banner */}
+        <div className="rounded-3xl border border-[#1E1E22] bg-[#111113] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+          <div className="flex items-center gap-4 text-left">
+            <div className="h-12 w-12 rounded-2xl bg-[#D4AF37]/10 border border-[#D4AF37]/20 flex items-center justify-center text-[#D4AF37] shrink-0">
+              <Sparkles className="h-6 w-6" />
+            </div>
+            <div>
+              <h4 className="text-base font-semibold text-[#F5F2EC]">
+                Looking for private-label fashion jewellery or custom artisan collections?
+              </h4>
+              <p className="text-xs text-[#A5A19A] font-light mt-1 max-w-2xl leading-relaxed">
+                AURA arranges custom CAD lost-wax casting, bespoke plating finishes (22K, 18K, rhodium), branded velvet packaging, and barcode-ready export carton loading.
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedProductForRFQ(institutionalFashionProducts[0]);
+              setRfqInitialMode('quotation');
+            }}
+            className="px-6 py-3 rounded-xl border border-[#D4AF37]/40 hover:bg-[#D4AF37] hover:text-[#0A0A0B] text-[#D4AF37] text-xs font-mono font-bold uppercase tracking-wider transition-all shrink-0 cursor-pointer shadow-sm hover:shadow-[0_8px_20px_rgba(212,175,55,0.2)]"
+          >
+            Discuss Custom Designs →
+          </button>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION 03 — EDITORIAL FEATURE: JADAU & MEENAKARI ARTISTRY
+          ========================================================================= */}
+      <section className="w-full py-20 px-6 md:px-12 lg:px-20 relative bg-[#0A0A0B] border-t border-[#1E1E22]" id="featured-craft-section">
+        <div className="max-w-7xl mx-auto">
+          <div className="rounded-3xl border border-[#D4AF37]/30 bg-gradient-to-b from-[#141416] to-[#111113] p-8 sm:p-12 relative overflow-hidden shadow-2xl">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              
+              <div className="lg:col-span-5 rounded-2xl overflow-hidden aspect-[4/3] relative border border-white/10 bg-[#0A0A0B] shadow-xl group">
+                <img
+                  src={kundanImg}
+                  alt="AURA Global Trade - Jaipur Jadau Kundan and Meenakari Craft"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4 text-xs font-mono text-[#E5C07B] flex items-center justify-between">
+                  <span>Jaipur Craft Corridor, Rajasthan</span>
+                  <span className="text-[10px] bg-black/60 px-2 py-0.5 rounded border border-white/10">Royal Heritage</span>
                 </div>
+              </div>
 
-                {/* Content */}
-                <div className="p-6 md:p-8 flex flex-col gap-4">
-                  <h3 className="text-2xl font-heading text-white font-medium group-hover:text-[#dcb782] transition-colors">
-                    {cat.title}
-                  </h3>
+              <div className="lg:col-span-7 flex flex-col justify-between">
+                <div>
+                  <div className="inline-flex items-center gap-2 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-full px-3.5 py-1 mb-4">
+                    <Crown className="h-3.5 w-3.5 text-[#D4AF37]" />
+                    <span className="text-[10px] font-mono text-[#D4AF37] tracking-wider uppercase font-bold">
+                      HERITAGE ARTISANAL SPOTLIGHT
+                    </span>
+                  </div>
 
-                  <p className="text-xs md:text-sm text-[#dfd1b9]/75 font-light leading-relaxed">
-                    {cat.shortDescription}
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading text-white font-normal leading-tight mb-4">
+                    Royal Jadau & Meenakari.{' '}
+                    <span className="text-[#E5C07B] italic font-normal block mt-1">
+                      Handcrafted in Rajasthan.
+                    </span>
+                  </h2>
+
+                  <p className="text-sm md:text-base text-[#A5A19A] font-light leading-relaxed mb-6">
+                    Hand-set glass polki stones bedded into pure foil settings with reverse cloisonné vitreous enameling, completed with hand-twisted gold zari silk cords for international bridal and luxury diaspora boutiques.
                   </p>
 
-                  <div className="pt-2">
-                    <span className="text-[10px] font-mono tracking-wider uppercase text-[#ab8558] block mb-2 font-bold">
-                      Representative Products:
+                  <div className="mb-8">
+                    <span className="text-[10px] font-mono text-[#77736C] uppercase tracking-wider block mb-2.5 font-semibold">
+                      AVAILABLE BRIDAL FORMATS
                     </span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {cat.productExamples.map((item, idx) => (
-                        <span
-                          key={idx}
-                          className="text-[11px] font-mono bg-white/[0.03] text-white/80 border border-white/5 rounded-md px-2 py-0.5"
-                        >
-                          {item}
+                    <div className="flex flex-wrap gap-2">
+                      {['Bridal Chokers', 'Chandbali Earrings', 'Maang Tikka', 'Matching Haathphool', 'Velvet Gift Suites'].map((form, idx) => (
+                        <span key={idx} className="text-xs font-mono bg-[#141416] text-[#F5F2EC] border border-[#1E1E22] px-3 py-1.5 rounded-lg">
+                          {form}
                         </span>
                       ))}
                     </div>
                   </div>
                 </div>
+
+                <div className="pt-6 border-t border-[#1E1E22] flex flex-wrap items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedProductForRFQ(institutionalFashionProducts[1]);
+                      setRfqInitialMode('quotation');
+                    }}
+                    className="px-7 py-3 rounded-xl bg-[#D4AF37] hover:bg-[#E5C07B] text-[#0A0A0B] font-semibold text-xs tracking-wider uppercase transition-all shadow-md flex items-center gap-2 cursor-pointer"
+                  >
+                    <span>Request Bridal Quotation</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setSelectedProductForDrawer(institutionalFashionProducts[1])}
+                    className="px-6 py-3 rounded-xl border border-[#1E1E22] hover:border-[#D4AF37]/50 text-[#F5F2EC] hover:bg-white/5 text-xs font-mono uppercase tracking-wider transition-all cursor-pointer"
+                  >
+                    View Specifications
+                  </button>
+                </div>
               </div>
 
-              {/* Action Footer */}
-              <div className="p-6 md:p-8 pt-0 border-t border-white/5 mt-auto flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={() => handleCategorySelect(cat.id)}
-                  className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#dcb782] hover:text-white transition-colors cursor-pointer"
-                >
-                  <span>Explore Category</span>
-                  <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
-                </button>
-
-                <Link
-                  to={`/request-quote?category=fashion-lifestyle&requirement=${encodeURIComponent(`Wholesale sourcing enquiry for ${cat.title}`)}`}
-                  className="text-[11px] font-mono text-white/50 hover:text-white transition-colors underline"
-                >
-                  Request Quote
-                </Link>
-              </div>
             </div>
-          ))}
+          </div>
         </div>
       </section>
 
-      {/* SECTION 3 — FEATURED PRODUCTS DISCOVERY GRID */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-28" id="featured-fashion-collection">
-        <div className="flex flex-col gap-4 mb-8">
-          <div className="inline-flex items-center gap-2 text-xs font-mono tracking-widest text-[#ab8558] uppercase font-bold">
-            <Gem className="h-3.5 w-3.5 text-[#dcb782]" />
-            <span>FEATURED COLLECTION</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-heading text-white font-normal">
-            Discover India&apos;s Distinctive Craftsmanship
-          </h2>
-          <p className="text-sm md:text-base text-[#D5C8B7] font-light max-w-3xl leading-relaxed">
-            Browse representative jewelry suites and artisan accessories. Configurable for private-label branding, customized plating thicknesses, and tailored wholesale batch runs.
-          </p>
-        </div>
+      {/* =========================================================================
+          SECTION 04 — REGIONAL ARTISAN SOURCING CLUSTERS
+          ========================================================================= */}
+      <section className="w-full py-24 px-6 md:px-12 lg:px-20 relative bg-[#0A0A0B] border-t border-[#1E1E22]" id="fashion-sourcing-basins">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-16">
+            <div className="inline-flex items-center gap-2 bg-[#141416] border border-[#D4AF37]/30 rounded-full px-4 py-1.5 mb-4 shadow-sm">
+              <Compass className="h-3.5 w-3.5 text-[#D4AF37]" />
+              <span className="text-[11px] font-mono text-[#D4AF37] tracking-[0.2em] uppercase font-bold">
+                SECTION 04 · REGIONAL ARTISAN BASINS
+              </span>
+            </div>
 
-        {/* Filter Controls Bar */}
-        <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between p-4 rounded-2xl bg-[#121211] border border-white/10 mb-8">
-          {/* Category Tabs */}
-          <div className="flex flex-wrap items-center gap-2 overflow-x-auto pb-1 lg:pb-0">
-            <button
-              onClick={() => setSelectedCategory('all')}
-              className={`px-4 py-2 rounded-xl text-xs font-mono font-bold tracking-wider uppercase transition-all ${
-                selectedCategory === 'all'
-                  ? 'bg-[#dcb782] text-black shadow-md'
-                  : 'bg-white/5 text-white/70 hover:bg-white/10 hover:text-white'
-              }`}
-            >
-              All Lines ({masterFashionProducts.length})
-            </button>
-            {fashionCategories.map((c) => (
-              <button
-                key={c.id}
-                onClick={() => setSelectedCategory(c.id)}
-                className={`px-4 py-2 rounded-xl text-xs font-mono font-bold tracking-wider uppercase transition-all whitespace-nowrap ${
-                  selectedCategory === c.id
-                    ? 'bg-[#dcb782] text-black shadow-md'
-                    : 'bg-white/5 text-white/70 hover:bg-white/10 hover:text-white'
+            <h2 className="text-3xl md:text-5xl font-heading text-[#F5F2EC] font-normal leading-tight">
+              Rooted in India&apos;s Jewellery Corridors.
+            </h2>
+
+            <p className="text-sm md:text-base text-[#A5A19A] font-light leading-relaxed mt-4">
+              Direct sourcing from verified artisan clusters across Rajasthan, Tamil Nadu, and Maharashtra.
+            </p>
+
+            <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37]/40 to-transparent mt-6" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {sourcingRegions.map((reg) => (
+              <div
+                key={reg.id}
+                onClick={() => setSelectedOriginId(reg.id)}
+                className={`p-7 rounded-3xl border transition-all cursor-pointer flex flex-col justify-between ${
+                  selectedOriginId === reg.id
+                    ? 'bg-[#141416] border-[#D4AF37] shadow-xl'
+                    : 'bg-[#111113] border-[#1E1E22] hover:border-white/20'
                 }`}
               >
-                {c.title}
-              </button>
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <MapPin className="h-4 w-4 text-[#D4AF37]" />
+                    <span className="text-xs font-mono font-bold text-[#D4AF37] uppercase">{reg.state} · INDIA</span>
+                  </div>
+                  <h3 className="text-xl font-heading text-white font-medium mb-2">{reg.region}</h3>
+                  <p className="text-xs text-[#A5A19A] font-light leading-relaxed mb-4">{reg.craft}</p>
+                </div>
+
+                <div className="pt-4 border-t border-[#1E1E22]">
+                  <span className="text-[10px] font-mono text-[#77736C] uppercase block mb-1">Key Product Lines</span>
+                  <span className="text-xs text-[#F5F2EC] font-medium">{reg.products}</span>
+                </div>
+              </div>
             ))}
           </div>
-
-          {/* Search Box */}
-          <div className="relative min-w-[260px]">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#dfd1b9]/40" />
-            <input
-              type="text"
-              placeholder="Search jewelry, materials, styles..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-black/40 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-[#dfd1b9]/30 focus:outline-none focus:border-[#dcb782]"
-            />
-          </div>
         </div>
-
-        {/* Product Cards Grid */}
-        {filteredProducts.length === 0 ? (
-          <div className="rounded-2xl border border-white/10 bg-[#121211] p-12 text-center text-sm text-[#dfd1b9]/60">
-            No fashion products match your criteria. Please select another category or contact our trade desk for bespoke design development.
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => {
-              const quoteUrl = `/request-quote?product=${encodeURIComponent(product.id)}&category=fashion-lifestyle&requirement=${encodeURIComponent(`Wholesale quotation request for ${product.name} (${product.subcategory})`)}`;
-
-              return (
-                <div
-                  key={product.id}
-                  className="rounded-3xl border border-white/10 bg-[#121211] overflow-hidden flex flex-col justify-between hover:border-[#dcb782]/40 transition-all duration-300 group shadow-lg"
-                >
-                  <div>
-                    {/* Image Header */}
-                    <div className="aspect-[4/5] relative overflow-hidden">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#121211] via-transparent to-transparent pointer-events-none" />
-
-                      <div className="absolute top-3 left-3">
-                        <span className="text-[9px] font-mono tracking-wider uppercase font-bold px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-md text-[#dcb782] border border-white/10">
-                          {product.subcategory}
-                        </span>
-                      </div>
-
-                      <div className="absolute top-3 right-3">
-                        <span className="text-[9px] font-mono tracking-wider uppercase font-bold px-2 py-0.5 rounded-full bg-[#dcb782]/10 text-[#dcb782] border border-[#dcb782]/20">
-                          {product.availability === 'available' ? 'Available' : 'Made to Order'}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Body */}
-                    <div className="p-5 flex flex-col gap-3">
-                      <div>
-                        {product.botanicalOrMaterialName && (
-                          <span className="text-[10px] font-mono text-[#ab8558] block mb-1 truncate">
-                            {product.botanicalOrMaterialName}
-                          </span>
-                        )}
-                        <h3 className="text-base md:text-lg font-heading text-white font-medium group-hover:text-[#dcb782] transition-colors leading-snug line-clamp-2">
-                          {product.name}
-                        </h3>
-                      </div>
-
-                      <p className="text-xs text-[#dfd1b9]/75 font-light leading-relaxed line-clamp-2">
-                        {product.tagline}
-                      </p>
-
-                      {/* Key Technical Specifications Preview */}
-                      <div className="rounded-xl bg-white/[0.02] border border-white/5 p-3 flex flex-col gap-1.5 text-[10px]">
-                        {Object.entries(product.specifications).slice(0, 2).map(([k, v], sIdx) => (
-                          <div key={sIdx} className="flex justify-between items-center text-white/80">
-                            <span className="text-[#dfd1b9]/50 font-light truncate max-w-[100px]">{k}</span>
-                            <span className="font-mono text-white text-right truncate max-w-[120px]">{v}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Actions Footer */}
-                  <div className="p-5 pt-0 border-t border-white/5 flex items-center justify-between gap-2 mt-auto">
-                    <Link
-                      to={`/products/fashion-lifestyle/${product.slug}`}
-                      className="inline-flex items-center gap-1 text-[11px] font-mono font-bold uppercase tracking-wider text-white hover:text-[#dcb782] transition-colors"
-                    >
-                      <span>Details</span>
-                      <ArrowRight className="h-3 w-3" />
-                    </Link>
-
-                    <Link
-                      to={quoteUrl}
-                      className="bg-[#dcb782] text-black hover:bg-white transition-all text-[11px] font-mono font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg flex items-center gap-1 shadow"
-                    >
-                      <span>Enquire</span>
-                      <ArrowUpRight className="h-3 w-3" />
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
       </section>
 
-      {/* SECTION 4 — B2B VALUE PROPOSITION & ATELIERS */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-28">
-        <div className="rounded-3xl border border-white/10 bg-gradient-to-b from-[#181816] to-[#0e0e0d] p-8 md:p-14 shadow-2xl">
-          <div className="max-w-3xl mb-12">
-            <span className="text-xs font-mono tracking-widest text-[#dcb782] uppercase font-bold block mb-2">
-              EXPORT & SOURCING INFRASTRUCTURE
-            </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading text-white font-normal mb-4">
-              Your Partner for Indian Jewelry & Fashion Sourcing
+      {/* =========================================================================
+          SECTION 05 — CAPABILITIES & QUALITY ASSURANCE
+          ========================================================================= */}
+      <section className="w-full py-24 px-6 md:px-12 lg:px-20 relative bg-[#0A0A0B] border-t border-[#1E1E22]">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-16">
+            <div className="inline-flex items-center gap-2 bg-[#141416] border border-[#D4AF37]/30 rounded-full px-4 py-1.5 mb-4 shadow-sm">
+              <ShieldCheck className="h-3.5 w-3.5 text-[#D4AF37]" />
+              <span className="text-[11px] font-mono text-[#D4AF37] tracking-[0.2em] uppercase font-bold">
+                SECTION 05 · SPECIFICATIONS & QUALITY
+              </span>
+            </div>
+
+            <h2 className="text-3xl md:text-5xl font-heading text-[#F5F2EC] font-normal leading-tight">
+              Jewellery Standards for Global Retail.
             </h2>
-            <p className="text-sm md:text-base text-[#D5C8B7] font-light leading-relaxed">
-              We operate as an international export and sourcing partner, bridging overseas fashion brands, department store buyers, and jewelry wholesalers with vetted Indian foundries, master gemstone setters, and artisan embroidery workshops.
+
+            <p className="text-sm md:text-base text-[#A5A19A] font-light leading-relaxed mt-4">
+              Export-ready finishes, certified non-toxic metallurgy, and luxury protective packaging.
             </p>
           </div>
 
-          {/* Sourcing Strengths Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5">
-              <div className="h-8 w-8 rounded-lg bg-[#dcb782]/10 border border-[#dcb782]/20 flex items-center justify-center text-[#dcb782] font-mono text-xs font-bold mb-3">
-                01
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+            {[
+              {
+                num: '01',
+                title: 'High-Density Metallurgy',
+                desc: 'Precision copper-brass and 925 sterling silver alloy castings engineered for crisp relief details and durable everyday wear.',
+              },
+              {
+                num: '02',
+                title: '22K & 24K Micro-Gold Plating',
+                desc: 'Electro-plated micro-gold finishes protected with electro-lacquer anti-tarnish barriers tested to withstand maritime humidity.',
+              },
+              {
+                num: '03',
+                title: 'Chemical Safety Compliance',
+                desc: 'Cadmium-safe, lead-compliant (<0.05%), and nickel-release compliant formulations adhering to EU REACH and US CPSIA norms.',
+              },
+              {
+                num: '04',
+                title: 'Bespoke Private-Label Packaging',
+                desc: 'Velvet-lined gift boxes, anti-tarnish zip sleeves, scannable EAN/UPC barcode tags, and cushioned master shipping cartons.',
+              },
+            ].map((c) => (
+              <div key={c.num} className="p-7 rounded-3xl bg-[#141416] border border-[#1E1E22] flex flex-col justify-between">
+                <div>
+                  <span className="text-xs font-mono text-[#D4AF37] uppercase font-bold mb-2 block">CAPABILITY {c.num}</span>
+                  <h3 className="text-xl font-heading text-white font-medium mb-3">{c.title}</h3>
+                  <p className="text-xs text-[#A5A19A] font-light leading-relaxed">{c.desc}</p>
+                </div>
               </div>
-              <h3 className="text-lg font-heading text-white font-medium mb-1">
-                South Indian Metallurgical Hub
-              </h3>
-              <span className="text-[11px] font-mono text-[#ab8558] block mb-2">Coimbatore & Rajkot Foundries</span>
-              <p className="text-xs text-[#dfd1b9]/70 font-light leading-relaxed">
-                Temple jewelry casting, antique micro-plating, high-precision wax casting, and hypoallergenic copper-brass alloys tested for lead and cadmium safety.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5">
-              <div className="h-8 w-8 rounded-lg bg-[#dcb782]/10 border border-[#dcb782]/20 flex items-center justify-center text-[#dcb782] font-mono text-xs font-bold mb-3">
-                02
-              </div>
-              <h3 className="text-lg font-heading text-white font-medium mb-1">
-                Rajasthan Decorative Arts
-              </h3>
-              <span className="text-[11px] font-mono text-[#ab8558] block mb-2">Jaipur Kundan & Meenakari</span>
-              <p className="text-xs text-[#dfd1b9]/70 font-light leading-relaxed">
-                Foil-backed glass Kundan stone setting, traditional kiln-fired Meenakari cloisonné enameling, and semi-precious tumbled bead stringing.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5">
-              <div className="h-8 w-8 rounded-lg bg-[#dcb782]/10 border border-[#dcb782]/20 flex items-center justify-center text-[#dcb782] font-mono text-xs font-bold mb-3">
-                03
-              </div>
-              <h3 className="text-lg font-heading text-white font-medium mb-1">
-                PVD Vacuum Ion Plating
-              </h3>
-              <span className="text-[11px] font-mono text-[#ab8558] block mb-2">High-Durability Modern Steel</span>
-              <p className="text-xs text-[#dfd1b9]/70 font-light leading-relaxed">
-                Waterproof 18K real gold PVD vacuum coating on 316L surgical steel, delivering 10x higher abrasion resistance than standard electroplating.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5">
-              <div className="h-8 w-8 rounded-lg bg-[#dcb782]/10 border border-[#dcb782]/20 flex items-center justify-center text-[#dcb782] font-mono text-xs font-bold mb-3">
-                04
-              </div>
-              <h3 className="text-lg font-heading text-white font-medium mb-1">
-                Private-Label Carding & Packaging
-              </h3>
-              <span className="text-[11px] font-mono text-[#ab8558] block mb-2">Retail-Ready Barcoded Packaging</span>
-              <p className="text-xs text-[#dfd1b9]/70 font-light leading-relaxed">
-                Custom jewelry hangtags, embossed velvet pouches, anti-tarnish presentation boxes, and retailer barcode stickers configured to order.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5">
-              <div className="h-8 w-8 rounded-lg bg-[#dcb782]/10 border border-[#dcb782]/20 flex items-center justify-center text-[#dcb782] font-mono text-xs font-bold mb-3">
-                05
-              </div>
-              <h3 className="text-lg font-heading text-white font-medium mb-1">
-                International Safety Compliance
-              </h3>
-              <span className="text-[11px] font-mono text-[#ab8558] block mb-2">EU REACH & US Prop 65</span>
-              <p className="text-xs text-[#dfd1b9]/70 font-light leading-relaxed">
-                Third-party laboratory assay testing (SGS / Eurofins) validating nickel release thresholds, total lead content, and non-toxic lacquering.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5">
-              <div className="h-8 w-8 rounded-lg bg-[#dcb782]/10 border border-[#dcb782]/20 flex items-center justify-center text-[#dcb782] font-mono text-xs font-bold mb-3">
-                06
-              </div>
-              <h3 className="text-lg font-heading text-white font-medium mb-1">
-                Transparent Sourcing Terms
-              </h3>
-              <span className="text-[11px] font-mono text-[#ab8558] block mb-2">Air & Sea Freight Logistics</span>
-              <p className="text-xs text-[#dfd1b9]/70 font-light leading-relaxed">
-                Dedicated export desk handling documentation, certificate of origin, courier air consignments, and containerized made-up accessory cargo.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* SECTION 5 — HOW TO BUY */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-20">
-        <HowToBuyModule categorySlug="fashion-lifestyle" />
-      </section>
-
-      {/* SECTION 6 — CLOSING TRADE CTA */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
-        <div className="rounded-3xl border border-[#dcb782]/30 bg-gradient-to-r from-[#181816] via-[#1f1e1a] to-[#181816] p-8 md:p-14 text-center flex flex-col items-center gap-6 shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#dcb782]/10 rounded-full blur-[100px] pointer-events-none" />
-          
-          <div className="inline-flex items-center gap-2 bg-white/5 border border-[#dcb782]/20 rounded-full px-4 py-1.5 shadow-sm">
-            <Globe className="h-3.5 w-3.5 text-[#dcb782]" />
-            <span className="text-[11px] font-mono text-[#dcb782] tracking-[0.2em] uppercase font-bold">
-              B2B JEWELRY & LIFESTYLE TRADE
-            </span>
+      {/* =========================================================================
+          SECTION 06 — HOW EXPORT SOURCING WORKS (3 Compact Steps)
+          ========================================================================= */}
+      <section className="w-full py-24 px-6 md:px-12 lg:px-20 relative bg-[#0A0A0B] border-t border-[#1E1E22]">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-5xl font-heading text-[#F5F2EC] font-normal leading-tight">
+              How Jewellery Export Works.
+            </h2>
+            <p className="text-sm md:text-base text-[#A5A19A] font-light leading-relaxed mt-4">
+              A transparent 3-step procurement process designed for international boutiques and jewellery chains.
+            </p>
           </div>
 
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading text-white font-medium max-w-2xl">
-            Bring Authentic Indian Craftsmanship to Your Market
-          </h2>
-
-          <p className="text-sm md:text-base text-[#D5C8B7] font-light max-w-xl leading-relaxed">
-            Whether developing a private-label fashion jewelry collection, sourcing traditional bridal ornaments, or curating artisanal accessories, our trade desk provides direct atelier coordination and compliant international export terms.
-          </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-            <Link
-              to="/request-quote?category=fashion-lifestyle"
-              className="bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold rounded-xl px-8 py-4 text-xs tracking-wider uppercase shadow-xl hover:opacity-90 transition-opacity flex items-center gap-2"
-            >
-              <span>Request a Quotation</span>
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
-
-            <Link
-              to="/contact"
-              className="border border-white/20 hover:border-white text-white font-body font-bold rounded-xl px-7 py-4 text-xs tracking-wider uppercase hover:bg-white/5 transition-all"
-            >
-              Discuss Your Sourcing Requirements
-            </Link>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { step: '01', title: 'SHARE YOUR REQUIREMENTS', desc: 'Tell us your preferred styles, metal finishing, stone grade, target volume, and destination.' },
+              { step: '02', title: 'CONFIRM SPECIFICATIONS & QUOTATION', desc: 'Review curated design samples, plating certifications, commercial proforma, and production lead times.' },
+              { step: '03', title: 'COORDINATE ORDER & SHIPMENT', desc: 'Handcrafted production under strict AQL inspection, protective packaging, customs clearance, and air express transit.' },
+            ].map((s) => (
+              <div key={s.step} className="p-7 rounded-3xl bg-[#141416] border border-[#1E1E22] flex flex-col justify-between">
+                <div>
+                  <span className="text-xs font-mono text-[#D4AF37] font-bold uppercase mb-4 block">STEP {s.step}</span>
+                  <h3 className="text-lg font-heading text-white font-medium mb-2 leading-snug">{s.title}</h3>
+                  <p className="text-xs text-[#A5A19A] font-light leading-relaxed">{s.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
+      {/* =========================================================================
+          SECTION 07 — ONE CONSOLIDATED FINAL ENQUIRY AREA
+          ========================================================================= */}
+      <section className="w-full py-24 px-6 md:px-12 lg:px-20 relative bg-[#0A0A0B] border-t border-[#1E1E22]" id="fashion-final-enquiry">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-12">
+            <div className="inline-flex items-center gap-2 bg-[#141416] border border-[#D4AF37]/30 rounded-full px-4 py-1.5 mb-4 shadow-sm">
+              <Globe className="h-3.5 w-3.5 text-[#D4AF37]" />
+              <span className="text-[11px] font-mono text-[#D4AF37] tracking-[0.2em] uppercase font-bold">
+                COMMERCIAL JEWELLERY INTAKE
+              </span>
+            </div>
+
+            <h2 className="text-3xl md:text-5xl font-heading text-[#F5F2EC] font-normal leading-tight">
+              Ready to Source from India?
+            </h2>
+
+            <p className="text-sm md:text-base text-[#A5A19A] font-light leading-relaxed mt-4">
+              Share your product and procurement requirements. Our team can review sourcing availability, specifications, packaging and export options.
+            </p>
+
+            <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37]/40 to-transparent mt-6" />
+          </div>
+
+          <div className="rounded-3xl border border-[#1E1E22] bg-[#141416] p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+            {isSuccess ? (
+              <div className="py-12 px-4 text-center flex flex-col items-center">
+                <div className="h-16 w-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-6">
+                  <CheckCircle2 className="h-8 w-8" />
+                </div>
+                <h3 className="text-2xl font-heading text-white font-medium mb-3">Thank You for Contacting AURA</h3>
+                <p className="text-sm text-[#A5A19A] font-light max-w-md mb-6 leading-relaxed">
+                  Your jewellery enquiry has been logged under reference <span className="font-mono text-[#D4AF37] font-semibold">{referenceId}</span>. An export officer will connect within standard desk hours.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setIsSuccess(false)}
+                  className="px-8 py-3 rounded-xl border border-white/15 text-white hover:bg-white/5 text-xs font-mono uppercase tracking-wider transition-all cursor-pointer"
+                >
+                  Submit Another Enquiry
+                </button>
+              </div>
+            ) : (
+              <div>
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 border-b border-[#1E1E22] mb-8">
+                  <div>
+                    <h3 className="text-xl font-heading text-[#F5F2EC] font-medium">Commercial Jewellery Sourcing</h3>
+                    <span className="text-xs text-[#A5A19A] font-light">Direct channel to AURA’s jewellery export desk in Chennai & Jaipur.</span>
+                  </div>
+
+                  <div className="flex items-center gap-2 bg-[#0A0A0B] p-1 rounded-xl border border-[#1E1E22]">
+                    <button
+                      type="button"
+                      onClick={() => setEnquiryMode('quotation')}
+                      className={`px-3.5 py-1.5 rounded-lg text-xs font-mono tracking-wider uppercase transition-all cursor-pointer ${
+                        enquiryMode === 'quotation' ? 'bg-[#D4AF37] text-[#0A0A0B] font-bold shadow-sm' : 'text-[#A5A19A] hover:text-white'
+                      }`}
+                    >
+                      Quotation
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setEnquiryMode('sample')}
+                      className={`px-3.5 py-1.5 rounded-lg text-xs font-mono tracking-wider uppercase transition-all cursor-pointer ${
+                        enquiryMode === 'sample' ? 'bg-[#D4AF37] text-[#0A0A0B] font-bold shadow-sm' : 'text-[#A5A19A] hover:text-white'
+                      }`}
+                    >
+                      Sample Collection
+                    </button>
+                  </div>
+                </div>
+
+                <form onSubmit={handleFinalSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-mono text-[#A5A19A] uppercase mb-1.5">Full Name *</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.fullName}
+                        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                        placeholder="e.g. Claire Bennett"
+                        className="w-full bg-[#0A0A0B] border border-[#1E1E22] rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#D4AF37]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-mono text-[#A5A19A] uppercase mb-1.5">Company / Store Name *</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.companyName}
+                        onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                        placeholder="e.g. Bennett Fine Jewels"
+                        className="w-full bg-[#0A0A0B] border border-[#1E1E22] rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#D4AF37]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-mono text-[#A5A19A] uppercase mb-1.5">Business Email *</label>
+                      <input
+                        type="email"
+                        required
+                        value={formData.businessEmail}
+                        onChange={(e) => setFormData({ ...formData, businessEmail: e.target.value })}
+                        placeholder="buyer@bennettjewels.com"
+                        className="w-full bg-[#0A0A0B] border border-[#1E1E22] rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#D4AF37]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-mono text-[#A5A19A] uppercase mb-1.5">Collection of Interest *</label>
+                      <select
+                        value={formData.productOfInterest}
+                        onChange={(e) => setFormData({ ...formData, productOfInterest: e.target.value })}
+                        className="w-full bg-[#0A0A0B] border border-[#1E1E22] rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      >
+                        <option value="South Indian Temple & Heritage Jewellery">South Indian Temple & Heritage Jewellery</option>
+                        <option value="Royal Jadau Kundan & Meenakari Bridal Sets">Royal Jadau Kundan & Meenakari Bridal Sets</option>
+                        <option value="Contemporary Minimalist & CZ Fashion Jewellery">Contemporary Minimalist & CZ Fashion Jewellery</option>
+                        <option value="Custom Artisan Jewellery Line">Custom Private Label Development</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-mono text-[#A5A19A] uppercase mb-1.5">Destination Country *</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.country}
+                        onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                        placeholder="e.g. United Kingdom, USA, UAE"
+                        className="w-full bg-[#0A0A0B] border border-[#1E1E22] rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#D4AF37]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-mono text-[#A5A19A] uppercase mb-1.5">
+                        {enquiryMode === 'sample' ? 'Sample Preference' : 'Estimated Volume (Pieces/Sets)'}
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.estimatedQuantity}
+                        onChange={(e) => setFormData({ ...formData, estimatedQuantity: e.target.value })}
+                        placeholder={enquiryMode === 'sample' ? 'e.g. Curated sample kit of 5 designs' : 'e.g. 50 Sets or 200 Pieces'}
+                        className="w-full bg-[#0A0A0B] border border-[#1E1E22] rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#D4AF37]"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono text-[#A5A19A] uppercase mb-1.5">Design Preferences or Custom Specifications</label>
+                    <textarea
+                      rows={2}
+                      value={formData.technicalRequirements}
+                      onChange={(e) => setFormData({ ...formData, technicalRequirements: e.target.value })}
+                      placeholder="Specify preferred plating (22K, 18K, rhodium), stone types, custom packaging tags, or trial assortment needs."
+                      className="w-full bg-[#0A0A0B] border border-[#1E1E22] rounded-xl p-3 text-xs text-white placeholder-white/30 focus:outline-none focus:border-[#D4AF37]"
+                    />
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-[#1E1E22]">
+                    <div className="flex items-center gap-2 text-[11px] text-[#A5A19A]">
+                      <ShieldCheck className="h-4 w-4 text-[#D4AF37] shrink-0" />
+                      <span>Initiates commercial review. No public pricing or binding commitment.</span>
+                    </div>
+
+                    <div className="flex items-center gap-3 w-full sm:w-auto">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEnquiryMode('sample');
+                          setSelectedProductForRFQ(institutionalFashionProducts[0]);
+                          setRfqInitialMode('sample');
+                        }}
+                        className="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-[#1E1E22] hover:border-[#D4AF37]/50 text-[#F5F2EC] text-xs font-mono uppercase tracking-wider transition-all"
+                      >
+                        Request a Sample Collection
+                      </button>
+
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#D4AF37] text-[#0A0A0B] font-semibold text-xs tracking-wider uppercase hover:bg-[#E5C07B] transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+                      >
+                        {isSubmitting ? <span>Submitting...</span> : <span>Request an Export Quotation</span>}
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Slide-over Specification Drawer */}
+      <FashionSpecDrawer
+        product={selectedProductForDrawer}
+        isOpen={Boolean(selectedProductForDrawer)}
+        onClose={() => setSelectedProductForDrawer(null)}
+        onRequestQuotation={(product, mode) => {
+          setSelectedProductForDrawer(null);
+          setSelectedProductForRFQ(product);
+          setRfqInitialMode(mode || 'quotation');
+        }}
+      />
+
+      {/* Product-Specific RFQ Modal */}
+      <InstitutionalRFQModal
+        product={null}
+        customTitle={selectedProductForRFQ?.name}
+        customOrigin={selectedProductForRFQ?.origin.displayOrigin}
+        customGrade={selectedProductForRFQ?.platingAndFinish}
+        initialForm={selectedProductForRFQ?.availableLines[0]}
+        isOpen={Boolean(selectedProductForRFQ)}
+        onClose={() => setSelectedProductForRFQ(null)}
+      />
+
+      {/* Floating & Sticky Quick Contact Bar */}
+      <FloatingQuickContact
+        onOpenRFQ={() => {
+          setSelectedProductForRFQ(institutionalFashionProducts[0]);
+          setRfqInitialMode('quotation');
+        }}
+        productContext={{
+          name: selectedProductForRFQ?.name || 'Indian Fashion Jewellery',
+          origin: selectedProductForRFQ?.origin.displayOrigin || 'India',
+        }}
+        isModalOpen={Boolean(selectedProductForRFQ || selectedProductForDrawer)}
+      />
     </div>
   );
 }

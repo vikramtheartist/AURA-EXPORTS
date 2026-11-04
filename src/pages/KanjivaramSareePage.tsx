@@ -16,6 +16,8 @@ import {
 import SEOHead from '../../src/components/SEOHead';
 import Breadcrumbs from '../../src/components/procurement/Breadcrumbs';
 import HowToBuyModule from '../../src/components/procurement/HowToBuyModule';
+import InstitutionalRFQModal from '../components/agro/InstitutionalRFQModal';
+import FloatingQuickContact from '../components/agro/FloatingQuickContact';
 import { getTextileProductBySlug } from '../data/textilesCatalog';
 
 // Gallery assets
@@ -32,6 +34,7 @@ import handloomRegionalImg from '../assets/images/textile_handloom_regional.jpg'
 
 export default function KanjivaramSareePage() {
   const [activeImage, setActiveImage] = useState<string>(heroImg);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const galleryImages = [
     { src: heroImg, label: 'Full Saree Display', detail: 'Ceremonial bridal drape with gold zari pallu' },
@@ -211,13 +214,14 @@ export default function KanjivaramSareePage() {
 
             {/* Commercial Action CTAs */}
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <Link
-                to={quoteUrl}
-                className="bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold text-xs tracking-wider uppercase px-6 py-4 rounded-xl flex items-center justify-center gap-2 shadow-xl hover:opacity-90 transition-opacity"
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(true)}
+                className="bg-[#E2BC86] hover:bg-[#d4a86a] text-[#0A0A0B] font-body font-bold text-xs tracking-wider uppercase px-6 py-4 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer hover:shadow-[0_8px_20px_rgba(226,188,134,0.25)]"
               >
                 <span>Enquire About Kanjivaram Silk Sarees</span>
                 <ArrowUpRight className="h-4 w-4" />
-              </Link>
+              </button>
 
               <a
                 href="#kanjivaram-specs"
@@ -451,6 +455,25 @@ export default function KanjivaramSareePage() {
           </div>
         </section>
 
+        {/* RFQ Modal */}
+        <InstitutionalRFQModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          product={null}
+          customTitle="Authentic Kanchipuram Silk Sarees"
+          customOrigin="Kanchipuram, Tamil Nadu, India"
+          customGrade="Pure Mulberry Silk / Heritage Korvai"
+        />
+
+        {/* Global Multi-Channel Contact & Sticky Mobile Actions */}
+        <FloatingQuickContact
+          productContext={{
+            name: 'Authentic Kanchipuram Silk Sarees',
+            origin: 'Kanchipuram, Tamil Nadu, India'
+          }}
+          onOpenRFQ={() => setIsModalOpen(true)}
+          isModalOpen={isModalOpen}
+        />
       </div>
     </div>
   );

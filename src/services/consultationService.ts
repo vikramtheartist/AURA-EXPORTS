@@ -17,7 +17,7 @@ export interface ConsultationResult {
 }
 
 const STORAGE_KEY = 'aura_consultation_inquiries_v1';
-export const DEFAULT_RECIPIENT_EMAIL = 'contact.auraexport.co@gmail.com';
+export const DEFAULT_RECIPIENT_EMAIL = 'auraexport.co@gmail.com';
 
 /**
  * Validates a corporate or business email format
@@ -90,6 +90,7 @@ export async function submitConsultationBooking(email: string): Promise<Consulta
           _subject: `🔔 New Trade Consultation Request (${referenceId})`,
           _template: 'table',
           _captcha: 'false',
+          _replyto: trimmed,
           'Reference ID': referenceId,
           'Client Email': trimmed,
           'Inquiry Type': 'Executive Commercial Trade Consultation',
@@ -98,8 +99,11 @@ export async function submitConsultationBooking(email: string): Promise<Consulta
         }),
       });
 
-      if (!response.ok) {
-        console.warn(`[AURA Consultation] FormSubmit returned status ${response.status}`);
+      const responseData = await response.json().catch(() => null);
+      if (responseData?.message?.toLowerCase().includes('activation')) {
+        console.info('[AURA Consultation] FormSubmit awaiting one-time inbox activation for:', recipient);
+      } else if (!response.ok) {
+        console.warn(`[AURA Consultation] FormSubmit returned status ${response.status}`, responseData);
       }
     }
   } catch (netErr) {

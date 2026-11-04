@@ -25,13 +25,11 @@ export function validateRFQ(payload: RFQRequest): { valid: boolean; errors: stri
     errors.push('Please enter your full name or representative title.');
   }
 
-  if (!payload.companyName?.trim()) {
-    errors.push('Please provide your registered company or organization name.');
-  }
+  const hasEmail = Boolean(payload.businessEmail?.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.businessEmail.trim()));
+  const hasPhone = Boolean(payload.phone?.trim() && payload.phone.trim().replace(/\D/g, '').length >= 6);
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!payload.businessEmail?.trim() || !emailRegex.test(payload.businessEmail.trim())) {
-    errors.push('Please enter an authentic corporate or business email address.');
+  if (!hasEmail && !hasPhone) {
+    errors.push('Please enter a valid business email address or WhatsApp/phone number.');
   }
 
   return {

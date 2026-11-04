@@ -13,13 +13,13 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
     {
       id: 'agro-products',
       routeId: 'products/agro-products',
-      label: 'PRIMARY AGRICULTURAL STREAM',
+      label: "INDIA'S FINEST ORIGINS. SOURCED FOR THE WORLD.",
       title: 'Agro Products',
       keywords: 'Spices | Turmeric | Chillies | Fresh Produce | Moringa | Grains & Pulses',
       description1:
-        'A diverse selection of agricultural commodities, Indian spices, natural ingredients and fresh produce, connecting quality sourcing with international demand.',
+        "From India's renowned agricultural regions to international markets, AURA Global Trade connects buyers with quality agricultural products, diverse processing formats and flexible sourcing solutions tailored to global business requirements.",
       description2:
-        'Engineered for international food manufacturers, spice importers, and commodity distributors requiring verified active assays, certified microbiology, and cold-chain integrity across bulk sea and air freight.',
+        'Origin-led sourcing from Erode, Salem, Kerala and Guntur, offering whole rhizomes, cold-milled powders, standardized pastes, and tailored bulk or private-label packaging.',
       ctaText: 'Explore Agro Products',
       image: agroHeroImg,
       badge: 'Comprehensive Agro Portfolio',

@@ -11,6 +11,7 @@ const AgroProductsPage = lazy(() => import('./pages/AgroProductsPage'));
 const ProductDetailPage = lazy(() => import('./pages/ProductDetailPage'));
 const SpicesCategoryPage = lazy(() => import('./pages/SpicesCategoryPage'));
 const TurmericDetailPage = lazy(() => import('./pages/TurmericDetailPage'));
+const TurmericFlagshipPage = lazy(() => import('./pages/TurmericFlagshipPage'));
 const JewelryPage = lazy(() => import('./pages/JewelryPage'));
 const FashionLifestylePage = lazy(() => import('./pages/FashionLifestylePage'));
 const TextilesPage = lazy(() => import('./pages/TextilesPage'));
@@ -63,6 +64,7 @@ export default function App() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/products" element={<ProductsPage />} />
               <Route path="/products/agro-products" element={<AgroProductsPage />} />
+              <Route path="/products/agro-products/turmeric" element={<TurmericFlagshipPage />} />
               <Route path="/products/agro-products/:productSlug" element={<ProductDetailPage />} />
               <Route path="/products/fashion-lifestyle" element={<FashionLifestylePage />} />
               <Route path="/products/fashion-lifestyle/:productSlug" element={<ProductDetailPage />} />
@@ -71,7 +73,7 @@ export default function App() {
               <Route path="/products/apparel-textiles/:productSlug" element={<ProductDetailPage />} />
               <Route path="/products/:categorySlug/:productSlug" element={<ProductDetailPage />} />
               <Route path="/products/spices" element={<Navigate to="/products/agro-products" replace />} />
-              <Route path="/products/spices/turmeric" element={<TurmericDetailPage />} />
+              <Route path="/products/spices/turmeric" element={<TurmericFlagshipPage />} />
               <Route path="/products/jewelry" element={<Navigate to="/products/fashion-lifestyle" replace />} />
               <Route path="/products/textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
               <Route path="/quality-compliance" element={<QualityPage />} />

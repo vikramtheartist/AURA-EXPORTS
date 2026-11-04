@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -12,11 +13,14 @@ import {
   Thermometer, 
   FileText, 
   HelpCircle,
-  Truck
+  Truck,
+  Sparkles
 } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import Breadcrumbs from '../components/procurement/Breadcrumbs';
 import HowToBuyModule from '../components/procurement/HowToBuyModule';
+import AgroEnquiryModal from '../components/agro/AgroEnquiryModal';
+import FloatingQuickContact from '../components/agro/FloatingQuickContact';
 import { getProductBySlug, masterCatalogProducts } from '../data/agroCatalog';
 import { getTextileProductBySlug, masterTextileProducts } from '../data/textilesCatalog';
 import { getFashionProductBySlug, masterFashionProducts } from '../data/fashionCatalog';
@@ -39,6 +43,14 @@ export default function ProductDetailPage() {
     .slice(0, 3);
 
   const quoteUrl = `/request-quote?product=${encodeURIComponent(product.id)}&category=${encodeURIComponent(product.categorySlug)}&requirement=${encodeURIComponent(`Quotation request for ${product.name} (${product.subcategory})`)}`;
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalInquiryType, setModalInquiryType] = useState<'quotation' | 'sample' | 'specifications' | 'packaging'>('quotation');
+
+  const handleOpenModal = (inquiryType: 'quotation' | 'sample' | 'specifications' | 'packaging') => {
+    setModalInquiryType(inquiryType);
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="w-full pt-28 pb-24" id="product-detail-view">
@@ -165,21 +177,53 @@ export default function ProductDetailPage() {
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-white/10">
-              <Link
-                to={quoteUrl}
-                className="flex-1 bg-[#dcb782] text-black hover:bg-white transition-all font-body font-bold text-xs tracking-wider uppercase py-4 px-6 rounded-xl flex items-center justify-center gap-2 shadow-xl cursor-pointer"
-              >
-                <span>Request a Quotation</span>
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
+            <div className="flex flex-col gap-3 pt-4 border-t border-white/10">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  type="button"
+                  onClick={() => handleOpenModal('quotation')}
+                  className="flex-1 bg-[#E2BC86] hover:bg-[#d4a86a] text-[#0A0A0B] transition-all font-body font-bold text-xs tracking-wider uppercase py-4 px-6 rounded-xl flex items-center justify-center gap-2 shadow-sm cursor-pointer hover:shadow-[0_8px_20px_rgba(226,188,134,0.25)]"
+                >
+                  <span>
+                    {product.categorySlug === 'fashion-lifestyle'
+                      ? 'Request a Jewellery Quotation'
+                      : product.categorySlug === 'apparel-textiles'
+                      ? 'Request Textile Quotation'
+                      : 'Request a Quotation'}
+                  </span>
+                  <ArrowUpRight className="h-4 w-4" />
+                </button>
 
-              <Link
-                to="/quality-compliance"
-                className="flex-1 border border-white/15 text-white hover:border-[#dcb782] hover:bg-white/5 transition-all font-body font-bold text-xs tracking-wider uppercase py-4 px-6 rounded-xl flex items-center justify-center gap-2"
-              >
-                <span>Verify Quality Standards</span>
-              </Link>
+                <button
+                  type="button"
+                  onClick={() => handleOpenModal('sample')}
+                  className="flex-1 border border-white/15 text-white hover:border-[#dcb782] hover:bg-white/5 transition-all font-body font-bold text-xs tracking-wider uppercase py-4 px-6 rounded-xl flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <span>
+                    {product.categorySlug === 'fashion-lifestyle'
+                      ? 'Request Sample Collection'
+                      : product.categorySlug === 'apparel-textiles'
+                      ? 'Request Fabric Swatches'
+                      : 'Request Product Sample'}
+                  </span>
+                </button>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between text-xs font-mono text-white/60 pt-1">
+                <button
+                  type="button"
+                  onClick={() => handleOpenModal('packaging')}
+                  className="hover:text-[#dcb782] transition-colors cursor-pointer"
+                >
+                  Discuss Custom Packaging →
+                </button>
+                <Link
+                  to={quoteUrl}
+                  className="hover:text-white transition-colors underline"
+                >
+                  Open Full RFQ Page
+                </Link>
+              </div>
             </div>
 
           </div>
@@ -430,6 +474,32 @@ export default function ProductDetailPage() {
           </section>
         )}
 
+        {/* Have Specific Product Requirements? (Agro Products) */}
+        {product.categorySlug === 'agro-products' && (
+          <section className="mb-20">
+            <div className="rounded-3xl border border-[#dcb782]/30 bg-[#141412] p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+              <div className="space-y-1 text-center md:text-left">
+                <span className="text-xs font-mono text-[#dcb782] uppercase font-bold tracking-wider">
+                  HAVE SPECIFIC PRODUCT REQUIREMENTS?
+                </span>
+                <h3 className="text-xl sm:text-2xl font-heading text-white font-medium">
+                  Need a custom grade, specific active assay, or bespoke packaging for {product.name}?
+                </h3>
+                <p className="text-xs text-[#dfd1b9]/75 font-light max-w-2xl leading-relaxed">
+                  Every market has different requirements. Share your target active assay percentages, particle mesh size, moisture threshold, or destination import documentation, and our team will evaluate regional sourcing options.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleOpenModal('specifications')}
+                className="px-6 py-3.5 rounded-xl bg-[#dcb782] text-black font-semibold text-xs tracking-wider uppercase hover:bg-white transition-all shadow-md shrink-0 cursor-pointer"
+              >
+                Submit Custom Specification
+              </button>
+            </div>
+          </section>
+        )}
+
         {/* Final RFQ CTA Card */}
         <section>
           <div className="rounded-3xl bg-gradient-to-tr from-[#121211] to-[#1d1b18] border border-[#dcb782]/20 p-8 md:p-12 text-center flex flex-col items-center gap-4">
@@ -443,12 +513,13 @@ export default function ProductDetailPage() {
               Specify your destination port, required volume, and grade parameters. Our trade officers will prepare a comprehensive proforma quotation.
             </p>
             <div className="flex flex-wrap gap-4 mt-2">
-              <Link
-                to={quoteUrl}
-                className="bg-[#dcb782] text-black hover:bg-white transition-all font-body font-bold text-xs tracking-wider uppercase px-8 py-3.5 rounded-xl shadow-lg"
+              <button
+                type="button"
+                onClick={() => handleOpenModal('quotation')}
+                className="bg-[#dcb782] text-black hover:bg-white transition-all font-body font-bold text-xs tracking-wider uppercase px-8 py-3.5 rounded-xl shadow-lg cursor-pointer"
               >
                 Request a Quotation for {product.name}
-              </Link>
+              </button>
               <Link
                 to="/contact"
                 className="border border-white/15 hover:border-white text-white text-xs font-body font-bold tracking-wider uppercase px-6 py-3.5 rounded-xl hover:bg-white/5 transition-all"
@@ -460,6 +531,27 @@ export default function ProductDetailPage() {
         </section>
 
       </div>
+
+      {/* B2B ENQUIRY MODAL */}
+      <AgroEnquiryModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        initialProduct={product.name}
+        initialCategory={product.category}
+        initialForm={product.formats[0] || 'Standard Export Grade'}
+        initialOrigin={product.origin}
+        initialInquiryType={modalInquiryType}
+      />
+
+      {/* Floating & Sticky Quick Contact Bar */}
+      <FloatingQuickContact
+        onOpenRFQ={() => handleOpenModal('quotation')}
+        productContext={{
+          name: product.name,
+          origin: product.origin,
+        }}
+        isModalOpen={isModalOpen}
+      />
     </div>
   );
 }

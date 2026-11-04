@@ -172,9 +172,19 @@ export default function CtaFooter() {
                   Thank you! Our trade desk officer has been notified and will review your consultation request and contact you at <strong className="text-white font-mono">{submittedEmail}</strong> promptly.
                 </span>
                 {referenceId && (
-                  <span className="text-[10px] font-mono text-[#dcb782] pt-1 tracking-wider uppercase font-semibold">
-                    Docket Reference: {referenceId}
-                  </span>
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 text-[11px] font-mono">
+                    <span className="text-[#dcb782] tracking-wider uppercase font-semibold">
+                      Docket Reference: {referenceId}
+                    </span>
+                    <span className="text-white/30 hidden sm:inline">·</span>
+                    <a
+                      href={`mailto:auraexport.co@gmail.com?subject=Trade%20Desk%20Consultation%20${referenceId}&body=Hello%20AURA%20Trade%20Desk,%0A%0ARequesting%20consultation%20follow-up%20for%20reference%20${referenceId}.%0AEmail:%20${encodeURIComponent(submittedEmail)}`}
+                      className="text-[#dcb782] hover:text-white underline transition-colors"
+                      id="cta-mailto-backup"
+                    >
+                      Email Direct ↗
+                    </a>
+                  </div>
                 )}
               </div>
               <button
