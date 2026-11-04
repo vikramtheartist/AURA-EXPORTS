@@ -80,10 +80,13 @@ export default function FinalEnquirySection({ onOpenModal }: FinalEnquirySection
           mode: enquiryMode,
         });
       } else {
-        setErrorMessage(result?.message || 'Submission could not be completed.');
+        setErrorMessage(result?.message || "We couldn't submit your enquiry right now. Your information has not been confirmed as received. Please try again or contact us directly at contact@auraexport.co.");
       }
     } catch (err: any) {
-      setErrorMessage(err.message || 'Submission failed. Please check your information or contact our Trade Desk.');
+      setErrorMessage(
+        err.message ||
+        "We couldn't submit your enquiry right now. Your information has not been confirmed as received. Please try again or contact us directly at contact@auraexport.co."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -123,25 +126,25 @@ export default function FinalEnquirySection({ onOpenModal }: FinalEnquirySection
               </div>
 
               <span className="text-[11px] font-mono tracking-widest text-[#D4AF37] uppercase font-bold mb-2">
-                {enquiryMode === 'sample' ? 'SAMPLE REQUEST SUBMITTED' : 'EXPORT QUOTATION REQUEST SUBMITTED'}
+                ENQUIRY RECEIVED
               </span>
 
               <h3 className="text-2xl sm:text-3xl font-heading text-[#F5F2EC] font-medium mb-3">
-                Thank You, {formData.fullName || 'Trade Partner'}
+                Thank you for contacting AURA Exports.
               </h3>
 
               <p className="text-sm text-[#A5A19A] font-light max-w-lg mb-6 leading-relaxed">
-                Your enquiry for <strong className="text-[#F5F2EC]">{formData.productOfInterest}</strong> has been assigned institutional reference <span className="font-mono text-[#D4AF37] font-semibold">{referenceId}</span>.
+                Your enquiry has been received successfully. Our team will review your requirements and get back to you.
               </p>
 
               <div className="rounded-2xl bg-[#0A0A0B] border border-[#1E1E22] p-5 text-left w-full max-w-md mb-8 text-xs text-[#A5A19A] space-y-2">
                 <div className="flex justify-between border-b border-white/5 pb-2">
-                  <span className="text-white/50">Destination Country:</span>
-                  <span className="text-[#F5F2EC] font-medium">{formData.country || 'To be confirmed'}</span>
+                  <span className="text-white/50">Enquiry Reference:</span>
+                  <span className="font-mono text-[#D4AF37] font-semibold">{referenceId}</span>
                 </div>
                 <div className="flex justify-between border-b border-white/5 pb-2">
-                  <span className="text-white/50">Packaging Format:</span>
-                  <span className="text-[#F5F2EC] font-medium">{formData.preferredPackaging}</span>
+                  <span className="text-white/50">Product:</span>
+                  <span className="text-[#F5F2EC] font-medium">{formData.productOfInterest}</span>
                 </div>
                 <div className="flex justify-between pt-1">
                   <span className="text-white/50">Next Commercial Step:</span>

@@ -25,6 +25,9 @@ export interface RFQRequest {
   // Metadata / Tracking
   submittedAt?: string;
   sourceUrl?: string;
+
+  // Flexible procurement parameters
+  [key: string]: any;
 }
 
 export interface RFQSubmissionResult {

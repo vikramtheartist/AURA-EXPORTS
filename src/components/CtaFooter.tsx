@@ -174,11 +174,11 @@ export default function CtaFooter() {
                 {referenceId && (
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 text-[11px] font-mono">
                     <span className="text-[#dcb782] tracking-wider uppercase font-semibold">
-                      Docket Reference: {referenceId}
+                      Enquiry Reference: {referenceId}
                     </span>
                     <span className="text-white/30 hidden sm:inline">·</span>
                     <a
-                      href={`mailto:auraexport.co@gmail.com?subject=Trade%20Desk%20Consultation%20${referenceId}&body=Hello%20AURA%20Trade%20Desk,%0A%0ARequesting%20consultation%20follow-up%20for%20reference%20${referenceId}.%0AEmail:%20${encodeURIComponent(submittedEmail)}`}
+                      href={`mailto:contact@auraexport.co?subject=Trade%20Desk%20Consultation%20${referenceId}&body=Hello%20Aura%20Exports,%0A%0ARequesting%20consultation%20follow-up%20for%20reference%20${referenceId}.%0AEmail:%20${encodeURIComponent(submittedEmail)}`}
                       className="text-[#dcb782] hover:text-white underline transition-colors"
                       id="cta-mailto-backup"
                     >

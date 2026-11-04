@@ -152,10 +152,13 @@ export default function ApparelTextilesPage() {
           mode: enquiryMode,
         });
       } else {
-        setErrorMessage(result?.message || 'Submission could not be completed.');
+        setErrorMessage(result?.message || "We couldn't submit your enquiry right now. Your information has not been confirmed as received. Please try again or contact us directly at contact@auraexport.co.");
       }
     } catch (err: any) {
-      setErrorMessage(err.message || 'Submission failed. Please check your details or contact our Trade Desk.');
+      setErrorMessage(
+        err.message ||
+        "We couldn't submit your enquiry right now. Your information has not been confirmed as received. Please try again or contact us directly at contact@auraexport.co."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -638,10 +641,13 @@ export default function ApparelTextilesPage() {
                 <div className="h-16 w-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-6">
                   <CheckCircle2 className="h-8 w-8" />
                 </div>
-                <h3 className="text-2xl font-heading text-white font-medium mb-3">Thank You for Contacting AURA</h3>
+                <h3 className="text-2xl font-heading text-white font-medium mb-3">Thank you for contacting AURA Exports.</h3>
                 <p className="text-sm text-[#A5A19A] font-light max-w-md mb-6 leading-relaxed">
-                  Your textile sourcing enquiry has been logged under reference <span className="font-mono text-[#D4AF37] font-semibold">{referenceId}</span>. A dedicated textile trade officer will review and reply within 24 hours.
+                  Your enquiry has been received successfully. Our team will review your requirements and get back to you.
                 </p>
+                <div className="p-3 rounded-xl bg-black/60 border border-white/10 font-mono text-xs text-[#D4AF37] mb-6 max-w-sm w-full">
+                  Enquiry Reference: <strong className="text-white">{referenceId}</strong>
+                </div>
                 <button
                   type="button"
                   onClick={() => setIsSuccess(false)}

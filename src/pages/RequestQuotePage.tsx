@@ -67,6 +67,7 @@ export default function RequestQuotePage() {
   const [incoterm, setIncoterm] = useState('FOB (Chennai / Tuticorin)');
   const [website, setWebsite] = useState('');
   const [additionalRequirements, setAdditionalRequirements] = useState('');
+  const [honeypot, setHoneypot] = useState('');
 
   const hasTriggeredFormStart = useRef(false);
 
@@ -146,17 +147,30 @@ export default function RequestQuotePage() {
         website,
         additionalRequirements,
         procurementType: 'Institutional Importer',
-      };
+        honeypot,
+      } as any;
 
       const result = await submitRFQ(payload);
 
       setSubmittedResult({ referenceId: result.referenceId });
-      trackContactEvent('enquiry_submitted', {
-        productName: category,
-        mode: 'quote_page',
-      });
+      // Reset form fields on confirmed success
+      setRequirementDescription('');
+      setEstimatedQuantity('');
+      setTargetTimeline('');
+      setDestinationCountry('');
+      setDestinationPort('');
+      setBuyerName('');
+      setCompanyName('');
+      setBusinessEmail('');
+      setPhone('');
+      setWebsite('');
+      setAdditionalRequirements('');
+      setHoneypot('');
     } catch (err: any) {
-      setErrorMsg(err.message || 'Submission failed. Please try again or contact our trade desk.');
+      setErrorMsg(
+        err.message ||
+        "We couldn't submit your enquiry right now. Your information has not been confirmed as received. Please try again or contact us directly at contact@auraexport.co."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -264,17 +278,17 @@ export default function RequestQuotePage() {
                   <CheckCircle2 className="h-8 w-8" />
                 </div>
                 <span className="text-[10px] font-mono tracking-widest text-[#dcb782] uppercase font-bold mb-2">
-                  RFQ REGISTERED ON TRADE DESK
+                  ENQUIRY RECEIVED ON TRADE DESK
                 </span>
                 <h3 className="text-2xl md:text-3xl font-heading text-white font-normal mb-3">
-                  Commercial Inquiry Transmitted
+                  Thank you for contacting AURA Exports.
                 </h3>
                 <p className="text-xs md:text-sm text-[#dfd1b9]/80 font-light max-w-md leading-relaxed mb-6">
-                  Your procurement parameters have been routed to our export trade desk in Chennai. An export coordinator will review product assays, volume feasibility, and dispatch pricing within 24 business hours.
+                  Your enquiry has been received successfully. Our team will review your requirements and get back to you.
                 </p>
 
                 <div className="p-4 rounded-xl bg-black/60 border border-white/10 font-mono text-xs text-[#dcb782] mb-8">
-                  Reference ID: <strong className="text-white">{submittedResult.referenceId}</strong>
+                  Enquiry Reference: <strong className="text-white">{submittedResult.referenceId}</strong>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 w-full max-w-sm">

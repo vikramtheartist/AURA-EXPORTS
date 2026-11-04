@@ -88,6 +88,7 @@ export default function InstitutionalRFQModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedRef, setSubmittedRef] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [honeypot, setHoneypot] = useState('');
   const hasTriggeredFormStart = useRef(false);
 
   // Sync state on modal open
@@ -192,27 +193,35 @@ export default function InstitutionalRFQModal({
         quantity: formattedQuantity,
         buyerName: fullName.trim(),
         companyName: 'B2B Trade Buyer',
-        businessEmail: isEmail ? contactVal : `trade-enquiry-${Date.now()}@auraexport.co`,
+        businessEmail: isEmail ? contactVal : '',
         phone: isPhone ? contactVal : '',
         destinationPort: destinationPort ? `${destinationPort} (${preferredIncoterm})` : destinationCountry || 'Unspecified',
         procurementType: 'Commercial Export Quotation',
+        honeypot,
       };
 
       const result = await submitRFQ(payload);
       if (result && result.success) {
-        const generatedRef = result.referenceId || `AURA-RFQ-${Date.now().toString(36).toUpperCase()}`;
+        const generatedRef = result.referenceId || `AURA-ENQ-${Date.now().toString(36).toUpperCase()}`;
         setSubmittedRef(generatedRef);
-        trackContactEvent('enquiry_submitted', {
-          productName,
-          referenceId: generatedRef,
-          vertical,
-          mode: 'quotation',
-        });
+        // Clear form only after confirmed success
+        setFullName('');
+        setContactIdentifier('');
+        setQuantityAmount('');
+        setDestinationCountry('');
+        setAdditionalRequirements('');
+        setTargetSpecification('');
+        setPreferredFinishingOrPackaging('');
+        setDestinationPort('');
+        setHoneypot('');
       } else {
-        setErrorMessage(result?.message || 'Submission could not be completed.');
+        setErrorMessage(result?.message || "We couldn't submit your enquiry right now. Your information has not been confirmed as received. Please try again or contact us directly at contact@auraexport.co.");
       }
     } catch (err: any) {
-      setErrorMessage(err.message || 'Submission failed. Please verify your details or contact the Trade Desk directly.');
+      setErrorMessage(
+        err.message ||
+        "We couldn't submit your enquiry right now. Your information has not been confirmed as received. Please try again or contact us directly at contact@auraexport.co."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -368,16 +377,16 @@ export default function InstitutionalRFQModal({
               </div>
 
               <h3 className="text-2xl sm:text-3xl font-heading text-[#F5F2EC] font-normal mb-2">
-                Thank you for contacting AURA.
+                Thank you for contacting AURA Exports.
               </h3>
 
               <p className="text-xs sm:text-sm text-neutral-400 font-light max-w-md mb-6 leading-relaxed">
-                Your enquiry has been received. Our export trade desk will review your specifications and connect through your preferred contact channel within 24 hours.
+                Your enquiry has been received successfully. Our team will review your requirements and get back to you.
               </p>
 
               <div className="rounded-2xl bg-[#141417] border border-[#26262B] p-4 text-left w-full max-w-md mb-6 text-xs text-neutral-400 space-y-2">
                 <div className="flex justify-between border-b border-white/5 pb-2">
-                  <span className="text-neutral-500">Reference ID:</span>
+                  <span className="text-neutral-500">Enquiry Reference:</span>
                   <span className="font-mono text-[#D8AB64] font-semibold">{submittedRef}</span>
                 </div>
                 <div className="flex justify-between border-b border-white/5 pb-2">
@@ -403,10 +412,33 @@ export default function InstitutionalRFQModal({
                FORM STATE (PIXEL-BY-PIXEL IMPLEMENTATION)
                ===================================================================== */
             <form onSubmit={handleSubmit} onFocus={handleFormInteraction} className="space-y-4">
+              {/* Invisible Honeypot Field */}
+              <input
+                type="text"
+                name="company_website_verify"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+                className="hidden"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+              />
+
               {errorMessage && (
-                <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2">
-                  <X className="h-4 w-4 shrink-0" />
-                  <span>{errorMessage}</span>
+                <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-xs flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <X className="h-4 w-4 shrink-0 text-red-400" />
+                    <span>{errorMessage}</span>
+                  </div>
+                  <div className="flex justify-end pt-1">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="text-[11px] font-bold underline hover:text-white cursor-pointer"
+                    >
+                      Retry Submission
+                    </button>
+                  </div>
                 </div>
               )}
 

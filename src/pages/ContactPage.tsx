@@ -42,10 +42,12 @@ export default function ContactPage() {
     country: '',
     topic: 'Bilateral Trade Partnership',
     message: '',
+    honeypot: '',
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [referenceId, setReferenceId] = useState('');
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const hasTriggeredFormStart = useRef(false);
@@ -80,22 +82,33 @@ export default function ContactPage() {
     setIsSubmitting(true);
 
     try {
-      await submitGeneralCorrespondence({
+      const result = await submitGeneralCorrespondence({
         fullName: formData.fullName,
         email: formData.email,
         organization: formData.organization,
         country: formData.country,
         topic: formData.topic,
         message: formData.message,
+        honeypot: formData.honeypot,
       });
 
+      setReferenceId(result.referenceId);
       setSubmitted(true);
-      trackContactEvent('enquiry_submitted', {
-        productName: formData.topic,
-        mode: 'general_correspondence',
+      // Clear form only after confirmed success
+      setFormData({
+        fullName: '',
+        email: '',
+        organization: '',
+        country: '',
+        topic: 'Bilateral Trade Partnership',
+        message: '',
+        honeypot: '',
       });
     } catch (err: any) {
-      setSubmitError(err.message || 'Submission failed. Please email us directly.');
+      setSubmitError(
+        err.message ||
+        "We couldn't submit your enquiry right now. Your information has not been confirmed as received. Please try again or contact us directly at contact@auraexport.co."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -398,35 +411,51 @@ export default function ContactPage() {
                 <div className="p-8 rounded-2xl bg-white/[0.02] border border-[#dcb782]/30 flex flex-col items-center text-center max-w-md mx-auto">
                   <CheckCircle2 className="h-12 w-12 text-[#dcb782] mb-3" />
                   <h3 className="text-xl font-heading text-white font-medium mb-2">
-                    Correspondence Received
+                    Thank you for contacting AURA Exports.
                   </h3>
                   <p className="text-xs text-[#dfd1b9]/80 font-light leading-relaxed mb-4">
-                    Thank you for contacting Aura Exports. Your inquiry has been routed to our Trade Desk team. We typically respond within one business day.
+                    Your enquiry has been received successfully. Our team will review your requirements and get back to you.
                   </p>
+                  <div className="p-3 rounded-xl bg-black/60 border border-white/10 font-mono text-xs text-[#dcb782] mb-5 w-full">
+                    Enquiry Reference: <strong className="text-white">{referenceId}</strong>
+                  </div>
                   <button
                     type="button"
                     onClick={() => {
                       setSubmitted(false);
                       setIsGeneralFormOpen(false);
-                      setFormData({
-                        fullName: '',
-                        email: '',
-                        organization: '',
-                        country: '',
-                        topic: 'Bilateral Trade Partnership',
-                        message: '',
-                      });
                     }}
-                    className="text-xs font-mono text-[#dcb782] hover:underline"
+                    className="text-xs font-mono text-[#dcb782] hover:underline cursor-pointer"
                   >
                     Send another inquiry
                   </button>
                 </div>
               ) : (
                 <form onSubmit={handleGeneralSubmit} onFocus={handleFormInteraction} className="flex flex-col gap-4">
+                  {/* Invisible Honeypot Field */}
+                  <input
+                    type="text"
+                    name="contact_auth_token"
+                    value={formData.honeypot}
+                    onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
+                    className="hidden"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                  />
+
                   {submitError && (
-                    <div className="p-3.5 rounded-xl bg-red-950/40 border border-red-500/30 text-red-200 text-xs">
-                      {submitError}
+                    <div className="p-3.5 rounded-xl bg-red-950/40 border border-red-500/30 text-red-200 text-xs flex flex-col gap-2">
+                      <span>{submitError}</span>
+                      <div className="flex justify-end pt-1">
+                        <button
+                          type="submit"
+                          disabled={isSubmitting}
+                          className="text-[11px] font-bold underline hover:text-white cursor-pointer"
+                        >
+                          Retry Submission
+                        </button>
+                      </div>
                     </div>
                   )}
 
