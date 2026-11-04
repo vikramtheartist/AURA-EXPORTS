@@ -428,7 +428,7 @@ export default function ApparelTextilesPage() {
                       AUTHENTIC WEAVE ATTRIBUTES
                     </span>
                     <div className="flex flex-wrap gap-2">
-                      {['100% Pure Mulberry Silk', 'Korvai Interlocked Borders', 'Petni Pallu Joint', 'Temple Gopuram Motifs', 'Breathable Preservation Covers'].map((form, idx) => (
+                      {['Pure Mulberry Silk (Configurable)', 'Korvai Interlocked Borders', 'Petni Pallu Joint', 'Temple Gopuram Motifs', 'Breathable Preservation Covers'].map((form, idx) => (
                         <span key={idx} className="text-xs font-mono bg-[#141416] text-[#F5F2EC] border border-[#1E1E22] px-3 py-1.5 rounded-lg">
                           {form}
                         </span>
