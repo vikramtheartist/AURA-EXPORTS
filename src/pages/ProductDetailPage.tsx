@@ -22,6 +22,7 @@ import Breadcrumbs from '../components/procurement/Breadcrumbs';
 import HowToBuyModule from '../components/procurement/HowToBuyModule';
 import AgroEnquiryModal from '../components/agro/AgroEnquiryModal';
 import FloatingQuickContact from '../components/agro/FloatingQuickContact';
+import NotFoundPage from './NotFoundPage';
 import { getProductBySlug, masterCatalogProducts } from '../data/agroCatalog';
 import { getTextileProductBySlug, masterTextileProducts } from '../data/textilesCatalog';
 import { getFashionProductBySlug, masterFashionProducts } from '../data/fashionCatalog';
@@ -31,12 +32,18 @@ export default function ProductDetailPage() {
   const navigate = useNavigate();
 
   // Look up product by slug across agro, textile and fashion catalogs
-  const allProducts = [...masterCatalogProducts, ...masterTextileProducts, ...masterFashionProducts];
-  const product = 
+  const matchedProduct = 
     getFashionProductBySlug(productSlug || '') ||
     getTextileProductBySlug(productSlug || '') || 
-    getProductBySlug(productSlug || '') || 
-    allProducts[0];
+    getProductBySlug(productSlug || '');
+
+  // Prevent soft 404s for invalid slugs
+  if (!matchedProduct) {
+    return <NotFoundPage />;
+  }
+
+  const product = matchedProduct;
+  const allProducts = [...masterCatalogProducts, ...masterTextileProducts, ...masterFashionProducts];
 
   // Related products in same subcategory or category
   const relatedProducts = allProducts
@@ -63,12 +70,39 @@ export default function ProductDetailPage() {
     }
   }, [product?.id]);
 
+  const breadcrumbs = [
+    { name: 'Home', item: 'https://auraexport.co/' },
+    { name: 'Products', item: 'https://auraexport.co/products' },
+    { name: product.category, item: `https://auraexport.co/products/${product.categorySlug}` },
+    { name: product.name, item: `https://auraexport.co/products/${product.categorySlug}/${product.slug}` },
+  ];
+
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    image: product.image.startsWith('http') ? product.image : `https://auraexport.co${product.image}`,
+    description: product.description,
+    sku: `AURA-${product.categorySlug.toUpperCase()}-${product.id}`,
+    category: `${product.category} / ${product.subcategory}`,
+    brand: {
+      '@type': 'Brand',
+      name: 'AURA Global Trade',
+    },
+    countryOfOrigin: {
+      '@type': 'Country',
+      name: 'India',
+    },
+  };
+
   return (
     <div className="w-full pt-28 pb-24" id="product-detail-view">
       <SEOHead 
-        title={`${product.name} Export from India | Specifications & Sourcing | AURA Global Trade`}
+        title={`${product.name} Wholesale Exporter India | ${product.subcategory} | AURA Global Trade`}
         description={product.description}
         canonical={`https://auraexport.co/products/${product.categorySlug}/${product.slug}`}
+        breadcrumbs={breadcrumbs}
+        jsonLd={productJsonLd}
       />
 
       {/* Semantic Breadcrumbs */}
@@ -456,7 +490,7 @@ export default function ProductDetailPage() {
                     <div className="rounded-2xl overflow-hidden aspect-[16/10] mb-4 border border-white/5">
                       <img
                         src={rel.image}
-                        alt={rel.name}
+                        alt={`AURA Global Trade - ${rel.name}`}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
                       />
@@ -473,7 +507,7 @@ export default function ProductDetailPage() {
                   </div>
 
                   <Link
-                    to={`/products/agro-products/${rel.slug}`}
+                    to={`/products/${rel.categorySlug || 'agro-products'}/${rel.slug}`}
                     className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-mono text-[#dcb782] group-hover:text-white transition-colors"
                   >
                     <span>View Specifications</span>

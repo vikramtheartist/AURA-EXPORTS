@@ -170,6 +170,8 @@ export default function AboutPage() {
                   src={philosophyImg}
                   alt="Aura Global Trade Wisdom Philosophy - South Indian Heritage stone craftsmanship"
                   className="w-full h-full object-cover filter grayscale contrast-125"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
               </div>

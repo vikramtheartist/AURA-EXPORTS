@@ -88,7 +88,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
           {!useFallbackSvg ? (
             <img
               src={logoPath}
-              alt="Aura Global Trade"
+              alt="Aura Global Trade - Indian Export Company & Wholesale Sourcing Partner"
               onError={handleLogoError}
               referrerPolicy="no-referrer"
               className="h-[44px] md:h-[48px] w-auto object-contain transition-transform duration-500 group-hover:scale-[1.03]"

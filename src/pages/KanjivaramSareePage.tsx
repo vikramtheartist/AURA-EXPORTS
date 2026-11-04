@@ -13,9 +13,9 @@ import {
   ChevronRight,
   Info
 } from 'lucide-react';
-import SEOHead from '../../src/components/SEOHead';
-import Breadcrumbs from '../../src/components/procurement/Breadcrumbs';
-import HowToBuyModule from '../../src/components/procurement/HowToBuyModule';
+import SEOHead from '../components/SEOHead';
+import Breadcrumbs from '../components/procurement/Breadcrumbs';
+import HowToBuyModule from '../components/procurement/HowToBuyModule';
 import InstitutionalRFQModal from '../components/agro/InstitutionalRFQModal';
 import FloatingQuickContact from '../components/agro/FloatingQuickContact';
 import { getTextileProductBySlug } from '../data/textilesCatalog';

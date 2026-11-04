@@ -53,9 +53,10 @@ export default function ProductsPage() {
                 <div className="rounded-2xl overflow-hidden aspect-[16/10] mb-6 border border-white/5 relative">
                   <img
                     src={category.featuredImage}
-                    alt={`AURA Global Trade - ${category.name}`}
+                    alt={`AURA Global Trade - ${category.name} Wholesale Export Portfolio`}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                   <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-md border border-[#dcb782]/30 rounded-full px-3 py-1">

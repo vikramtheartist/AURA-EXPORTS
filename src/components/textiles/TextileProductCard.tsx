@@ -27,9 +27,10 @@ export default function TextileProductCard({
         >
           <img
             src={product.image}
-            alt={`AURA Global Trade - ${product.cardTitle}`}
+            alt={`AURA Global Trade - ${product.cardTitle} Indian Handloom Textile Export`}
             className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             loading="lazy"
+            decoding="async"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
         </div>

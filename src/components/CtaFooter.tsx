@@ -225,18 +225,36 @@ export default function CtaFooter() {
           </div>
 
           {/* Canonical Internal Footer Links */}
-          <div className="flex flex-wrap justify-center md:justify-end items-center gap-5" id="footer-links">
+          <div className="flex flex-wrap justify-center md:justify-end items-center gap-4 sm:gap-5" id="footer-links">
             <Link
-              to="/privacy"
+              to="/about"
               className="text-[#dfd1b9]/50 hover:text-[#dcb782] font-body font-light text-xs transition-colors"
             >
-              Privacy Policy
+              About
             </Link>
             <Link
-              to="/terms"
+              to="/export-process"
               className="text-[#dfd1b9]/50 hover:text-[#dcb782] font-body font-light text-xs transition-colors"
             >
-              Terms of Use
+              Export Process
+            </Link>
+            <Link
+              to="/faqs"
+              className="text-[#dfd1b9]/50 hover:text-[#dcb782] font-body font-light text-xs transition-colors"
+            >
+              FAQs
+            </Link>
+            <Link
+              to="/contact"
+              className="text-[#dfd1b9]/50 hover:text-[#dcb782] font-body font-light text-xs transition-colors"
+            >
+              Contact
+            </Link>
+            <Link
+              to="/quality-compliance"
+              className="text-[#dfd1b9]/50 hover:text-[#dcb782] font-body font-light text-xs transition-colors"
+            >
+              Quality & Compliance
             </Link>
             <Link
               to="/terms-of-trade"
@@ -245,14 +263,20 @@ export default function CtaFooter() {
               Terms of Trade
             </Link>
             <Link
-              to="/quality-compliance"
+              to="/terms"
               className="text-[#dfd1b9]/50 hover:text-[#dcb782] font-body font-light text-xs transition-colors"
             >
-              Verification Kit
+              Terms of Use
+            </Link>
+            <Link
+              to="/privacy"
+              className="text-[#dfd1b9]/50 hover:text-[#dcb782] font-body font-light text-xs transition-colors"
+            >
+              Privacy Policy
             </Link>
             <Link
               to="/request-quote"
-              className="text-[#dcb782] hover:text-white font-mono text-xs uppercase tracking-wider transition-colors font-medium"
+              className="text-[#dcb782] hover:text-white font-mono text-xs uppercase tracking-wider transition-colors font-medium ml-2"
             >
               Request Quote →
             </Link>
