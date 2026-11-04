@@ -15,8 +15,7 @@ declare global {
  * GA4 Measurement ID configuration.
  * Strictly driven by environment variable. No unverified production fallback is used.
  */
-export const GA_MEASUREMENT_ID =
-  (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GA_MEASUREMENT_ID) || '';
+export const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || '';
 
 export type ContactEventName =
   | 'rfq_modal_opened'
