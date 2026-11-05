@@ -82,6 +82,7 @@ export async function submitEnquiry(payload: Partial<StandardEnquiryPayload>): P
       business_email: hasEmail ? email : '',
       phone: phone,
       whatsapp: payload.customer?.whatsapp || phone,
+      website: (payload.customer?.website || '').trim(),
       country: (payload.customer?.country || '').trim(),
     },
     requirements: {
@@ -92,6 +93,7 @@ export async function submitEnquiry(payload: Partial<StandardEnquiryPayload>): P
       grade_or_specification: payload.requirements?.grade_or_specification || '',
       packaging: payload.requirements?.packaging || '',
       incoterm: payload.requirements?.incoterm || '',
+      certifications: payload.requirements?.certifications || '',
       target_timeline: payload.requirements?.target_timeline || '',
       message: payload.requirements?.message || '',
     },
@@ -125,9 +127,16 @@ export async function submitEnquiry(payload: Partial<StandardEnquiryPayload>): P
     const data = await response.json().catch(() => null);
 
     if (!response.ok || !data?.success) {
-      const errMsg =
-        data?.error ||
-        "We couldn't submit your enquiry right now. Your information has not been confirmed as received. Please try again or contact us directly at contact@auraexport.co.";
+      let errMsg = data?.error;
+      if (!errMsg) {
+        if (response.status === 405) {
+          errMsg =
+            "We couldn't submit your enquiry right now. Your information has not been confirmed as received. Please try again or contact us directly at contact@auraexport.co.";
+        } else {
+          errMsg =
+            "We couldn't submit your enquiry right now. Your information has not been confirmed as received. Please try again or contact us directly at contact@auraexport.co.";
+        }
+      }
       
       // Track error event in GA4 (Zero PII)
       if (typeof window !== 'undefined' && window.gtag) {

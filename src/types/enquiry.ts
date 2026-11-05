@@ -11,6 +11,7 @@ export interface CustomerDetails {
   business_email?: string;
   phone?: string;
   whatsapp?: string;
+  website?: string;
   country?: string;
 }
 
@@ -22,6 +23,7 @@ export interface ProcurementRequirements {
   grade_or_specification?: string;
   packaging?: string;
   incoterm?: string;
+  certifications?: string;
   target_timeline?: string;
   message?: string;
 }

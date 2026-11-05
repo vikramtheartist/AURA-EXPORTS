@@ -31,7 +31,18 @@ export default async function handler(req: any, res: any) {
       req.socket?.remoteAddress ||
       '127.0.0.1';
 
-    const result = await processEnquiry(req.body || {}, process.env, clientIp);
+    const parsedBody =
+      typeof req.body === 'string'
+        ? (() => {
+            try {
+              return JSON.parse(req.body);
+            } catch {
+              return {};
+            }
+          })()
+        : req.body || {};
+
+    const result = await processEnquiry(parsedBody, process.env, clientIp);
     return res.status(result.status).json(result.body);
   } catch (error: any) {
     console.error('[AURA API Error]', error);

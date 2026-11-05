@@ -1,6 +1,7 @@
 /**
  * AURA EXPORTS — Institutional Email Template Generator
- * Produces clean, responsive HTML email and plain-text fallback
+ * Produces clean, professional, responsive HTML and plain-text emails.
+ * Delivered to central enquiry collection: contact@auraexport.co
  */
 
 function escapeHtml(str) {
@@ -13,41 +14,71 @@ function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
+/**
+ * Generate standardized subject lines conforming to AURA EXPORTS specifications:
+ * [NEW RFQ] Salem Turmeric — Company Name
+ * [NEW ENQUIRY] Temple Jewellery — Company Name
+ * [NEW CONTACT REQUEST] Website Contact Form
+ */
 export function generateEmailSubject(enquiry) {
-  const typeMap = {
-    quotation: 'QUOTATION REQUEST',
-    product: 'PRODUCT ENQUIRY',
-    contact: 'GENERAL CONTACT',
-    sample: 'SAMPLE REQUEST',
-    callback: 'CONSULTATION REQUEST',
-  };
+  const c = enquiry.customer || {};
+  const company = (c.company_name || '').trim();
+  const person = (c.full_name || '').trim();
+  const customerLabel = company || person || 'Direct Buyer';
+  const target = (enquiry.product_name || enquiry.product_category || 'Commercial Trade').trim();
 
-  const typeStr = typeMap[enquiry.enquiry_type] || 'BUSINESS ENQUIRY';
-
-  // Product or Category
-  const subjectTarget = enquiry.product_name || enquiry.product_category || 'INTERNATIONAL TRADE';
-
-  // Customer or Company
-  const customerTarget = enquiry.customer?.company_name || enquiry.customer?.full_name || 'BUYER INQUIRY';
-
-  return `[AURA EXPORTS] ${typeStr.toUpperCase()} — ${subjectTarget.toUpperCase()} — ${customerTarget.toUpperCase()}`;
+  switch (enquiry.enquiry_type) {
+    case 'quotation':
+      return `[NEW RFQ] ${target} — ${customerLabel}`;
+    case 'product':
+      return `[NEW ENQUIRY] ${target} — ${customerLabel}`;
+    case 'contact':
+      return `[NEW CONTACT REQUEST] Website Contact Form${company ? ' — ' + company : (person ? ' — ' + person : '')}`;
+    case 'sample':
+      return `[NEW SAMPLE REQUEST] ${target} — ${customerLabel}`;
+    case 'callback':
+      return `[NEW CONSULTATION REQUEST] Executive Trade Consultation — ${customerLabel}`;
+    default:
+      return `[NEW ENQUIRY] ${target} — ${customerLabel}`;
+  }
 }
 
+/**
+ * Format submission timestamp to Indian Standard Time (IST, UTC+5:30)
+ */
+function formatSubmissionIST(isoString) {
+  const dateObj = new Date(isoString || Date.now());
+  try {
+    return (
+      dateObj.toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        dateStyle: 'full',
+        timeStyle: 'medium',
+      }) + ' (IST)'
+    );
+  } catch {
+    return dateObj.toUTCString() + ' (UTC)';
+  }
+}
+
+/**
+ * Generate structured, institutional HTML email
+ */
 export function generateEmailHtml(enquiry) {
   const c = enquiry.customer || {};
   const r = enquiry.requirements || {};
-  const dateFormatted = new Date(enquiry.submitted_at || Date.now()).toUTCString();
+  const dateFormattedIST = formatSubmissionIST(enquiry.submitted_at);
+
+  const typeLabels = {
+    quotation: 'Commercial Trade RFQ (Quotation Request)',
+    product: 'Product Sourcing Enquiry',
+    contact: 'General Contact & Business Correspondence',
+    sample: 'Physical Sample Request',
+    callback: 'Executive Trade Consultation Request',
+  };
+  const enquiryTypeDisplay = typeLabels[enquiry.enquiry_type] || (enquiry.enquiry_type || 'Commercial Enquiry').toUpperCase();
 
   const hasProduct = Boolean(enquiry.product_name || enquiry.product_category || enquiry.product_variant);
-  const hasRequirements = Boolean(
-    r.estimated_quantity ||
-    r.destination_country ||
-    r.destination_port ||
-    r.grade_or_specification ||
-    r.packaging ||
-    r.incoterm ||
-    r.target_timeline
-  );
   const hasMessage = Boolean(r.message && r.message.trim());
 
   return `<!DOCTYPE html>
@@ -71,13 +102,13 @@ export function generateEmailHtml(enquiry) {
       width: 100%;
     }
     .wrapper {
-      max-width: 640px;
+      max-width: 660px;
       margin: 20px auto;
       background: #0d0d0c;
       border: 1px solid #29241c;
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.85);
     }
     .header {
       background: linear-gradient(135deg, #1c1811 0%, #0d0d0c 100%);
@@ -108,9 +139,9 @@ export function generateEmailHtml(enquiry) {
       font-family: monospace;
       font-size: 12px;
       font-weight: 700;
-      padding: 4px 10px;
+      padding: 5px 12px;
       border-radius: 6px;
-      margin-top: 10px;
+      margin-top: 12px;
     }
     .section {
       padding: 24px 32px;
@@ -130,19 +161,23 @@ export function generateEmailHtml(enquiry) {
       border-bottom: 1px solid #14120e;
     }
     .data-label {
-      width: 35%;
+      width: 36%;
       color: #a0988a;
       font-size: 12px;
       vertical-align: top;
-      padding: 4px 0;
+      padding: 5px 0;
     }
     .data-value {
-      width: 65%;
+      width: 64%;
       color: #ffffff;
       font-size: 13px;
       vertical-align: top;
-      padding: 4px 0;
+      padding: 5px 0;
       word-break: break-word;
+    }
+    .not-provided {
+      color: #6d665a;
+      font-style: italic;
     }
     .message-box {
       background: #14120f;
@@ -180,146 +215,150 @@ export function generateEmailHtml(enquiry) {
   <div class="wrapper">
     <!-- Header -->
     <div class="header">
-      <div class="brand-eyebrow">AURA EXPORTS · INSTITUTIONAL INTAKE</div>
-      <h1 class="header-title">New Business Enquiry</h1>
-      <div style="color: #a0988a; font-size: 12px;">Submitted: ${escapeHtml(dateFormatted)}</div>
+      <div class="brand-eyebrow">AURA EXPORTS · CENTRAL ENQUIRY MANAGEMENT</div>
+      <h1 class="header-title">${escapeHtml(enquiryTypeDisplay)}</h1>
+      <div style="color: #a0988a; font-size: 12px; margin-top: 4px;">
+        Submission Time: <strong>${escapeHtml(dateFormattedIST)}</strong>
+      </div>
       <div class="ref-badge">REFERENCE: ${escapeHtml(enquiry.enquiry_id)}</div>
     </div>
 
     <!-- Section 1: Customer Information -->
     <div class="section">
-      <div class="section-title">SECTION 1 — CUSTOMER INFORMATION</div>
+      <div class="section-title">SECTION 1 — CUSTOMER DETAILS</div>
       <table>
         <tr class="data-row">
           <td class="data-label">Full Name:</td>
           <td class="data-value"><strong>${escapeHtml(c.full_name || 'Not provided')}</strong></td>
         </tr>
         <tr class="data-row">
-          <td class="data-label">Company Name:</td>
-          <td class="data-value">${escapeHtml(c.company_name || 'Individual / Retail Buyer')}</td>
+          <td class="data-label">Company Legal Name:</td>
+          <td class="data-value">${c.company_name ? escapeHtml(c.company_name) : '<span class="not-provided">Not provided</span>'}</td>
         </tr>
         <tr class="data-row">
-          <td class="data-label">Business Email:</td>
+          <td class="data-label">Corporate Email:</td>
           <td class="data-value">
-            ${c.business_email ? `<a href="mailto:${escapeHtml(c.business_email)}" style="color: #dcb782; text-decoration: underline;">${escapeHtml(c.business_email)}</a>` : '<span style="color:#6d665a">Not provided</span>'}
+            ${c.business_email ? `<a href="mailto:${escapeHtml(c.business_email)}" style="color: #dcb782; text-decoration: underline;">${escapeHtml(c.business_email)}</a>` : '<span class="not-provided">Not provided</span>'}
           </td>
         </tr>
         <tr class="data-row">
-          <td class="data-label">Phone Number:</td>
+          <td class="data-label">Phone / Mobile:</td>
           <td class="data-value">
-            ${c.phone ? `<a href="tel:${escapeHtml(c.phone)}" style="color: #dcb782;">${escapeHtml(c.phone)}</a>` : '<span style="color:#6d665a">Not provided</span>'}
+            ${c.phone ? `<a href="tel:${escapeHtml(c.phone)}" style="color: #dcb782;">${escapeHtml(c.phone)}</a>` : '<span class="not-provided">Not provided</span>'}
           </td>
         </tr>
         <tr class="data-row">
-          <td class="data-label">WhatsApp Number:</td>
+          <td class="data-label">WhatsApp:</td>
           <td class="data-value">
-            ${c.whatsapp || c.phone ? `<a href="https://wa.me/${encodeURIComponent(String(c.whatsapp || c.phone).replace(/\\D/g, ''))}" style="color: #25D366; text-decoration: underline;">Direct WhatsApp Chat</a>` : '<span style="color:#6d665a">Not provided</span>'}
+            ${c.whatsapp || c.phone ? `<a href="https://wa.me/${encodeURIComponent(String(c.whatsapp || c.phone).replace(/\D/g, ''))}" style="color: #25D366; text-decoration: underline;">Direct WhatsApp Chat</a> (${escapeHtml(c.whatsapp || c.phone)})` : '<span class="not-provided">Not provided</span>'}
           </td>
         </tr>
         <tr class="data-row">
-          <td class="data-label">Country:</td>
-          <td class="data-value">${escapeHtml(c.country || r.destination_country || 'International / Global')}</td>
+          <td class="data-label">Company Website:</td>
+          <td class="data-value">
+            ${c.website ? `<a href="${escapeHtml(c.website.startsWith('http') ? c.website : 'https://' + c.website)}" target="_blank" style="color: #dcb782;">${escapeHtml(c.website)}</a>` : '<span class="not-provided">Not provided</span>'}
+          </td>
+        </tr>
+        <tr class="data-row">
+          <td class="data-label">Buyer Country:</td>
+          <td class="data-value">${c.country || r.destination_country ? escapeHtml(c.country || r.destination_country) : '<span class="not-provided">Not provided</span>'}</td>
         </tr>
       </table>
     </div>
 
     ${hasProduct ? `
-    <!-- Section 2: Product Information -->
+    <!-- Section 2: Product Sourcing Information -->
     <div class="section">
-      <div class="section-title">SECTION 2 — PRODUCT INFORMATION</div>
+      <div class="section-title">SECTION 2 — PRODUCT SOURCING DETAILS</div>
       <table>
-        ${enquiry.product_category ? `
         <tr class="data-row">
-          <td class="data-label">Product Category:</td>
-          <td class="data-value">${escapeHtml(enquiry.product_category)}</td>
-        </tr>` : ''}
-        ${enquiry.product_name ? `
+          <td class="data-label">Product / Category:</td>
+          <td class="data-value">${enquiry.product_category ? escapeHtml(enquiry.product_category) : '<span class="not-provided">Not provided</span>'}</td>
+        </tr>
         <tr class="data-row">
-          <td class="data-label">Product Name:</td>
-          <td class="data-value"><strong>${escapeHtml(enquiry.product_name)}</strong></td>
-        </tr>` : ''}
-        ${enquiry.product_variant ? `
+          <td class="data-label">Selected Product:</td>
+          <td class="data-value"><strong>${enquiry.product_name ? escapeHtml(enquiry.product_name) : '<span class="not-provided">Not provided</span>'}</strong></td>
+        </tr>
         <tr class="data-row">
-          <td class="data-label">Product Variant:</td>
-          <td class="data-value">${escapeHtml(enquiry.product_variant)}</td>
-        </tr>` : ''}
-        ${enquiry.product_origin ? `
+          <td class="data-label">Product Variant / Form:</td>
+          <td class="data-value">${enquiry.product_variant ? escapeHtml(enquiry.product_variant) : '<span class="not-provided">Not provided</span>'}</td>
+        </tr>
         <tr class="data-row">
           <td class="data-label">Product Origin:</td>
-          <td class="data-value">${escapeHtml(enquiry.product_origin)}</td>
-        </tr>` : ''}
+          <td class="data-value">${escapeHtml(enquiry.product_origin || 'India')}</td>
+        </tr>
         <tr class="data-row">
-          <td class="data-label">Source Page:</td>
-          <td class="data-value"><a href="${escapeHtml(enquiry.source_page || 'https://auraexport.co')}" style="color: #dcb782;">${escapeHtml(enquiry.source_page || 'auraexport.co')}</a></td>
+          <td class="data-label">Website Source Page:</td>
+          <td class="data-value"><a href="${escapeHtml(enquiry.source_page || 'https://auraexport.co')}" style="color: #dcb782;">${escapeHtml(enquiry.source_page || 'https://auraexport.co')}</a></td>
         </tr>
       </table>
     </div>` : ''}
 
-    ${hasRequirements ? `
-    <!-- Section 3: Procurement Requirements -->
+    <!-- Section 3: Procurement Parameters -->
     <div class="section">
-      <div class="section-title">SECTION 3 — PROCUREMENT REQUIREMENTS</div>
+      <div class="section-title">SECTION 3 — PROCUREMENT PARAMETERS</div>
       <table>
-        ${r.estimated_quantity ? `
         <tr class="data-row">
-          <td class="data-label">Estimated Quantity:</td>
-          <td class="data-value"><strong>${escapeHtml(r.estimated_quantity)} ${escapeHtml(r.unit || '')}</strong></td>
-        </tr>` : ''}
-        ${r.destination_country ? `
+          <td class="data-label">Estimated Quantity & Unit:</td>
+          <td class="data-value"><strong>${r.estimated_quantity ? `${escapeHtml(r.estimated_quantity)} ${escapeHtml(r.unit || '')}`.trim() : '<span class="not-provided">Not provided</span>'}</strong></td>
+        </tr>
         <tr class="data-row">
           <td class="data-label">Destination Country:</td>
-          <td class="data-value">${escapeHtml(r.destination_country)}</td>
-        </tr>` : ''}
-        ${r.destination_port ? `
+          <td class="data-value">${r.destination_country ? escapeHtml(r.destination_country) : '<span class="not-provided">Not provided</span>'}</td>
+        </tr>
         <tr class="data-row">
-          <td class="data-label">Destination Port:</td>
-          <td class="data-value">${escapeHtml(r.destination_port)}</td>
-        </tr>` : ''}
-        ${r.grade_or_specification ? `
+          <td class="data-label">Destination Discharge Port:</td>
+          <td class="data-value">${r.destination_port ? escapeHtml(r.destination_port) : '<span class="not-provided">Not provided</span>'}</td>
+        </tr>
         <tr class="data-row">
-          <td class="data-label">Requested Specification:</td>
-          <td class="data-value">${escapeHtml(r.grade_or_specification)}</td>
-        </tr>` : ''}
-        ${r.packaging ? `
+          <td class="data-label">Target Incoterm:</td>
+          <td class="data-value">${r.incoterm ? escapeHtml(r.incoterm) : '<span class="not-provided">Not provided</span>'}</td>
+        </tr>
         <tr class="data-row">
           <td class="data-label">Packaging Requirements:</td>
-          <td class="data-value">${escapeHtml(r.packaging)}</td>
-        </tr>` : ''}
-        ${r.incoterm ? `
+          <td class="data-value">${r.packaging ? escapeHtml(r.packaging) : '<span class="not-provided">Not provided</span>'}</td>
+        </tr>
         <tr class="data-row">
-          <td class="data-label">Requested Incoterm:</td>
-          <td class="data-value">${escapeHtml(r.incoterm)}</td>
-        </tr>` : ''}
-        ${r.target_timeline ? `
+          <td class="data-label">Quality Specifications / Assays:</td>
+          <td class="data-value">${r.grade_or_specification ? escapeHtml(r.grade_or_specification) : '<span class="not-provided">Not provided</span>'}</td>
+        </tr>
         <tr class="data-row">
-          <td class="data-label">Target Timeline:</td>
-          <td class="data-value">${escapeHtml(r.target_timeline)}</td>
-        </tr>` : ''}
+          <td class="data-label">Certifications / Testing Scope:</td>
+          <td class="data-value">${r.certifications ? escapeHtml(r.certifications) : '<span class="not-provided">Standard statutory export certification</span>'}</td>
+        </tr>
+        <tr class="data-row">
+          <td class="data-label">Target Procurement Timeline:</td>
+          <td class="data-value">${r.target_timeline ? escapeHtml(r.target_timeline) : '<span class="not-provided">Not provided</span>'}</td>
+        </tr>
       </table>
-    </div>` : ''}
+    </div>
 
     ${hasMessage ? `
-    <!-- Section 4: Customer Message -->
+    <!-- Section 4: Customer Comments -->
     <div class="section">
-      <div class="section-title">SECTION 4 — CUSTOMER MESSAGE</div>
+      <div class="section-title">SECTION 4 — ADDITIONAL COMMENTS & NOTES</div>
       <div class="message-box">${escapeHtml(r.message)}</div>
     </div>` : ''}
 
-    <!-- Section 5: Enquiry Management -->
+    <!-- Section 5: Enquiry Administration -->
     <div class="section">
-      <div class="section-title">SECTION 5 — ENQUIRY MANAGEMENT</div>
+      <div class="section-title">SECTION 5 — ENQUIRY AUDIT & DISPATCH</div>
       <table>
         <tr class="data-row">
-          <td class="data-label">Enquiry Reference:</td>
-          <td class="data-value"><span style="font-family: monospace; color: #dcb782;">${escapeHtml(enquiry.enquiry_id)}</span></td>
+          <td class="data-label">Enquiry Reference ID:</td>
+          <td class="data-value"><span style="font-family: monospace; color: #dcb782; font-weight: 700;">${escapeHtml(enquiry.enquiry_id)}</span></td>
         </tr>
         <tr class="data-row">
           <td class="data-label">Source Component:</td>
           <td class="data-value">${escapeHtml(enquiry.source_component || 'Website Form')}</td>
         </tr>
         <tr class="data-row">
+          <td class="data-label">Collection Recipient:</td>
+          <td class="data-value">contact@auraexport.co</td>
+        </tr>
+        <tr class="data-row">
           <td class="data-label">Enquiry Status:</td>
-          <td class="data-value"><span style="color: #34d399; font-weight: 700;">NEW</span></td>
+          <td class="data-value"><span style="color: #34d399; font-weight: 700;">PENDING REVIEW</span></td>
         </tr>
       </table>
 
@@ -333,81 +372,78 @@ export function generateEmailHtml(enquiry) {
 
     <!-- Footer -->
     <div class="footer">
-      <div>Aura Exports (AURA ENTERPRISE EXPORTS (OPC) PVT LTD) · Chennai, Tamil Nadu, India</div>
-      <div style="margin-top: 4px;">Automated Institutional Commercial Dispatch · Delivered to contact@auraexport.co</div>
+      <div>Aura Exports (Aura Global Trade (OPC) Private Limited) · Chennai, Tamil Nadu, India</div>
+      <div style="margin-top: 4px;">Automated Institutional Commercial Dispatch · Inquiries: contact@auraexport.co</div>
     </div>
   </div>
 </body>
 </html>`;
 }
 
+/**
+ * Generate structured, scannable plain-text email fallback
+ */
 export function generateEmailText(enquiry) {
   const c = enquiry.customer || {};
   const r = enquiry.requirements || {};
-  const dateFormatted = new Date(enquiry.submitted_at || Date.now()).toUTCString();
+  const dateFormattedIST = formatSubmissionIST(enquiry.submitted_at);
 
   let text = `=================================================================\n`;
   text += `AURA EXPORTS — NEW BUSINESS ENQUIRY\n`;
   text += `=================================================================\n`;
   text += `Enquiry Reference: ${enquiry.enquiry_id}\n`;
-  text += `Date & Time:       ${dateFormatted}\n`;
-  text += `Enquiry Type:      ${(enquiry.enquiry_type || 'quotation').toUpperCase()}\n\n`;
+  text += `Submission (IST):  ${dateFormattedIST}\n`;
+  text += `Enquiry Type:      ${(enquiry.enquiry_type || 'quotation').toUpperCase()}\n`;
+  text += `Recipient:         contact@auraexport.co\n\n`;
 
   text += `-----------------------------------------------------------------\n`;
-  text += `SECTION 1 — CUSTOMER INFORMATION\n`;
+  text += `SECTION 1 — CUSTOMER DETAILS\n`;
   text += `-----------------------------------------------------------------\n`;
   text += `Full Name:         ${c.full_name || 'Not provided'}\n`;
-  text += `Company Name:      ${c.company_name || 'Individual / Retail Buyer'}\n`;
+  text += `Company Name:      ${c.company_name || 'Not provided'}\n`;
   text += `Business Email:    ${c.business_email || 'Not provided'}\n`;
   text += `Phone Number:      ${c.phone || 'Not provided'}\n`;
   text += `WhatsApp Number:   ${c.whatsapp || c.phone || 'Not provided'}\n`;
-  text += `Country:           ${c.country || r.destination_country || 'International / Global'}\n\n`;
+  text += `Company Website:   ${c.website || 'Not provided'}\n`;
+  text += `Country:           ${c.country || r.destination_country || 'Not provided'}\n\n`;
 
   if (enquiry.product_name || enquiry.product_category || enquiry.product_variant) {
     text += `-----------------------------------------------------------------\n`;
-    text += `SECTION 2 — PRODUCT INFORMATION\n`;
+    text += `SECTION 2 — PRODUCT SOURCING DETAILS\n`;
     text += `-----------------------------------------------------------------\n`;
-    if (enquiry.product_category) text += `Product Category:  ${enquiry.product_category}\n`;
-    if (enquiry.product_name)     text += `Product Name:      ${enquiry.product_name}\n`;
-    if (enquiry.product_variant)  text += `Product Variant:   ${enquiry.product_variant}\n`;
-    if (enquiry.product_origin)   text += `Product Origin:    ${enquiry.product_origin}\n`;
-    text += `Source Page:       ${enquiry.source_page || 'auraexport.co'}\n\n`;
+    text += `Product Category:  ${enquiry.product_category || 'Not provided'}\n`;
+    text += `Product Name:      ${enquiry.product_name || 'Not provided'}\n`;
+    text += `Product Variant:   ${enquiry.product_variant || 'Not provided'}\n`;
+    text += `Product Origin:    ${enquiry.product_origin || 'India'}\n`;
+    text += `Source Page:       ${enquiry.source_page || 'https://auraexport.co'}\n\n`;
   }
 
-  if (
-    r.estimated_quantity ||
-    r.destination_country ||
-    r.destination_port ||
-    r.grade_or_specification ||
-    r.packaging ||
-    r.incoterm ||
-    r.target_timeline
-  ) {
-    text += `-----------------------------------------------------------------\n`;
-    text += `SECTION 3 — PROCUREMENT REQUIREMENTS\n`;
-    text += `-----------------------------------------------------------------\n`;
-    if (r.estimated_quantity)      text += `Estimated Quantity: ${r.estimated_quantity} ${r.unit || ''}\n`;
-    if (r.destination_country)     text += `Destination Country:${r.destination_country}\n`;
-    if (r.destination_port)        text += `Destination Port:   ${r.destination_port}\n`;
-    if (r.grade_or_specification)  text += `Specification:      ${r.grade_or_specification}\n`;
-    if (r.packaging)               text += `Packaging:          ${r.packaging}\n`;
-    if (r.incoterm)                text += `Incoterm:           ${r.incoterm}\n`;
-    if (r.target_timeline)         text += `Target Timeline:    ${r.target_timeline}\n\n`;
-  }
+  text += `-----------------------------------------------------------------\n`;
+  text += `SECTION 3 — PROCUREMENT PARAMETERS\n`;
+  text += `-----------------------------------------------------------------\n`;
+  text += `Estimated Quantity:${r.estimated_quantity ? `${r.estimated_quantity} ${r.unit || ''}`.trim() : 'Not provided'}\n`;
+  text += `Destination Country:${r.destination_country || 'Not provided'}\n`;
+  text += `Destination Port:   ${r.destination_port || 'Not provided'}\n`;
+  text += `Target Incoterm:    ${r.incoterm || 'Not provided'}\n`;
+  text += `Packaging:          ${r.packaging || 'Not provided'}\n`;
+  text += `Quality Spec:       ${r.grade_or_specification || 'Not provided'}\n`;
+  text += `Certifications:     ${r.certifications || 'Standard statutory export certification'}\n`;
+  text += `Target Timeline:    ${r.target_timeline || 'Not provided'}\n\n`;
 
   if (r.message && r.message.trim()) {
     text += `-----------------------------------------------------------------\n`;
-    text += `SECTION 4 — CUSTOMER MESSAGE\n`;
+    text += `SECTION 4 — ADDITIONAL COMMENTS & NOTES\n`;
     text += `-----------------------------------------------------------------\n`;
     text += `${r.message.trim()}\n\n`;
   }
 
   text += `-----------------------------------------------------------------\n`;
-  text += `SECTION 5 — ENQUIRY MANAGEMENT\n`;
+  text += `SECTION 5 — ENQUIRY AUDIT & DISPATCH\n`;
   text += `-----------------------------------------------------------------\n`;
   text += `Enquiry Reference: ${enquiry.enquiry_id}\n`;
-  text += `Source Component:  ${enquiry.source_component || 'Website'}\n`;
-  text += `Enquiry Status:    NEW\n`;
+  text += `Source Component:  ${enquiry.source_component || 'Website Form'}\n`;
+  text += `Recipient Email:   contact@auraexport.co\n`;
+  text += `Enquiry Status:    PENDING REVIEW\n`;
   text += `Reply-To:          ${c.business_email || 'contact@auraexport.co'}\n`;
   text += `=================================================================\n`;
 

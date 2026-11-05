@@ -149,6 +149,13 @@ export async function processEnquiry(rawBody, env = {}, clientIp = '127.0.0.1') 
   const randomSuffix = Math.floor(100 + Math.random() * 899);
   const enquiryId = `${prefix}-${timestampCode}-${randomSuffix}`;
 
+  const website = (customer.website || rawBody.website || '').trim();
+  const certifications = (
+    rawBody.requirements?.certifications ||
+    rawBody.certifications ||
+    ''
+  ).trim();
+
   const normalizedEnquiry = {
     enquiry_id: enquiryId,
     submitted_at: new Date().toISOString(),
@@ -165,6 +172,7 @@ export async function processEnquiry(rawBody, env = {}, clientIp = '127.0.0.1') 
       business_email: hasEmail ? businessEmail : '',
       phone: phone,
       whatsapp: customer.whatsapp || phone,
+      website: website,
       country: country,
     },
     requirements: {
@@ -174,7 +182,8 @@ export async function processEnquiry(rawBody, env = {}, clientIp = '127.0.0.1') 
       destination_port: rawBody.requirements?.destination_port || rawBody.destinationPort || '',
       grade_or_specification: rawBody.requirements?.grade_or_specification || rawBody.technicalRequirements || rawBody.productRequirement || '',
       packaging: rawBody.requirements?.packaging || rawBody.preferredPackaging || '',
-      incoterm: rawBody.requirements?.incoterm || rawBody.incoterm || '',
+      incoterm: rawBody.requirements?.incoterm || rawBody.requirements?.target_incoterm || rawBody.incoterm || '',
+      certifications: certifications,
       target_timeline: rawBody.requirements?.target_timeline || rawBody.timeline || rawBody.targetTimeline || '',
       message: rawBody.requirements?.message || rawBody.message || rawBody.additionalRequirements || '',
     },
@@ -193,20 +202,84 @@ export async function processEnquiry(rawBody, env = {}, clientIp = '127.0.0.1') 
   const senderEmail = env.EMAIL_FROM || process.env.EMAIL_FROM || 'enquiries@auraexport.co';
   const replyTo = hasEmail ? sanitizeHeader(businessEmail) : recipientEmail;
 
-  // 7. Transactional Email Provider Credentials
-  const apiKey =
-    env.EMAIL_PROVIDER_API_KEY ||
-    process.env.EMAIL_PROVIDER_API_KEY ||
-    env.RESEND_API_KEY ||
-    process.env.RESEND_API_KEY ||
-    env.SENDGRID_API_KEY ||
-    process.env.SENDGRID_API_KEY;
+  // 7. Transactional Email Provider Selection & Credentials
+  const brevoKey = env.BREVO_API_KEY || process.env.BREVO_API_KEY;
+  const resendKey = env.RESEND_API_KEY || process.env.RESEND_API_KEY;
+  const sendgridKey = env.SENDGRID_API_KEY || process.env.SENDGRID_API_KEY;
+  const genericApiKey = env.EMAIL_PROVIDER_API_KEY || process.env.EMAIL_PROVIDER_API_KEY;
+
+  const apiKey = brevoKey || resendKey || sendgridKey || genericApiKey;
+
+  // Determine provider
+  const preferredProvider = (env.EMAIL_PROVIDER || process.env.EMAIL_PROVIDER || '').toLowerCase();
+  let providerType = 'none';
+
+  if (preferredProvider === 'brevo' || brevoKey || (apiKey && apiKey.startsWith('xkeysib-'))) {
+    providerType = 'brevo';
+  } else if (preferredProvider === 'sendgrid' || sendgridKey || (apiKey && apiKey.startsWith('SG.'))) {
+    providerType = 'sendgrid';
+  } else if (preferredProvider === 'resend' || resendKey || (apiKey && apiKey.startsWith('re_'))) {
+    providerType = 'resend';
+  } else if (apiKey) {
+    // Default to Resend if unknown format
+    providerType = 'resend';
+  }
 
   let deliverySuccess = false;
   let deliveryDetails = null;
 
-  // Case A: RESEND API Integration
-  if (apiKey && (apiKey.startsWith('re_') || (!env.SENDGRID_API_KEY && !process.env.SENDGRID_API_KEY))) {
+  // Provider 1: BREVO (Sendinblue) API Integration
+  if (providerType === 'brevo' && apiKey) {
+    try {
+      const brevoResp = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+          'api-key': apiKey,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          sender: { name: 'AURA Exports', email: senderEmail },
+          to: [{ email: recipientEmail, name: 'AURA Trade Desk' }],
+          replyTo: { email: replyTo, name: fullName },
+          subject: emailSubject,
+          htmlContent: emailHtml,
+          textContent: emailText,
+          tags: ['aura-enquiry', enquiryType],
+        }),
+      });
+
+      const brevoData = await brevoResp.json().catch(() => null);
+
+      if (brevoResp.ok && (brevoResp.status === 200 || brevoResp.status === 201)) {
+        deliverySuccess = true;
+        deliveryDetails = { provider: 'brevo', messageId: brevoData?.messageId || 'accepted' };
+        console.info(`[AURA Email] Brevo accepted enquiry ${enquiryId} with ID ${brevoData?.messageId}`);
+      } else {
+        console.error('[AURA Email] Brevo delivery error:', brevoData);
+        return {
+          status: 502,
+          body: {
+            success: false,
+            error: brevoData?.message || 'Brevo email delivery failed to dispatch enquiry.',
+            enquiry_id: enquiryId,
+          },
+        };
+      }
+    } catch (netErr) {
+      console.error('[AURA Email] Network error connecting to Brevo:', netErr);
+      return {
+        status: 503,
+        body: {
+          success: false,
+          error: 'Network connectivity failure connecting to Brevo.',
+          enquiry_id: enquiryId,
+        },
+      };
+    }
+  }
+  // Provider 2: RESEND API Integration
+  else if (providerType === 'resend' && apiKey) {
     try {
       const resendResp = await fetch('https://api.resend.com/emails', {
         method: 'POST',
@@ -257,8 +330,8 @@ export async function processEnquiry(rawBody, env = {}, clientIp = '127.0.0.1') 
       };
     }
   }
-  // Case B: SENDGRID API Integration
-  else if (apiKey && apiKey.startsWith('SG.')) {
+  // Provider 3: SENDGRID API Integration
+  else if (providerType === 'sendgrid' && apiKey) {
     try {
       const sgResp = await fetch('https://api.sendgrid.com/v3/mail/send', {
         method: 'POST',
@@ -306,13 +379,20 @@ export async function processEnquiry(rawBody, env = {}, clientIp = '127.0.0.1') 
       };
     }
   }
-  // Case C: Development / Local Audit Log Mode
-  else if (
-    process.env.NODE_ENV !== 'production' ||
-    env.ENABLE_DEV_AUDIT_LOGS === 'true' ||
-    process.env.ENABLE_DEV_AUDIT_LOGS === 'true' ||
-    !apiKey
-  ) {
+  // Case D: Strict Production Safety Check (Do not fake success if no provider configured)
+  else if (process.env.NODE_ENV === 'production' || env.NODE_ENV === 'production') {
+    console.error('[AURA Server Error] In production mode but no transactional email provider API key is configured.');
+    return {
+      status: 503,
+      body: {
+        success: false,
+        error: 'Transactional email provider is not configured on this server. Please contact contact@auraexport.co directly.',
+        enquiry_id: enquiryId,
+      },
+    };
+  }
+  // Case E: Development / Local Audit Log Mode
+  else {
     // Record to local audit trail in development so work can be verified end-to-end
     try {
       const auditDir = path.resolve(process.cwd(), '.audit-logs');
@@ -336,7 +416,7 @@ export async function processEnquiry(rawBody, env = {}, clientIp = '127.0.0.1') 
     deliveryDetails = {
       provider: 'dev_audit_log',
       destination: recipientEmail,
-      note: 'Saved to local audit log. In production, configure EMAIL_PROVIDER_API_KEY for live Resend/SendGrid delivery.',
+      note: 'Saved to local audit log. In production, configure BREVO_API_KEY, RESEND_API_KEY, or SENDGRID_API_KEY.',
     };
   }
 

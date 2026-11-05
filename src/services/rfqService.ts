@@ -57,6 +57,7 @@ export async function submitRFQ(payload: RFQRequest): Promise<RFQSubmissionResul
       business_email: payload.businessEmail || '',
       phone: payload.phone || '',
       country: payload.destinationCountry || '',
+      website: (payload as any).website || '',
     },
     requirements: {
       estimated_quantity: payload.estimatedQuantity || '',
@@ -66,8 +67,9 @@ export async function submitRFQ(payload: RFQRequest): Promise<RFQSubmissionResul
       grade_or_specification: payload.grade || '',
       packaging: payload.preferredPackaging || '',
       incoterm: payload.incoterm || '',
+      certifications: (payload as any).certifications || '',
       target_timeline: payload.targetTimeline || '',
-      message: payload.additionalSpecifications || '',
+      message: payload.additionalSpecifications || (payload as any).additionalRequirements || '',
     },
     honeypot: (payload as any).honeypot || '',
   });

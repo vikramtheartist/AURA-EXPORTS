@@ -372,10 +372,10 @@ async function runTests() {
   console.log('\n--- TEST GROUP 4: Email Formatting & Content Architecture ---');
 
   // -------------------------------------------------------------------------
-  // TEST 15: Email Subject Line Formatting
+  // TEST 15: Email Subject Line Formatting (Exact user specification)
   // -------------------------------------------------------------------------
   {
-    const mockEnquiry = {
+    const mockRfq = {
       enquiry_id: 'AURA-RFQ-TEST-1',
       enquiry_type: 'quotation',
       product_name: 'Salem Turmeric',
@@ -386,12 +386,39 @@ async function runTests() {
         business_email: 'a.vance@vance.com',
       },
     };
-
-    const subject = generateEmailSubject(mockEnquiry);
+    const rfqSubject = generateEmailSubject(mockRfq);
     assert(
-      subject === '[AURA EXPORTS] QUOTATION REQUEST — SALEM TURMERIC — VANCE COMMODITIES',
-      'Subject matches specified pattern',
-      subject
+      rfqSubject === '[NEW RFQ] Salem Turmeric — Vance Commodities',
+      'Subject matches specified pattern [NEW RFQ] Salem Turmeric — Vance Commodities',
+      rfqSubject
+    );
+
+    const mockEnquiry = {
+      enquiry_id: 'AURA-ENQ-TEST-2',
+      enquiry_type: 'product',
+      product_name: 'Temple Jewellery',
+      customer: {
+        full_name: 'Meera Patel',
+        company_name: 'Heritage Jewels UK',
+      },
+    };
+    const enqSubject = generateEmailSubject(mockEnquiry);
+    assert(
+      enqSubject === '[NEW ENQUIRY] Temple Jewellery — Heritage Jewels UK',
+      'Subject matches specified pattern [NEW ENQUIRY] Temple Jewellery — Heritage Jewels UK',
+      enqSubject
+    );
+
+    const mockContact = {
+      enquiry_id: 'AURA-CONT-TEST-3',
+      enquiry_type: 'contact',
+      customer: {},
+    };
+    const contactSubject = generateEmailSubject(mockContact);
+    assert(
+      contactSubject === '[NEW CONTACT REQUEST] Website Contact Form',
+      'Subject matches specified pattern [NEW CONTACT REQUEST] Website Contact Form',
+      contactSubject
     );
   }
 
@@ -432,15 +459,15 @@ async function runTests() {
     const text = generateEmailText(mockEnquiry);
 
     assert(html.includes('AURA EXPORTS'), 'HTML contains company branding header');
-    assert(html.includes('SECTION 1 — CUSTOMER INFORMATION'), 'HTML contains SECTION 1');
-    assert(html.includes('SECTION 2 — PRODUCT INFORMATION'), 'HTML contains SECTION 2');
-    assert(html.includes('SECTION 3 — PROCUREMENT REQUIREMENTS'), 'HTML contains SECTION 3');
-    assert(html.includes('SECTION 4 — CUSTOMER MESSAGE'), 'HTML contains SECTION 4');
-    assert(html.includes('SECTION 5 — ENQUIRY MANAGEMENT'), 'HTML contains SECTION 5');
+    assert(html.includes('SECTION 1 — CUSTOMER DETAILS'), 'HTML contains SECTION 1');
+    assert(html.includes('SECTION 2 — PRODUCT SOURCING DETAILS'), 'HTML contains SECTION 2');
+    assert(html.includes('SECTION 3 — PROCUREMENT PARAMETERS'), 'HTML contains SECTION 3');
+    assert(html.includes('SECTION 4 — ADDITIONAL COMMENTS & NOTES'), 'HTML contains SECTION 4');
+    assert(html.includes('SECTION 5 — ENQUIRY AUDIT & DISPATCH'), 'HTML contains SECTION 5');
     assert(html.includes('AURA-RFQ-MOCK'), 'HTML embeds Enquiry Reference ID');
     assert(html.includes('contact@auraexport.co'), 'HTML references destination contact@auraexport.co');
 
-    assert(text.includes('SECTION 1 — CUSTOMER INFORMATION'), 'Plain text contains SECTION 1');
+    assert(text.includes('SECTION 1 — CUSTOMER DETAILS'), 'Plain text contains SECTION 1');
     assert(text.includes('Robert Hastings'), 'Plain text contains customer name');
     assert(text.includes('Alleppey Green Cardamom'), 'Plain text contains product name');
   }
