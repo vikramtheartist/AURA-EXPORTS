@@ -15,19 +15,18 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
       routeId: 'products/agro-products',
       label: "INDIA'S FINEST ORIGINS. SOURCED FOR THE WORLD.",
       title: 'Agro Products',
-      keywords: 'Spices | Turmeric | Chillies | Fresh Produce | Moringa | Grains & Pulses',
+      keywords: 'Spices · Turmeric · Chillies · Grains · Pulses · Fresh Produce',
       description1:
-        "From India's renowned agricultural regions to international markets, Aura Exports connects buyers with quality agricultural products, diverse processing formats and flexible sourcing solutions tailored to global business requirements.",
+        'Connecting global buyers with quality Indian agricultural products through origin-led sourcing, flexible specifications and reliable export solutions.',
       description2:
-        'Origin-led sourcing from Erode, Salem, Kerala and Guntur, offering whole rhizomes, cold-milled powders, standardized pastes, and tailored bulk or private-label packaging.',
+        "Sourced across India's leading agricultural regions, including Tamil Nadu, Kerala and Andhra Pradesh, with product formats and packaging tailored to buyer requirements.",
       ctaText: 'Explore Agro Products',
       image: agroHeroImg,
       badge: 'Comprehensive Agro Portfolio',
       specs: [
-        { label: 'Category Breadth', value: '7 Dedicated Agro Subdivisions' },
-        { label: 'Active Standards', value: 'HPLC Assays, ASTA & Piperine' },
-        { label: 'Logistics Scope', value: 'Dry Container, Reefer & Air Cargo' },
-        { label: 'Export Gateways', value: 'Chennai, Tuticorin & Cochin' },
+        { label: 'PRODUCT RANGE', value: '7 Agro Subcategories' },
+        { label: 'QUALITY FOCUS', value: 'Product-specific testing' },
+        { label: 'EXPORT LOGISTICS', value: 'Dry, Reefer & Air Cargo' },
       ],
       isImageLeft: false,
     },
@@ -186,7 +185,7 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
                   </h3>
 
                   {/* Category Keywords Banner */}
-                  <div className="flex items-center gap-2 mb-4 bg-white/[0.03] border border-[#dcb782]/20 rounded-xl px-3 py-1.5">
+                  <div className="inline-flex items-center gap-2 mb-3.5 bg-white/[0.03] border border-[#dcb782]/20 rounded-xl px-3 py-1 w-fit max-w-full">
                     <Tag className="h-3 w-3 text-[#dcb782] shrink-0" />
                     <span className="text-[11px] font-mono text-[#dcb782] font-medium tracking-wide">
                       {product.keywords}
@@ -194,37 +193,44 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
                   </div>
 
                   {/* Luxury editorial text body */}
-                  <div className="flex flex-col gap-3 text-xs md:text-sm leading-relaxed text-[#D5C8B7]/85 font-body font-light mb-6">
-                    <p>{product.description1}</p>
-                    <p>{product.description2}</p>
+                  <div className="flex flex-col gap-2.5 text-xs md:text-sm leading-relaxed font-body font-light mb-5">
+                    <p className="text-[#D5C8B7]/95">{product.description1}</p>
+                    <p className="text-[#D5C8B7]/70 text-[11px] md:text-xs leading-relaxed">{product.description2}</p>
                   </div>
 
                   {/* Technical Specs inner container with decorative accents */}
-                  <div className="border-t border-white/10 pt-5 flex flex-col gap-3">
+                  <div className="border-t border-white/10 pt-4 flex flex-col gap-2.5">
                     <div className="flex items-center justify-between text-[10px] font-mono text-[#dcb782] tracking-wider font-extrabold uppercase">
                       <span>PROCUREMENT PARAMETERS</span>
                       <ShieldCheck className="h-4 w-4" />
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {product.specs.map((spec, sIdx) => (
-                        <div 
-                          key={sIdx} 
-                          className="flex flex-col gap-0.5 bg-white/[0.02] border border-white/5 rounded-xl p-2.5 hover:border-[#dcb782]/20 hover:bg-white/[0.04] transition-all duration-300"
-                        >
-                          <span className="text-[9px] font-mono text-white/45 uppercase tracking-wider font-bold">
-                            {spec.label}
-                          </span>
-                          <span className="text-xs font-semibold text-white tracking-wide mt-0.5">
-                            {spec.value}
-                          </span>
-                        </div>
-                      ))}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {product.specs.map((spec, sIdx) => {
+                        const isFullSpan = product.specs.length === 3 && sIdx === 2;
+                        return (
+                          <div 
+                            key={sIdx} 
+                            className={`flex ${
+                              isFullSpan 
+                                ? 'sm:col-span-2 sm:flex-row sm:items-center sm:justify-between px-3.5 py-2' 
+                                : 'flex-col justify-center px-3 py-2'
+                            } gap-0.5 bg-white/[0.02] border border-white/5 rounded-xl hover:border-[#dcb782]/20 hover:bg-white/[0.04] transition-all duration-300 min-h-[46px]`}
+                          >
+                            <span className="text-[9px] font-mono text-white/45 uppercase tracking-wider font-bold">
+                              {spec.label}
+                            </span>
+                            <span className="text-xs font-semibold text-white tracking-wide">
+                              {spec.value}
+                            </span>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
 
                   {/* Interactive luxury Action Buttons */}
-                  <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                  <div className="mt-5 flex flex-col sm:flex-row gap-3">
                     <button 
                       onClick={() => onNavigate(product.routeId)}
                       className="flex-1 bg-[#dcb782] text-black hover:bg-white hover:text-black font-semibold transition-all duration-300 rounded-xl px-5 py-3 flex items-center justify-center gap-2 text-xs font-body tracking-wider uppercase cursor-pointer shadow-md"
