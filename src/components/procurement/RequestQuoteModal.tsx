@@ -77,9 +77,16 @@ export default function RequestQuoteModal() {
       setSubmittedResult(null);
 
       if (initialData?.category) {
-        const found = CATEGORY_OPTIONS.find(c =>
-          c.value.toLowerCase().includes(initialData.category!.toLowerCase())
-        );
+        const rawCategory = initialData.category.toLowerCase();
+        const cleanQuery = rawCategory.replace(/[-_]/g, ' ');
+        const found = CATEGORY_OPTIONS.find(c => {
+          const val = c.value.toLowerCase();
+          return (
+            val.includes(cleanQuery) ||
+            val.includes(rawCategory) ||
+            cleanQuery.split(' ').some(word => word.length > 3 && val.includes(word))
+          );
+        });
         if (found) setCategory(found.value);
       }
       if (initialData?.product || initialData?.requirement) {

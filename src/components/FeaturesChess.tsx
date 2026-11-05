@@ -3,12 +3,15 @@ import { ArrowUpRight, ShieldCheck, Award, Tag } from 'lucide-react';
 import agroHeroImg from '../assets/images/agro_products_hero.jpg';
 import fashionHeroImg from '../assets/images/fashion_lifestyle_hero.jpg';
 import apparelHeritageHeroImg from '../assets/images/apparel_textiles_hero_heritage.jpg';
+import { useQuoteModal } from '../context/QuoteModalContext';
 
 interface FeaturesChessProps {
   onNavigate: (sectionId: string) => void;
 }
 
 export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
+  const { openQuoteModal } = useQuoteModal();
+
   const products = [
     {
       id: 'agro-products',
@@ -240,7 +243,12 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
                     </button>
                     
                     <button 
-                      onClick={() => onNavigate(`request-quote?category=${product.id}`)}
+                      type="button"
+                      onClick={() => openQuoteModal({
+                        category: product.id,
+                        product: product.title,
+                        requirement: `Procurement inquiry for ${product.title}.`,
+                      })}
                       className="flex-1 border border-white/10 text-white hover:border-[#dcb782] hover:bg-white/5 transition-all duration-300 rounded-xl px-4 py-3 flex items-center justify-center gap-1.5 text-xs font-body tracking-wider uppercase font-semibold cursor-pointer"
                     >
                       <span>Request Quote</span>
