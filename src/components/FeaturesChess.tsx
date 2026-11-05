@@ -204,19 +204,6 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
                   }`}
                   id={`product-${product.id}-content`}
                 >
-                  {/* Decorative corner brackets */}
-                  <div className="absolute top-2 left-2 pointer-events-none opacity-60">
-                    <div className="w-4 h-4 sm:w-5 sm:h-5 border-t border-l border-[#dcb782]" />
-                  </div>
-                  <div className="absolute top-2 right-2 pointer-events-none opacity-60">
-                    <div className="w-4 h-4 sm:w-5 sm:h-5 border-t border-r border-[#dcb782]" />
-                  </div>
-                  <div className="absolute bottom-2 left-2 pointer-events-none opacity-60">
-                    <div className="w-4 h-4 sm:w-5 sm:h-5 border-b border-l border-[#dcb782]" />
-                  </div>
-                  <div className="absolute bottom-2 right-2 pointer-events-none opacity-60">
-                    <div className="w-4 h-4 sm:w-5 sm:h-5 border-b border-r border-[#dcb782]" />
-                  </div>
 
                   {/* Top content: Eyebrow, Title, Description */}
                   <div className="flex flex-col justify-start">
