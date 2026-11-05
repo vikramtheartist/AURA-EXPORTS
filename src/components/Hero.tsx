@@ -292,32 +292,21 @@ export default function Hero({ onNavigate }: HeroProps) {
             Through quality sourcing and global partnerships, we deliver more than products — we deliver value.
           </motion.p>
 
-          {/* CTA Buttons - Conversion Hierarchy: Primary Request Quote, Secondary Explore Products */}
+          {/* Hero CTA */}
           <motion.div
             initial={{ opacity: 0.9, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.15 }}
-            className="flex flex-col sm:flex-row items-start justify-start gap-4 sm:gap-6"
+            className="flex items-start justify-start"
             id="hero-ctas"
           >
-            {/* Primary CTA */}
-            <button
-              onClick={() => onNavigate('request-quote')}
-              className="group bg-gradient-to-r from-[#dcb782] to-[#ab8558] hover:from-white hover:to-[#dcb782] text-black font-body font-bold text-xs uppercase tracking-wider rounded-full px-7 py-3.5 flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg hover:scale-[1.03] active:scale-[0.98]"
-              id="hero-cta-quote"
-            >
-              <span>Request a Quote</span>
-              <ArrowUpRight className="h-4 w-4" />
-            </button>
-
-            {/* Secondary CTA */}
             <button
               onClick={() => onNavigate('products')}
-              className="group liquid-glass-strong rounded-full px-7 py-3.5 flex items-center justify-center gap-2 text-white border border-[#dcb782]/30 hover:border-[#dcb782]/60 hover:bg-white/5 transition-all cursor-pointer shadow-lg hover:scale-[1.03] active:scale-[0.98]"
+              className="group bg-gradient-to-r from-[#dcb782] to-[#ab8558] hover:from-white hover:to-[#dcb782] text-black font-body font-bold text-xs uppercase tracking-wider rounded-full px-7 py-3.5 flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg hover:scale-[1.03] active:scale-[0.98]"
               id="hero-cta-main"
             >
-              <span className="font-body font-medium text-xs uppercase tracking-wider text-[#fbfbeb] group-hover:text-white">Explore Products</span>
-              <ArrowUpRight className="h-4 w-4 text-[#dcb782] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              <span>Explore Products</span>
+              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </button>
           </motion.div>
         </div>
