@@ -204,21 +204,17 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
                   }`}
                   id={`product-${product.id}-content`}
                 >
-                  {/* Decorative corner framing with subtle gradient lines */}
-                  <div className="absolute top-2 left-2 flex items-center pointer-events-none opacity-60">
+                  {/* Decorative corner brackets */}
+                  <div className="absolute top-2 left-2 pointer-events-none opacity-60">
                     <div className="w-4 h-4 sm:w-5 sm:h-5 border-t border-l border-[#dcb782]" />
-                    <div className="w-16 sm:w-28 h-[1px] bg-gradient-to-r from-[#dcb782] to-transparent" />
                   </div>
-                  <div className="absolute top-2 right-2 flex items-center justify-end pointer-events-none opacity-60">
-                    <div className="w-16 sm:w-28 h-[1px] bg-gradient-to-l from-[#dcb782] to-transparent" />
+                  <div className="absolute top-2 right-2 pointer-events-none opacity-60">
                     <div className="w-4 h-4 sm:w-5 sm:h-5 border-t border-r border-[#dcb782]" />
                   </div>
-                  <div className="absolute bottom-2 left-2 flex items-center pointer-events-none opacity-60">
+                  <div className="absolute bottom-2 left-2 pointer-events-none opacity-60">
                     <div className="w-4 h-4 sm:w-5 sm:h-5 border-b border-l border-[#dcb782]" />
-                    <div className="w-16 sm:w-28 h-[1px] bg-gradient-to-r from-[#dcb782] to-transparent" />
                   </div>
-                  <div className="absolute bottom-2 right-2 flex items-center justify-end pointer-events-none opacity-60">
-                    <div className="w-16 sm:w-28 h-[1px] bg-gradient-to-l from-[#dcb782] to-transparent" />
+                  <div className="absolute bottom-2 right-2 pointer-events-none opacity-60">
                     <div className="w-4 h-4 sm:w-5 sm:h-5 border-b border-r border-[#dcb782]" />
                   </div>
 
