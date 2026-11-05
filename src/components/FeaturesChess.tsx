@@ -82,7 +82,7 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
       label: 'INDIAN CRAFTSMANSHIP. GLOBAL STYLE.',
       title: 'Fashion & Lifestyle',
       description:
-        'Connecting global buyers with authentic Indian craftsmanship, traditional metallurgy and contemporary artisanal fashion accessories with flexible export specifications.',
+        'Connecting global buyers with authentic Indian craftsmanship, traditional metallurgy and contemporary artisanal accessories through reliable export solutions.',
       keywords: 'Fashion Jewelry · Temple Metallurgy · Kundan · Oxidized · Lifestyle Products',
       ctaText: 'Explore Fashion & Lifestyle',
       image: fashionHeroImg,
@@ -115,7 +115,7 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
       label: 'INDIAN TEXTILE HERITAGE. GLOBAL POSSIBILITIES.',
       title: 'Apparel & Textiles',
       description:
-        "From authentic Kanjivaram silks and handloom weaves to contemporary export apparel, connecting institutional buyers with India's diverse textile craftsmanship.",
+        'Connecting global buyers with authentic Indian textile craftsmanship, heritage handloom weaves, silk sarees and export apparel solutions.',
       keywords: 'Silk Sarees · Handloom Textiles · Cotton Fabrics · Apparel · Home Textiles',
       ctaText: 'Explore Apparel & Textiles',
       image: apparelHeritageHeroImg,
@@ -192,14 +192,14 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true, margin: '-10% 0px' }}
               transition={{ duration: 0.8, ease: 'easeOut' }}
-              className="relative w-full rounded-[2.5rem] border border-white/10 bg-[#090908]/95 backdrop-blur-xl p-5 sm:p-7 md:p-9 lg:p-10 shadow-[0_30px_80px_rgba(0,0,0,0.85)] overflow-hidden"
+              className="relative w-full rounded-[2.5rem] border border-white/10 bg-[#090908]/95 backdrop-blur-xl p-5 sm:p-7 md:p-8 lg:p-10 shadow-[0_30px_80px_rgba(0,0,0,0.85)] overflow-hidden lg:h-[590px] xl:h-[600px] flex flex-col justify-center"
               id={`product-${product.id}-block`}
             >
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch w-full h-full">
                 
                 {/* Content Column */}
                 <div
-                  className={`lg:col-span-7 flex flex-col justify-between relative p-4 sm:p-6 md:p-8 lg:p-9 ${
+                  className={`lg:col-span-7 flex flex-col justify-between relative p-4 sm:p-6 md:p-7 lg:p-8 h-full ${
                     product.isImageLeft ? 'lg:order-2' : 'lg:order-1'
                   }`}
                   id={`product-${product.id}-content`}
@@ -223,24 +223,24 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
                   </div>
 
                   {/* Top content: Eyebrow, Title, Description */}
-                  <div>
+                  <div className="flex flex-col justify-start">
                     {/* Eyebrow */}
-                    <div className="text-[#dcb782] font-mono text-[10.5px] sm:text-[11px] md:text-xs tracking-[0.25em] font-bold uppercase mb-3">
+                    <div className="text-[#dcb782] font-mono text-[10.5px] sm:text-[11px] md:text-xs tracking-[0.25em] font-bold uppercase mb-2 sm:mb-3 h-[18px] flex items-center">
                       {product.label}
                     </div>
 
                     {/* Main Title */}
-                    <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-heading text-white font-normal leading-[1.1] tracking-tight mb-4">
+                    <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-heading text-white font-normal leading-[1.1] tracking-tight mb-3 sm:mb-4 min-h-[48px] md:min-h-[56px] flex items-center">
                       {product.title}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-sm md:text-[15px] font-body font-light text-[#D5C8B7]/80 leading-relaxed max-w-xl mb-6">
+                    <p className="text-sm md:text-[15px] font-body font-light text-[#D5C8B7]/80 leading-relaxed max-w-xl mb-5 sm:mb-6 min-h-[44px] md:min-h-[46px] flex items-center">
                       {product.description}
                     </p>
 
                     {/* 3 Spec Columns with vertical dividers */}
-                    <div className="grid grid-cols-3 divide-x divide-white/10 mb-6 py-1">
+                    <div className="grid grid-cols-3 divide-x divide-white/10 mb-5 sm:mb-6 py-1 min-h-[88px] items-center">
                       {product.highlights.map((item, idx) => (
                         <div
                           key={idx}
@@ -266,20 +266,20 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
                     </div>
 
                     {/* Category Keywords Banner */}
-                    <div className="flex items-center gap-2.5 bg-black/40 border border-[#dcb782]/30 rounded-2xl md:rounded-full px-4 py-2.5 mb-6 w-full flex-wrap sm:flex-nowrap">
+                    <div className="flex items-center gap-2.5 bg-black/40 border border-[#dcb782]/30 rounded-2xl md:rounded-full px-4 h-[44px] mb-5 sm:mb-6 w-full overflow-hidden">
                       <Tag className="h-3.5 w-3.5 text-[#dcb782] shrink-0" />
-                      <span className="text-xs md:text-[12.5px] font-mono text-[#dcb782] font-medium tracking-wide">
+                      <span className="text-xs md:text-[12.5px] font-mono text-[#dcb782] font-medium tracking-wide truncate">
                         {product.keywords}
                       </span>
                     </div>
                   </div>
 
                   {/* Interactive Action Buttons */}
-                  <div className="flex flex-col sm:flex-row gap-3.5 w-full pt-2">
+                  <div className="flex flex-col sm:flex-row gap-3.5 w-full pt-1">
                     <button
                       type="button"
                       onClick={() => onNavigate(product.routeId)}
-                      className="flex-1 bg-[#dcb782] hover:bg-white text-black font-semibold transition-all duration-300 rounded-xl px-5 py-3.5 flex items-center justify-center gap-2 text-xs font-body tracking-wider uppercase cursor-pointer shadow-md"
+                      className="flex-1 bg-[#dcb782] hover:bg-white text-black font-semibold transition-all duration-300 rounded-xl px-5 py-3.5 flex items-center justify-center gap-2 text-xs font-body tracking-wider uppercase cursor-pointer shadow-md h-[46px]"
                     >
                       <span>{product.ctaText}</span>
                       <ArrowUpRight className="h-4 w-4 shrink-0" />
@@ -294,7 +294,7 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
                           requirement: `Procurement inquiry for ${product.title}.`,
                         })
                       }
-                      className="flex-1 bg-transparent hover:bg-white/5 border border-[#dcb782]/40 hover:border-[#dcb782] text-white font-semibold transition-all duration-300 rounded-xl px-5 py-3.5 flex items-center justify-center gap-1.5 text-xs font-body tracking-wider uppercase cursor-pointer"
+                      className="flex-1 bg-transparent hover:bg-white/5 border border-[#dcb782]/40 hover:border-[#dcb782] text-white font-semibold transition-all duration-300 rounded-xl px-5 py-3.5 flex items-center justify-center gap-1.5 text-xs font-body tracking-wider uppercase cursor-pointer h-[46px]"
                     >
                       <span>Request Quote</span>
                     </button>
@@ -303,7 +303,7 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
 
                 {/* Right / Left Image Column */}
                 <div
-                  className={`lg:col-span-5 relative rounded-[2rem] overflow-hidden min-h-[380px] md:min-h-[460px] lg:min-h-[500px] w-full h-full group cursor-pointer ${
+                  className={`lg:col-span-5 relative rounded-[2rem] overflow-hidden min-h-[380px] md:min-h-[440px] lg:min-h-0 h-full w-full group cursor-pointer ${
                     product.isImageLeft ? 'lg:order-1' : 'lg:order-2'
                   }`}
                   onClick={() => onNavigate(product.routeId)}
