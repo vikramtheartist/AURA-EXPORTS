@@ -9,16 +9,12 @@ import {
   Send,
   CheckCircle2,
   Building2,
-  ShieldCheck,
-  Zap,
-  Layers,
   ChevronDown,
   ChevronUp,
   ArrowRight,
   Calendar,
   CalendarDays,
   Loader2,
-  QrCode,
   Download,
   Share2,
   Eye,
@@ -133,54 +129,24 @@ export default function ContactPage() {
       <SEOHead pageKey="contact" />
 
       {/* Header Section */}
-      <header className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-14">
+      <header className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-12">
         {/* Eyebrow */}
-        <div className="inline-flex items-center gap-2 text-xs font-mono text-[#dcb782] tracking-widest uppercase font-semibold mb-4">
-          <Globe className="h-4 w-4 text-[#dcb782]" />
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-[#dcb782]/20 text-xs font-mono text-[#dcb782] tracking-widest uppercase mb-5">
+          <Globe className="h-3.5 w-3.5 text-[#dcb782]" />
           <span>CONTACT & OPERATIONS</span>
         </div>
 
-        {/* 2-Column Split: Title & Intro Description */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          <div className="lg:col-span-7">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading text-white tracking-tight leading-[1.05] font-normal">
+        {/* Title & Organized Intro */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2">
+          <div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading text-white tracking-tight leading-[1.08] font-normal">
               Get in Touch with <br className="hidden sm:inline" />
               <span className="text-[#dfd1b9]">Aura Exports</span>
             </h1>
           </div>
-
-          <div className="lg:col-span-5 flex flex-col gap-4 lg:border-l lg:border-white/10 lg:pl-8">
-            <p className="text-sm md:text-base text-[#dfd1b9]/80 font-light leading-relaxed">
-              Your direct point of contact for trade enquiries, partnerships, sourcing, documentation, and operational support.
-            </p>
-
-            {/* 3 Inline Capability Badges + Business Card Link */}
-            <div className="flex flex-wrap items-center gap-4 pt-1 text-xs">
-              <div className="inline-flex items-center gap-2 text-[#dcb782]">
-                <Zap className="h-4 w-4 shrink-0 text-[#dcb782]" />
-                <span className="text-white text-[11px] font-medium">Responsive & Direct Communication</span>
-              </div>
-
-              <div className="inline-flex items-center gap-2 text-[#dcb782]">
-                <ShieldCheck className="h-4 w-4 shrink-0 text-[#dcb782]" />
-                <span className="text-white text-[11px] font-medium">Verified & Trade Compliant</span>
-              </div>
-
-              <div className="inline-flex items-center gap-2 text-[#dcb782]">
-                <Layers className="h-4 w-4 shrink-0 text-[#dcb782]" />
-                <span className="text-white text-[11px] font-medium">End-to-End Trade Support</span>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setIsCardModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#dcb782]/15 hover:bg-[#dcb782]/25 border border-[#dcb782]/40 text-[#dcb782] text-[11px] font-mono transition-all cursor-pointer shadow-sm hover:scale-[1.02]"
-              >
-                <QrCode className="h-3.5 w-3.5" />
-                <span>Download Business Card</span>
-              </button>
-            </div>
-          </div>
+          <p className="text-sm md:text-base text-[#dfd1b9]/75 font-light leading-relaxed max-w-md">
+            Your direct point of contact for trade enquiries, partnerships, sourcing, documentation, and operational support.
+          </p>
         </div>
       </header>
 
