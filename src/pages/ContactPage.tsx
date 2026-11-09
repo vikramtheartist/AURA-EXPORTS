@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, useRef } from 'react';
+import React, { useState, useEffect, FormEvent, useRef } from 'react';
 import {
   Globe,
   Mail,
@@ -19,19 +19,36 @@ import {
   CalendarDays,
   Loader2,
   QrCode,
+  Download,
+  Share2,
+  Eye,
 } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import { COMPANY_CONTACT } from '../config/companyContact';
 import { useQuoteModal } from '../context/QuoteModalContext';
 import { trackContactEvent } from '../utils/analytics';
 import { submitGeneralCorrespondence } from '../services/consultationService';
-import BusinessCardSection from '../components/card/BusinessCardSection';
+import BusinessCardModal from '../components/card/BusinessCardModal';
+import {
+  downloadVCard,
+  generateQrCode,
+  getDigitalCardUrl,
+  shareBusinessCard,
+} from '../utils/businessCardUtils';
 
 export default function ContactPage() {
   const { openQuoteModal } = useQuoteModal();
 
   // Accordion state for credentials in Card 1
   const [isCredentialsOpen, setIsCredentialsOpen] = useState(false);
+
+  // Digital Business Card modal & QR code state
+  const [isCardModalOpen, setIsCardModalOpen] = useState(false);
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
+
+  useEffect(() => {
+    generateQrCode(getDigitalCardUrl()).then(setQrCodeDataUrl);
+  }, []);
 
   // Toggle state for General Inquiry Form in Card 3
   const [isGeneralFormOpen, setIsGeneralFormOpen] = useState(false);
@@ -161,10 +178,7 @@ export default function ContactPage() {
 
               <button
                 type="button"
-                onClick={() => {
-                  const el = document.getElementById('digital-business-card-section');
-                  el?.scrollIntoView({ behavior: 'smooth' });
-                }}
+                onClick={() => setIsCardModalOpen(true)}
                 className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#dcb782]/15 hover:bg-[#dcb782]/25 border border-[#dcb782]/40 text-[#dcb782] text-[11px] font-mono transition-all cursor-pointer shadow-sm hover:scale-[1.02]"
               >
                 <QrCode className="h-3.5 w-3.5" />
@@ -184,11 +198,11 @@ export default function ContactPage() {
         >
           <div className="grid grid-cols-1 lg:grid-cols-12">
             {/* Left Column (5 cols) */}
-            <div className="lg:col-span-5 relative p-8 md:p-12 bg-gradient-to-br from-[#221a11] via-[#14120f] to-[#0c0c0b] flex flex-col justify-start overflow-hidden border-b lg:border-b-0 lg:border-r border-white/10">
+            <div className="lg:col-span-5 relative p-7 sm:p-9 md:p-11 bg-gradient-to-br from-[#221a11] via-[#14120f] to-[#0c0c0b] flex flex-col justify-between overflow-hidden border-b lg:border-b-0 lg:border-r border-white/10">
               {/* Warm top-left glow */}
               <div className="absolute -top-24 -left-24 w-72 h-72 bg-[#dcb782]/20 rounded-full blur-[80px] pointer-events-none" />
 
-              <div className="relative z-10">
+              <div className="relative z-10 flex flex-col">
                 <span className="text-[10px] font-mono tracking-[0.25em] text-[#dcb782] uppercase font-bold">
                   CONTACT & OPERATIONS
                 </span>
@@ -203,6 +217,81 @@ export default function ContactPage() {
                 <p className="text-sm text-[#dfd1b9]/75 font-light leading-relaxed">
                   Reach us directly through your preferred channel. Our team in Chennai is available to support your business enquiries, coordination, and documentation needs.
                 </p>
+
+                {/* Compact Executive Digital Business Card & QR Module */}
+                <div className="mt-6 pt-5 border-t border-white/10 flex flex-col gap-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono tracking-widest text-[#dcb782] uppercase font-bold">
+                      EXECUTIVE BUSINESS CARD
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setIsCardModalOpen(true)}
+                      className="text-[10px] font-mono text-[#dcb782] hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
+                      title="View exact luxury 3D card front and back"
+                    >
+                      <Eye className="w-3 h-3" />
+                      <span>View 3D Card</span>
+                    </button>
+                  </div>
+
+                  <div className="flex items-center gap-3.5 p-3 rounded-2xl bg-black/45 border border-white/10 hover:border-[#dcb782]/30 transition-colors">
+                    {/* Compact QR Code (Click to open full card) */}
+                    <button
+                      type="button"
+                      onClick={() => setIsCardModalOpen(true)}
+                      className="shrink-0 p-1.5 rounded-xl bg-white shadow-md hover:scale-105 transition-transform cursor-pointer relative group"
+                      title="Click to view full business card"
+                    >
+                      {qrCodeDataUrl ? (
+                        <img
+                          src={qrCodeDataUrl}
+                          alt="AURA Business Card QR Code"
+                          className="w-16 h-16 sm:w-[66px] sm:h-[66px] object-contain"
+                        />
+                      ) : (
+                        <div className="w-16 h-16 flex items-center justify-center bg-neutral-200 animate-pulse">
+                          <QrCode className="w-6 h-6 text-black/40" />
+                        </div>
+                      )}
+                    </button>
+
+                    {/* Details & Compact Action Buttons */}
+                    <div className="flex-1 flex flex-col justify-center gap-1.5 min-w-0">
+                      <div>
+                        <div className="text-xs font-semibold text-white truncate">
+                          Vikram <span className="text-[11px] font-light text-[#dcb782] italic font-serif">· Managing Director</span>
+                        </div>
+                        <p className="text-[10px] text-[#dfd1b9]/60 font-light truncate">
+                          Scan to save contact to phone
+                        </p>
+                      </div>
+
+                      {/* Small Action Buttons */}
+                      <div className="flex items-center gap-2 pt-0.5">
+                        <button
+                          type="button"
+                          onClick={() => downloadVCard()}
+                          className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-[#dcb782] to-[#ab8558] hover:from-[#fbf3db] hover:to-[#dcb782] text-black text-[10px] font-bold tracking-wider uppercase flex items-center gap-1 shadow-sm transition-transform hover:scale-[1.02] cursor-pointer"
+                          title="Save Vikram's contact to your phone (.vcf)"
+                        >
+                          <Download className="w-3 h-3" />
+                          <span>Save .VCF</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => shareBusinessCard()}
+                          className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#dcb782]/40 text-white hover:text-[#dcb782] text-[10px] font-mono flex items-center gap-1 transition-colors cursor-pointer"
+                          title="Share contact details"
+                        >
+                          <Share2 className="w-3 h-3 text-[#dcb782]" />
+                          <span>Share</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -344,10 +433,7 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* CARD 2: DIGITAL BUSINESS CARD & EXECUTIVE PASS */}
-        <BusinessCardSection />
-
-        {/* CARD 3: REQUEST A TRADE QUOTE */}
+        {/* CARD 2: REQUEST A TRADE QUOTE */}
         <section
           aria-labelledby="card-quote-heading"
           className="rounded-[2rem] bg-gradient-to-r from-[#1d1710] via-[#12110f] to-[#0c0c0b] border border-white/10 p-6 sm:p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden shadow-2xl"
@@ -587,6 +673,9 @@ export default function ContactPage() {
           )}
         </section>
       </main>
+
+      {/* Interactive Digital Business Card Modal */}
+      <BusinessCardModal isOpen={isCardModalOpen} onClose={() => setIsCardModalOpen(false)} />
     </div>
   );
 }
