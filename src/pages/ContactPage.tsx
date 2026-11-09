@@ -31,8 +31,8 @@ import { submitGeneralCorrespondence } from '../services/consultationService';
 import BusinessCardModal from '../components/card/BusinessCardModal';
 import {
   downloadVCard,
-  generateQrCode,
-  getDigitalCardUrl,
+  OFFICIAL_DIGITAL_CARD_URL,
+  OFFICIAL_QR_CODE_IMAGE,
   shareBusinessCard,
 } from '../utils/businessCardUtils';
 
@@ -42,13 +42,8 @@ export default function ContactPage() {
   // Accordion state for credentials in Card 1
   const [isCredentialsOpen, setIsCredentialsOpen] = useState(false);
 
-  // Digital Business Card modal & QR code state
+  // Digital Business Card modal state
   const [isCardModalOpen, setIsCardModalOpen] = useState(false);
-  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
-
-  useEffect(() => {
-    generateQrCode(getDigitalCardUrl()).then(setQrCodeDataUrl);
-  }, []);
 
   // Toggle state for General Inquiry Form in Card 3
   const [isGeneralFormOpen, setIsGeneralFormOpen] = useState(false);
@@ -236,25 +231,20 @@ export default function ContactPage() {
                   </div>
 
                   <div className="flex items-center gap-3.5 p-3 rounded-2xl bg-black/45 border border-white/10 hover:border-[#dcb782]/30 transition-colors">
-                    {/* Compact QR Code (Click to open full card) */}
-                    <button
-                      type="button"
-                      onClick={() => setIsCardModalOpen(true)}
-                      className="shrink-0 p-1.5 rounded-xl bg-white shadow-md hover:scale-105 transition-transform cursor-pointer relative group"
-                      title="Click to view full business card"
+                    {/* Compact QR Code (Click or scan to open official digital card) */}
+                    <a
+                      href={OFFICIAL_DIGITAL_CARD_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="shrink-0 p-1.5 rounded-xl bg-white shadow-md hover:scale-105 transition-transform cursor-pointer relative group block"
+                      title="Scan or click to open official digital business card"
                     >
-                      {qrCodeDataUrl ? (
-                        <img
-                          src={qrCodeDataUrl}
-                          alt="AURA Business Card QR Code"
-                          className="w-16 h-16 sm:w-[66px] sm:h-[66px] object-contain"
-                        />
-                      ) : (
-                        <div className="w-16 h-16 flex items-center justify-center bg-neutral-200 animate-pulse">
-                          <QrCode className="w-6 h-6 text-black/40" />
-                        </div>
-                      )}
-                    </button>
+                      <img
+                        src={OFFICIAL_QR_CODE_IMAGE}
+                        alt="AURA Business Card QR Code"
+                        className="w-16 h-16 sm:w-[66px] sm:h-[66px] object-contain"
+                      />
+                    </a>
 
                     {/* Details & Compact Action Buttons */}
                     <div className="flex-1 flex flex-col justify-center gap-1.5 min-w-0">

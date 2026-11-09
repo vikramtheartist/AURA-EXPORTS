@@ -17,20 +17,15 @@ import BusinessCardModal from './BusinessCardModal';
 import {
   AURA_CARD_DATA,
   downloadVCard,
-  generateQrCode,
   getDigitalCardUrl,
+  OFFICIAL_DIGITAL_CARD_URL,
+  OFFICIAL_QR_CODE_IMAGE,
   shareBusinessCard,
 } from '../../utils/businessCardUtils';
 
 export const BusinessCardSection: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
   const [copied, setCopied] = useState<string | null>(null);
-
-  useEffect(() => {
-    const url = getDigitalCardUrl();
-    generateQrCode(url).then(setQrCodeDataUrl);
-  }, []);
 
   const handleCopy = (text: string, label: string) => {
     if (navigator.clipboard) {
@@ -103,24 +98,24 @@ export const BusinessCardSection: React.FC = () => {
               </div>
 
               {/* Scannable QR Code */}
-              {qrCodeDataUrl ? (
-                <div className="p-3 rounded-2xl bg-white shadow-2xl mb-3 relative group">
-                  <img
-                    src={qrCodeDataUrl}
-                    alt="AURA Exports Digital Business Card QR Code"
-                    className="w-36 h-36 sm:w-40 sm:h-40 object-contain"
-                  />
-                  <div className="absolute inset-0 bg-black/75 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-3 text-center">
-                    <span className="text-[11px] text-white font-mono">
-                      Point phone camera to scan
-                    </span>
-                  </div>
+              <a
+                href={OFFICIAL_DIGITAL_CARD_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 rounded-2xl bg-white shadow-2xl mb-3 relative group block hover:scale-105 transition-transform"
+                title="Scan or click to open official digital business card"
+              >
+                <img
+                  src={OFFICIAL_QR_CODE_IMAGE}
+                  alt="AURA Exports Digital Business Card QR Code"
+                  className="w-36 h-36 sm:w-40 sm:h-40 object-contain"
+                />
+                <div className="absolute inset-0 bg-black/75 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-3 text-center">
+                  <span className="text-[11px] text-white font-mono">
+                    Point phone camera or click to open
+                  </span>
                 </div>
-              ) : (
-                <div className="w-36 h-36 rounded-2xl bg-white/5 flex items-center justify-center animate-pulse mb-3">
-                  <QrCode className="w-10 h-10 text-white/30" />
-                </div>
-              )}
+              </a>
 
               <p className="text-xs text-[#dfd1b9]/80 font-light leading-relaxed max-w-xs">
                 Scanning this code instantly opens the card on mobile with one-tap{' '}

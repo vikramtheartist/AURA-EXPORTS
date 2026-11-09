@@ -92,14 +92,15 @@ export async function generateQrCode(targetUrl: string): Promise<string> {
   }
 }
 
+export const OFFICIAL_DIGITAL_CARD_URL = 'https://s1.blinq.me/WP5yZSRBrN6D?bs=db&ida_v=treatment';
+export const OFFICIAL_QR_CODE_IMAGE = '/images/aura_trade_desk_qr.png';
+
 /**
- * Get the canonical digital business card URL based on window location.
+ * Get the canonical digital business card URL.
+ * Links to the official live digital business card pass.
  */
 export function getDigitalCardUrl(): string {
-  if (typeof window !== 'undefined') {
-    return `${window.location.origin}/card`;
-  }
-  return 'https://auraexport.co/card';
+  return OFFICIAL_DIGITAL_CARD_URL;
 }
 
 /**
@@ -119,6 +120,9 @@ export async function shareBusinessCard(data: BusinessCardData = AURA_CARD_DATA)
       // User cancelled share
       return false;
     }
+  } else if (typeof navigator !== 'undefined' && navigator.clipboard) {
+    await navigator.clipboard.writeText(shareUrl);
+    return true;
   }
   return false;
 }

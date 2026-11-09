@@ -17,9 +17,10 @@ import BusinessCard3D from './BusinessCard3D';
 import {
   AURA_CARD_DATA,
   downloadVCard,
-  generateQrCode,
   getDigitalCardUrl,
   shareBusinessCard,
+  OFFICIAL_QR_CODE_IMAGE,
+  OFFICIAL_DIGITAL_CARD_URL,
 } from '../../utils/businessCardUtils';
 
 interface BusinessCardModalProps {
@@ -31,14 +32,11 @@ export const BusinessCardModal: React.FC<BusinessCardModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
   const [copied, setCopied] = useState<string | null>(null);
   const [showQrExpanded, setShowQrExpanded] = useState<boolean>(false);
 
   useEffect(() => {
     if (isOpen) {
-      const url = getDigitalCardUrl();
-      generateQrCode(url).then(setQrCodeDataUrl);
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -137,19 +135,19 @@ export const BusinessCardModal: React.FC<BusinessCardModalProps> = ({
                   <span>Scan with Phone Camera</span>
                 </div>
 
-                {qrCodeDataUrl ? (
-                  <div className="p-2.5 rounded-xl bg-white shadow-md mb-2">
-                    <img
-                      src={qrCodeDataUrl}
-                      alt="AURA Exports Digital Business Card QR Code"
-                      className="w-32 h-32 sm:w-36 sm:h-36 object-contain"
-                    />
-                  </div>
-                ) : (
-                  <div className="w-32 h-32 rounded-xl bg-white/5 flex items-center justify-center animate-pulse mb-2">
-                    <QrCode className="w-8 h-8 text-white/30" />
-                  </div>
-                )}
+                <a
+                  href={OFFICIAL_DIGITAL_CARD_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 rounded-xl bg-white shadow-md mb-2 block hover:scale-105 transition-transform group"
+                  title="Click or scan to open official digital business card"
+                >
+                  <img
+                    src={OFFICIAL_QR_CODE_IMAGE}
+                    alt="AURA Exports Digital Business Card QR Code"
+                    className="w-32 h-32 sm:w-36 sm:h-36 object-contain"
+                  />
+                </a>
 
                 <p className="text-[11px] text-[#dfd1b9]/70 font-light max-w-xs leading-relaxed">
                   Opens instant mobile pass with 1-tap <strong className="text-white font-medium">Add to Contacts</strong> for Apple & Google devices.
