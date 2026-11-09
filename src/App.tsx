@@ -28,6 +28,7 @@ const RequestQuotePage = lazy(() => import('./pages/RequestQuotePage'));
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'));
 const TermsPage = lazy(() => import('./pages/TermsPage'));
 const TermsOfTradePage = lazy(() => import('./pages/TermsOfTradePage'));
+const DigitalBusinessCardPage = lazy(() => import('./pages/DigitalBusinessCardPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 /**
@@ -89,6 +90,8 @@ export default function App() {
                 <Route path="/faqs" element={<FaqsPage />} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/request-quote" element={<RequestQuotePage />} />
+                <Route path="/card" element={<DigitalBusinessCardPage />} />
+                <Route path="/business-card" element={<DigitalBusinessCardPage />} />
 
                 {/* Legal & Governance Routes */}
                 <Route path="/privacy" element={<PrivacyPolicyPage />} />

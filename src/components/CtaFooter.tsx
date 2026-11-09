@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowUpRight, Check, Sparkles, Globe, ShieldCheck } from 'lucide-react';
+import { ArrowUpRight, Check, Sparkles, Globe, ShieldCheck, QrCode } from 'lucide-react';
 import { submitConsultationBooking } from '../services/consultationService';
+import BusinessCardModal from './card/BusinessCardModal';
 
 const HlsVideoBg = lazy(() => import('./HlsVideoBg'));
 
@@ -13,6 +14,7 @@ export default function CtaFooter() {
   const [referenceId, setReferenceId] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const [isCardModalOpen, setIsCardModalOpen] = useState(false);
   const footerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -209,6 +211,18 @@ export default function CtaFooter() {
           )}
         </AnimatePresence>
 
+        {/* Executive Digital Business Card & Contact Pass Trigger */}
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+          <button
+            type="button"
+            onClick={() => setIsCardModalOpen(true)}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-[#dcb782]/40 hover:border-[#dcb782] text-xs font-mono text-[#dcb782] hover:text-white transition-all shadow-md cursor-pointer group"
+          >
+            <QrCode className="w-3.5 h-3.5 text-[#dcb782] group-hover:scale-110 transition-transform" />
+            <span>Download Executive Business Card</span>
+          </button>
+        </div>
+
         {/* Corporate Legal & Navigation Footer */}
         <div
           className="w-full mt-24 pt-8 border-t border-[#dcb782]/10 flex flex-col md:flex-row justify-between items-center bg-transparent gap-6 text-center md:text-left"
@@ -283,6 +297,9 @@ export default function CtaFooter() {
           </div>
         </div>
       </div>
+
+      {/* Interactive Business Card Modal */}
+      <BusinessCardModal isOpen={isCardModalOpen} onClose={() => setIsCardModalOpen(false)} />
     </footer>
   );
 }

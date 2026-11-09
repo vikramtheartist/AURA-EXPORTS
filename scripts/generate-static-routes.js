@@ -119,6 +119,18 @@ const routes = [
     description: 'Privacy policy detailing how Aura Exports processes and protects corporate enquiry information and user data in accordance with international data protection standards.',
     canonical: 'https://auraexport.co/privacy',
   },
+  {
+    path: '/card',
+    title: 'Vikram — Managing Director | AURA Enterprise Exports Digital Business Card',
+    description: 'Official executive digital business card for Vikram, Managing Director at AURA Enterprise Exports. Save contact details directly to your mobile phone or call our trade desk.',
+    canonical: 'https://auraexport.co/card',
+  },
+  {
+    path: '/business-card',
+    title: 'Vikram — Managing Director | AURA Enterprise Exports Digital Business Card',
+    description: 'Official executive digital business card for Vikram, Managing Director at AURA Enterprise Exports. Save contact details directly to your mobile phone or call our trade desk.',
+    canonical: 'https://auraexport.co/business-card',
+  },
 ];
 
 for (const route of routes) {

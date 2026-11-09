@@ -18,12 +18,14 @@ import {
   Calendar,
   CalendarDays,
   Loader2,
+  QrCode,
 } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import { COMPANY_CONTACT } from '../config/companyContact';
 import { useQuoteModal } from '../context/QuoteModalContext';
 import { trackContactEvent } from '../utils/analytics';
 import { submitGeneralCorrespondence } from '../services/consultationService';
+import BusinessCardSection from '../components/card/BusinessCardSection';
 
 export default function ContactPage() {
   const { openQuoteModal } = useQuoteModal();
@@ -140,7 +142,7 @@ export default function ContactPage() {
               Your direct point of contact for trade enquiries, partnerships, sourcing, documentation, and operational support.
             </p>
 
-            {/* 3 Inline Capability Badges */}
+            {/* 3 Inline Capability Badges + Business Card Link */}
             <div className="flex flex-wrap items-center gap-4 pt-1 text-xs">
               <div className="inline-flex items-center gap-2 text-[#dcb782]">
                 <Zap className="h-4 w-4 shrink-0 text-[#dcb782]" />
@@ -156,6 +158,18 @@ export default function ContactPage() {
                 <Layers className="h-4 w-4 shrink-0 text-[#dcb782]" />
                 <span className="text-white text-[11px] font-medium">End-to-End Trade Support</span>
               </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById('digital-business-card-section');
+                  el?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#dcb782]/15 hover:bg-[#dcb782]/25 border border-[#dcb782]/40 text-[#dcb782] text-[11px] font-mono transition-all cursor-pointer shadow-sm hover:scale-[1.02]"
+              >
+                <QrCode className="h-3.5 w-3.5" />
+                <span>Download Business Card</span>
+              </button>
             </div>
           </div>
         </div>
@@ -330,7 +344,10 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* CARD 2: REQUEST A TRADE QUOTE */}
+        {/* CARD 2: DIGITAL BUSINESS CARD & EXECUTIVE PASS */}
+        <BusinessCardSection />
+
+        {/* CARD 3: REQUEST A TRADE QUOTE */}
         <section
           aria-labelledby="card-quote-heading"
           className="rounded-[2rem] bg-gradient-to-r from-[#1d1710] via-[#12110f] to-[#0c0c0b] border border-white/10 p-6 sm:p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden shadow-2xl"
