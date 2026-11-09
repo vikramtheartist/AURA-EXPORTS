@@ -3,7 +3,6 @@ import {
   Globe,
   Mail,
   MapPin,
-  Clock,
   Phone,
   FileText,
   Send,
@@ -12,8 +11,6 @@ import {
   ChevronDown,
   ChevronUp,
   ArrowRight,
-  Calendar,
-  CalendarDays,
   Loader2,
   Download,
   Share2,
@@ -129,25 +126,17 @@ export default function ContactPage() {
       <SEOHead pageKey="contact" />
 
       {/* Header Section */}
-      <header className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-12">
+      <header className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-10">
         {/* Eyebrow */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-[#dcb782]/20 text-xs font-mono text-[#dcb782] tracking-widest uppercase mb-5">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-[#dcb782]/20 text-xs font-mono text-[#dcb782] tracking-widest uppercase mb-4">
           <Globe className="h-3.5 w-3.5 text-[#dcb782]" />
           <span>CONTACT & OPERATIONS</span>
         </div>
 
-        {/* Title & Organized Intro */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2">
-          <div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading text-white tracking-tight leading-[1.08] font-normal">
-              Get in Touch with <br className="hidden sm:inline" />
-              <span className="text-[#dfd1b9]">Aura Exports</span>
-            </h1>
-          </div>
-          <p className="text-sm md:text-base text-[#dfd1b9]/75 font-light leading-relaxed max-w-md">
-            Your direct point of contact for trade enquiries, partnerships, sourcing, documentation, and operational support.
-          </p>
-        </div>
+        {/* Title */}
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading text-white tracking-tight leading-[1.08] font-normal">
+          Get in Touch with <span className="text-[#dfd1b9]">Aura Exports</span>
+        </h1>
       </header>
 
       {/* Main Content Area */}
@@ -215,10 +204,10 @@ export default function ContactPage() {
                     {/* Details & Compact Action Buttons */}
                     <div className="flex-1 flex flex-col justify-center gap-1.5 min-w-0">
                       <div>
-                        <div className="text-xs font-semibold text-white truncate">
-                          Vikram <span className="text-[11px] font-light text-[#dcb782] italic font-serif">· Managing Director</span>
+                        <div className="text-[17px] font-semibold text-white truncate leading-tight">
+                          Vikram <span className="text-[16px] font-light text-[#dcb782] italic font-serif">· Managing Director</span>
                         </div>
-                        <p className="text-[10px] text-[#dfd1b9]/60 font-light truncate">
+                        <p className="text-[11px] text-[#dfd1b9]/60 font-light truncate mt-0.5">
                           Scan to save contact to phone
                         </p>
                       </div>
@@ -312,31 +301,6 @@ export default function ContactPage() {
                 >
                   <Phone className="h-3.5 w-3.5" />
                   <span>Call Now</span>
-                </a>
-              </div>
-
-              {/* Row 4: Operating Desk Hours */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors gap-4">
-                <div className="flex items-start gap-4">
-                  <div className="h-11 w-11 rounded-2xl bg-white/5 border border-[#dcb782]/25 flex items-center justify-center shrink-0">
-                    <Clock className="h-5 w-5 text-[#dcb782]" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-white">Operating Desk Hours</h3>
-                    <p className="text-xs text-[#dfd1b9]/80 font-mono mt-0.5">{COMPANY_CONTACT.deskHours}</p>
-                    <p className="text-[11px] text-[#dfd1b9]/50 font-light mt-0.5">
-                      {COMPANY_CONTACT.operatingDays}
-                    </p>
-                  </div>
-                </div>
-                <a
-                  href={COMPANY_CONTACT.getWhatsAppUrl()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="self-start sm:self-center border border-[#dcb782]/35 hover:border-[#dcb782] text-white hover:text-[#dcb782] px-4 py-2 rounded-xl text-xs font-mono flex items-center gap-2 transition-all bg-white/[0.02]"
-                >
-                  <CalendarDays className="h-3.5 w-3.5 text-[#dcb782]" />
-                  <span>Schedule a Call</span>
                 </a>
               </div>
             </div>
