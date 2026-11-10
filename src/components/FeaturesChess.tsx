@@ -50,7 +50,7 @@ export default function FeaturesChess({ onNavigate }: FeaturesChessProps) {
       title: 'Agro Products',
       description:
         'Connecting global buyers with quality Indian agricultural products through origin-led sourcing, flexible specifications and reliable export solutions.',
-      keywords: 'Spices · Turmeric · Chillies · Grains · Pulses · Fresh Produce',
+      keywords: 'Rice & Grains · Spices · Turmeric · Chillies · Fresh Produce',
       ctaText: 'Explore Agro Products',
       image: agroHeroImg,
       badge: 'COMPREHENSIVE AGRO PORTFOLIO',

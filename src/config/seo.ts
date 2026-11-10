@@ -213,6 +213,12 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
           name: 'Tamil Nadu Moringa Leaf Powder',
           url: `${SITE_BASE_URL}/products/agro-products/moringa-leaf-powder`,
         },
+        {
+          '@type': 'ListItem',
+          position: 7,
+          name: 'Rice & Specialty Grains (Basmati & Regional Varieties)',
+          url: `${SITE_BASE_URL}/products/agro-products/rice-basmati-non-basmati`,
+        },
       ],
     },
   },

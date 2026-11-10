@@ -219,7 +219,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                             onClick={() => setIsProductsDropdownOpen(false)}
                             className="hover:text-white transition-colors"
                           >
-                            • Grains & Pulses
+                            • Rice & Specialty Grains
                           </Link>
                         </div>
 
@@ -512,7 +512,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                             <Link to="/products/agro-products/dried-red-chillies" onClick={() => setIsOpen(false)}>• Chillies & Chilli Products</Link>
                             <Link to="/products/agro-products/fresh-drumsticks" onClick={() => setIsOpen(false)}>• Fresh Agricultural Produce</Link>
                             <Link to="/products/agro-products/moringa-leaf-powder" onClick={() => setIsOpen(false)}>• Moringa & Natural Botanicals</Link>
-                            <Link to="/products/agro-products/rice-basmati-non-basmati" onClick={() => setIsOpen(false)}>• Grains & Pulses</Link>
+                            <Link to="/products/agro-products/rice-basmati-non-basmati" onClick={() => setIsOpen(false)}>• Rice & Specialty Grains</Link>
                           </div>
                         </div>
 

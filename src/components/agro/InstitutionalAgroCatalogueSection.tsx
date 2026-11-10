@@ -16,6 +16,7 @@ export default function InstitutionalAgroCatalogueSection() {
 
   const filterTabs = [
     { id: 'all', label: 'All Products', count: institutionalAgroProducts.length },
+    { id: 'grains', label: 'Rice & Grains', count: institutionalAgroProducts.filter((p) => p.category.includes('GRAIN') || p.category.includes('COMMODIT')).length },
     { id: 'spices', label: 'Spices', count: institutionalAgroProducts.filter((p) => p.category.includes('SPICES') && !p.category.includes('SEEDS')).length },
     { id: 'seeds', label: 'Seeds', count: institutionalAgroProducts.filter((p) => p.category.includes('SEEDS')).length },
     { id: 'botanicals', label: 'Botanical Ingredients', count: institutionalAgroProducts.filter((p) => p.category.includes('BOTANICAL')).length },
@@ -29,7 +30,9 @@ export default function InstitutionalAgroCatalogueSection() {
 
     return institutionalAgroProducts.filter((product) => {
       let matchesCategory = true;
-      if (selectedCategory === 'spices') {
+      if (selectedCategory === 'grains') {
+        matchesCategory = product.category.includes('GRAIN') || product.category.includes('COMMODIT');
+      } else if (selectedCategory === 'spices') {
         matchesCategory = product.category.includes('SPICES') && !product.category.includes('SEEDS');
       } else if (selectedCategory === 'seeds') {
         matchesCategory = product.category.includes('SEEDS');
@@ -45,8 +48,10 @@ export default function InstitutionalAgroCatalogueSection() {
         product.name.toLowerCase().includes(q) ||
         product.botanicalName.toLowerCase().includes(q) ||
         product.grade.toLowerCase().includes(q) ||
+        product.subcategory.toLowerCase().includes(q) ||
         product.origin.displayOrigin.toLowerCase().includes(q) ||
-        product.availableForms.some((f) => f.toLowerCase().includes(q));
+        product.availableForms.some((f) => f.toLowerCase().includes(q)) ||
+        product.overviewDescription.toLowerCase().includes(q);
 
       return matchesCategory && matchesSearch;
     });

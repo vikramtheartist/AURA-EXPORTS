@@ -4,6 +4,7 @@ import cardamomImg from '../assets/images/agro_cardamom.jpg';
 import cuminImg from '../assets/images/agro_cumin.jpg';
 import chilliesImg from '../assets/images/agro_chillies.jpg';
 import moringaImg from '../assets/images/agro_moringa.jpg';
+import grainsImg from '../assets/images/agro_grains.jpg';
 
 export type VerificationStatus =
   | 'VERIFIED'
@@ -1367,6 +1368,258 @@ export const institutionalAgroProducts: InstitutionalProduct[] = [
       quotationRequired: true,
       sampleEnquiryEnabled: true,
       ctaLabel: 'REQUEST MORINGA QUOTATION',
+    },
+  },
+
+  // =========================================================================
+  // PRODUCT 07 — RICE & SPECIALTY GRAINS
+  // =========================================================================
+  {
+    id: 'rice-specialty-grains',
+    name: 'Indian Rice & Specialty Grains (Basmati & Regional Varieties)',
+    cardTitle: 'Rice & Specialty Grains',
+    cardDescription: "India's #1 agricultural commodity export to UAE & GCC: premium 1121 Basmati alongside high-demand South Indian staples.",
+    cardForms: ['1121 Steam Basmati', 'Sona Masoori', 'Ponni & Matta', 'Ambient Bulk & Branded Packs'],
+    category: 'COMMODITIES & GRAINS',
+    subcategory: 'Basmati & Regional Specialty Rice',
+    botanicalName: 'Oryza sativa',
+    hsnCodes: [
+      {
+        form: 'Basmati Rice (Semi-Milled / Wholly Milled)',
+        code: '10063020',
+        verificationStatus: 'VERIFIED',
+        note: 'Registered with APEDA Basmati Export Development Foundation (BEDF).',
+      },
+      {
+        form: 'Non-Basmati White / Parboiled Rice',
+        code: '10063010',
+        verificationStatus: 'VERIFIED',
+        note: 'Covers Ponni, Sona Masoori, and Matta parboiled/steam variants.',
+      },
+      {
+        form: 'Broken / Other Milled Rice',
+        code: '10063090',
+        verificationStatus: 'VERIFIED',
+      },
+    ],
+    origin: {
+      country: 'India',
+      state: 'Punjab, Haryana, Andhra Pradesh, Telangana, Tamil Nadu & Kerala',
+      regions: ['Indo-Gangetic Basin (Basmati)', 'Kaveri & Godavari Basins (Sona Masoori & Ponni)', 'Palakkad (Matta)'],
+      displayOrigin: 'Indo-Gangetic Basin (Basmati) & Southern Basins (Staples)',
+    },
+    grade: '100% Sortex Cleaned · Double Silky Polished · Export Grade',
+    gradesAvailable: [
+      '1121 Extra Long Grain Basmati (Steam / Golden Sella / Raw) — 8.35mm+ AGL',
+      'Pusa Basmati & Traditional Aromatic Long Grain',
+      'Sona Masoori (Raw / Steam / Silky Sortex — Lightweight & Aromatic)',
+      'Ponni Rice (Single Boiled, Steam & Raw — Tamil Nadu Staple)',
+      'Kerala Palakkadan Matta (Single & Double Boiled Red Parboiled Rice)',
+      'Sortex Cleaned Ancient Millets & Regional Pulses (On Request)',
+    ],
+    image: grainsImg,
+    availableForms: [
+      '1121 Steam Basmati Rice (8.35mm+ AGL)',
+      '1121 Golden Sella & Creamy Sella Basmati',
+      'Traditional Aromatic Raw Basmati',
+      'Sona Masoori Silky Double Polished',
+      'Ponni Boiled & Steam Rice',
+      'Palakkadan Matta Red Parboiled Rice',
+      '25kg & 50kg PP Woven Export Bulk Sacks',
+      'Custom Branded 5kg & 10kg Retail Handle Pouches',
+    ],
+    primaryApplications: [
+      'UAE & GCC Modern Retail Supermarkets & Hypermarket Chains',
+      'Hospitality, HORECA, Fine Dining & Luxury Biryani Catering',
+      'South Indian Expatriate Diaspora Retail in Dubai, Sharjah & Abu Dhabi',
+      'Institutional Foodservice & Wholesale Cash-and-Carry Distribution',
+      'Private Label Branded Rice Programs with Custom Bilingual Packaging',
+    ],
+    overviewDescription:
+      "Rice is consistently India's top agricultural commodity shipment into the UAE and the wider Gulf region. AURA structures containerized export shipments tailored to the two core procurement pillars of the Middle East market: first, extra-long grain 1121 Steam, Pusa, and Traditional Basmati (essential for UAE retail, luxury hospitality, and high-volume catering), and second, premium South Indian non-basmati staples (Sona Masoori, Ponni, and Matta rice) serving the massive expatriate diaspora across Dubai, Sharjah, and Abu Dhabi. With exceptional baseline trade volume, steady year-round repeat orders, and ambient bulk packaging (25 kg/50 kg woven sacks or branded 5 kg/10 kg consumer packs), AURA provides verified grain length, sortex purity, zero foreign matter, and direct vessel coordination from Mundra, Chennai, and Kakinada ports.",
+    physicalParameters: [
+      {
+        parameter: 'Average Grain Length (AGL)',
+        specification: '1121 Basmati: 8.35mm+ (Raw), 18mm–22mm (Cooked) · Sona Masoori: 5.0mm–5.5mm · Ponni: 5.2mm · Matta: 5.5mm',
+        testMethodOrEvidence: 'Dial Caliper / Photographic Grain Analyzer (AGMARK / APEDA standards)',
+        status: 'VERIFIED',
+      },
+      {
+        parameter: 'Moisture Content',
+        specification: 'Maximum 12.5% – 13.0% (w/w)',
+        testMethodOrEvidence: 'Digital Moisture Meter / Hot Air Oven Method (ISO 712)',
+        status: 'VERIFIED',
+      },
+      {
+        parameter: 'Broken Grains',
+        specification: 'Premium Basmati: Max 1.0% · Standard Export: Max 2.0% – 5.0% (calibrated per contract)',
+        testMethodOrEvidence: 'Laboratory Mechanical Sieve Separation',
+        status: 'VERIFIED',
+      },
+      {
+        parameter: 'Damaged & Discoloured Grains',
+        specification: 'Maximum 0.5% – 1.0%',
+        testMethodOrEvidence: 'High-Resolution Optical Sortex Inspection',
+        status: 'VERIFIED',
+      },
+      {
+        parameter: 'Chalky Grains',
+        specification: 'Maximum 2.0%',
+        testMethodOrEvidence: 'Visual Optical Inspection under Backlight',
+        status: 'VERIFIED',
+      },
+      {
+        parameter: 'Foreign Matter / Extraneous Matter',
+        specification: 'Nil / Maximum 0.1% (100% Sortex cleaned & destoned)',
+        testMethodOrEvidence: 'Magnetic Separation & Density Destoning',
+        status: 'VERIFIED',
+      },
+      {
+        parameter: 'Purity / Varietal Authenticity',
+        specification: 'Minimum 95.0% to 98.0% varietal purity',
+        testMethodOrEvidence: 'DNA Fingerprinting / Basmati PCR Assaying on request',
+        status: 'VERIFIED',
+      },
+    ],
+    chemicalParameters: [
+      {
+        parameter: 'Elongation Ratio (Post Cooking)',
+        specification: '2.0x to 2.5x original grain length (non-sticky, separate grains)',
+        testMethodOrEvidence: 'Standardized Boiling Water Elongation Test',
+        status: 'VERIFIED',
+      },
+      {
+        parameter: 'Amylose Content',
+        specification: 'Basmati: 20% – 24% (Intermediate Amylose) · Sona Masoori: 23% – 26%',
+        testMethodOrEvidence: 'Iodometric Spectrophotometry (ISO 6647)',
+        status: 'VERIFIED',
+      },
+      {
+        parameter: 'Pesticide Residue Screen',
+        specification: 'Compliant with UAE MoIAT, GCC GSO 1016 & EU MRL thresholds',
+        testMethodOrEvidence: 'GC-MS/MS & LC-MS/MS Multi-Residue Screen (SGS / Intertek)',
+        status: 'VERIFIED',
+      },
+      {
+        parameter: 'Total Aflatoxin (B1 + B2 + G1 + G2)',
+        specification: 'Maximum 4.0 ppb (compliant with strict international food safety)',
+        testMethodOrEvidence: 'HPLC Fluorometric Detector Assay',
+        status: 'VERIFIED',
+      },
+      {
+        parameter: 'Heavy Metals (Arsenic, Lead, Cadmium)',
+        specification: 'Inorganic Arsenic <0.2 mg/kg, Lead <0.2 mg/kg, Cadmium <0.4 mg/kg',
+        testMethodOrEvidence: 'ICP-MS Heavy Metal Analysis (Codex Alimentarius standards)',
+        status: 'VERIFIED',
+      },
+    ],
+    microbiologicalParameters: [
+      {
+        parameter: 'Salmonella spp.',
+        specification: 'Absent in 25g',
+        testMethodOrEvidence: 'ISO 6579 / FDA-BAM',
+        status: 'VERIFIED',
+      },
+      {
+        parameter: 'Escherichia coli',
+        specification: '<10 CFU/g',
+        testMethodOrEvidence: 'ISO 16649-2',
+        status: 'VERIFIED',
+      },
+      {
+        parameter: 'Yeast & Mould Count',
+        specification: '<1,000 CFU/g',
+        testMethodOrEvidence: 'ISO 21527-2',
+        status: 'VERIFIED',
+      },
+      {
+        parameter: 'Bacillus cereus',
+        specification: '<100 CFU/g',
+        testMethodOrEvidence: 'ISO 7932',
+        status: 'VERIFIED',
+      },
+    ],
+    qualityDocumentationNote:
+      'Every grain export consignment is processed through multi-stage color optical sortex machines, double-aspirated, destoned, and metal detected. Third-party pre-shipment quality inspection certificates (SGS, Bureau Veritas, or Cotecna) provided per shipment.',
+    packagingOptions: [
+      {
+        format: '25 kg & 50 kg PP Woven Export Sacks',
+        description: 'Heavy-duty laminated polypropylene woven bags with stitched closure and inner moisture-barrier lining.',
+        suitability: 'Standard ambient bulk ocean freight, wholesale terminal distribution, and commercial catering supply.',
+      },
+      {
+        format: '5 kg & 10 kg Branded Retail Pouches',
+        description: 'High-definition printed BOPP / non-woven bags with reinforced die-cut handles and bilingual artwork.',
+        suitability: 'Supermarket retail shelf distribution across UAE and GCC hypermarket chains.',
+      },
+      {
+        format: 'Traditional Jute Export Bags (20kg / 40kg)',
+        description: 'Breathable natural hydro-carbon free jute bags with custom brand stenciling.',
+        suitability: 'Traditional commodity trade, ethnic wholesale distributors, and specialty aged basmati programs.',
+      },
+      {
+        format: '1,000 kg Jumbo / Tote Bags',
+        description: 'Heavy industrial FIBC bulk tote bags with discharge spouts.',
+        suitability: 'Industrial food processing, repacking facilities, and automated milling rebagging lines.',
+      },
+    ],
+    logistics: {
+      indicativeMOQ: '1 FCL (20-ft dry container ~25–26 Metric Tons)',
+      containerCapacity:
+        'Approximately 25.0 to 26.0 Metric Tons per 20ft container (floor loaded in 25kg/50kg bags), or 21.0 MT palletized, subject to port axle limits',
+      indicativeDispatch: '10–14 days post-order confirmation & artwork approval',
+      portsOfDispatch: ['Mundra Port (INMUN)', 'Chennai Port (INMAA)', 'Kakinada Port (INKAK)'],
+      logisticsDisclaimer:
+        'Ambient dry cargo requiring dry, ventilated ocean container stowage. Direct maritime sailings available from West Coast (Mundra) and East Coast (Chennai/Kakinada) into Jebel Ali (Dubai), Port Khalid (Sharjah), and Khalifa Port (Abu Dhabi) within 3 to 7 days transit.',
+    },
+    tradeRegulatory: {
+      hsnSummary: '1006.30.20 (Basmati Rice) · 1006.30.10 / 1006.30.90 (Non-Basmati Milled / Parboiled)',
+      exportRegistrations: [
+        'APEDA Registered Exporter (Ministry of Commerce & Industry)',
+        'FSSAI Central Export License',
+        'Basmati Export Development Foundation (BEDF) Member',
+      ],
+      requiredDocumentation: [
+        'Commercial Invoice & Packing List',
+        'Clean on Board Ocean Bill of Lading',
+        'Certificate of Origin (India-UAE CEPA Preferential COO / Chamber of Commerce)',
+        'Government Phytosanitary Certificate (Plant Quarantine Authority of India)',
+        'Pre-Shipment Inspection Certificate (Weight, Quality & Packing by SGS / BV)',
+        'Fumigation & Free from Live Insects Certificate',
+        'Non-GMO Declaration Certificate',
+      ],
+      destinationComplianceNotes: [
+        'Compliant with UAE Cabinet Resolution and MoIAT food safety regulations.',
+        'Gulf Standard GSO 93/2013 (Rice specifications and labeling).',
+        'Compatible with Dubai Municipality Food Watch portal batch clearance.',
+      ],
+      cepaTariffNote:
+        'Eligible for preferential zero-duty or reduced tariff treatment under the India-UAE Comprehensive Economic Partnership Agreement (CEPA) with qualifying Rules of Origin documentation.',
+    },
+    customRequirements: {
+      customGradesSupported: [
+        '1121 Steam Basmati (8.35mm+ Extra Long Grain)',
+        '1121 Golden Sella & Creamy Parboiled Sella',
+        'Traditional Dehradun / Aromatic Raw Basmati',
+        'Sona Masoori Silky Double Polished (Lightweight Grain)',
+        'Ponni Boiled & Raw (Traditional Tamil Nadu & South Indian Staple)',
+        'Kerala Palakkadan Matta (Single & Double Boiled Red Rice)',
+      ],
+      specificAssays: [
+        'DNA Basmati Authenticity / Admixture Testing (<5% non-basmati admixture)',
+        'Custom Calibration of Broken Grain Percentage (from 1% up to 15%)',
+        'Moisture Threshold Control (12.0% for extended tropical container voyages)',
+      ],
+      packagingTailoring:
+        'Full-color bilingual English/Arabic printing, custom private label branding, barcoding (EAN-13), and retail shelf-ready handle pouches.',
+      privateLabelEnquiries:
+        'End-to-end private labeling support for Middle East retail chains, cash & carry networks, and commercial hospitality brands.',
+    },
+    commercial: {
+      priceVisible: false,
+      quotationRequired: true,
+      sampleEnquiryEnabled: true,
+      ctaLabel: 'REQUEST RICE & GRAINS QUOTATION',
     },
   },
 ];

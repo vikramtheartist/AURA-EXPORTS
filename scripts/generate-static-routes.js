@@ -54,6 +54,12 @@ const routes = [
     canonical: 'https://auraexport.co/products/agro-products/turmeric',
   },
   {
+    path: '/products/agro-products/rice-basmati-non-basmati',
+    title: 'Rice & Specialty Grains Exporter India | Basmati & South Indian Rice Wholesale | Aura Exports',
+    description: 'Indian rice exporter based in Chennai. Sourcing premium 1121 Steam, Pusa & Traditional Basmati rice, and South Indian staples (Sona Masoori, Ponni & Matta) for UAE & GCC wholesale and retail distribution.',
+    canonical: 'https://auraexport.co/products/agro-products/rice-basmati-non-basmati',
+  },
+  {
     path: '/products/fashion-lifestyle',
     title: 'Indian Fashion Jewellery Exporter | South Indian Temple & Kundan Jewellery Wholesale | Aura Exports',
     description: 'Indian fashion jewellery exporter based in Chennai. Wholesale sourcing of handcrafted South Indian temple jewellery, Jaipur Jadau Kundan and Meenakari bridal suites, and contemporary CZ fashion jewellery.',
