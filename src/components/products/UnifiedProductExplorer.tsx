@@ -1,19 +1,18 @@
-import React, { useState, useMemo, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Sparkles, SlidersHorizontal } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Sparkles } from 'lucide-react';
 import { 
   UNIFIED_PRODUCT_CATEGORIES, 
   UnifiedProductCategory, 
-  PackagedProductItem, 
   AgroCommodityItem 
 } from '../../data/unifiedProductsCatalog';
 import CategorySelector from './CategorySelector';
-import OriginShowcase from './OriginShowcase';
 import ProductModeSwitcher, { ProductFormatMode } from './ProductModeSwitcher';
 import RetailProductCard from './RetailProductCard';
 import AgroProductCard from './AgroProductCard';
 import TrustQualityStrip from './TrustQualityStrip';
 import ExportConversionBanner from './ExportConversionBanner';
 import { institutionalAgroProducts, InstitutionalProduct } from '../../data/institutionalAgroCatalog';
+import { useRetailCart } from '../../context/RetailCartContext';
 
 interface UnifiedProductExplorerProps {
   onOpenAgroEnquiry: (
@@ -35,8 +34,7 @@ export default function UnifiedProductExplorer({
   // Format Switcher Mode ('packaged' vs 'agro')
   const [formatMode, setFormatMode] = useState<ProductFormatMode>('packaged');
 
-  // Horizontal Carousel scroll ref for product cards
-  const productCardsScrollRef = useRef<HTMLDivElement>(null);
+  const { currency, setCurrency } = useRetailCart();
 
   // Active Category Data
   const currentCategory = useMemo(() => {
@@ -45,18 +43,6 @@ export default function UnifiedProductExplorer({
       UNIFIED_PRODUCT_CATEGORIES[0]
     );
   }, [selectedCategoryId]);
-
-  const handleScrollLeft = () => {
-    if (productCardsScrollRef.current) {
-      productCardsScrollRef.current.scrollBy({ left: -320, behavior: 'smooth' });
-    }
-  };
-
-  const handleScrollRight = () => {
-    if (productCardsScrollRef.current) {
-      productCardsScrollRef.current.scrollBy({ left: 320, behavior: 'smooth' });
-    }
-  };
 
   const handleViewSpecs = (commodity: AgroCommodityItem) => {
     if (commodity.institutionalId && onOpenSpecDrawer) {
@@ -111,7 +97,7 @@ export default function UnifiedProductExplorer({
         </div>
 
         {/* Category Horizontal Selector */}
-        <div className="mb-10">
+        <div className="mb-8">
           <CategorySelector
             selectedCategoryId={selectedCategoryId}
             onSelectCategory={(catId) => setSelectedCategoryId(catId)}
@@ -119,34 +105,9 @@ export default function UnifiedProductExplorer({
         </div>
 
         {/* =========================================================================
-            SECTION D: DYNAMIC AGRICULTURAL ORIGIN SHOWCASE
-            ========================================================================= */}
-        <div className="mb-10">
-          <OriginShowcase
-            categoryName={currentCategory.name}
-            origin={currentCategory.origin}
-            onRequestQuote={() =>
-              onOpenAgroEnquiry(
-                currentCategory.origin.title,
-                currentCategory.origin.location,
-                'Bulk Export Specifications',
-                'quotation'
-              )
-            }
-            onExploreSpecs={() => {
-              if (currentCategory.origin.bulkSpecsLink.startsWith('#')) {
-                setFormatMode('agro');
-              } else {
-                window.location.href = currentCategory.origin.bulkSpecsLink;
-              }
-            }}
-          />
-        </div>
-
-        {/* =========================================================================
             SECTION E: PRODUCT FORMAT SWITCHER (Packaged vs Agro)
             ========================================================================= */}
-        <div className="mb-8">
+        <div className="mb-6">
           <ProductModeSwitcher
             currentMode={formatMode}
             onModeChange={(mode) => setFormatMode(mode)}
@@ -154,57 +115,76 @@ export default function UnifiedProductExplorer({
             agroCount={currentCategory.agriculturalProducts.length}
           />
 
-          {/* Section Sub-header & Carousel Controls */}
-          <div className="flex items-center justify-between mt-6 mb-4">
+          {/* Section Sub-header & Currency Switcher Bar */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-8 mb-6 pb-4 border-b border-white/10">
             <div>
               <h3 className="text-xl md:text-2xl font-heading font-medium text-[#F5F1E8]">
                 {formatMode === 'packaged'
                   ? `${currentCategory.name} Finished Products`
                   : `${currentCategory.name} Agricultural Commodities`}
               </h3>
-              <p className="text-xs font-mono text-[#A5A19A] mt-0.5">
+              <p className="text-xs font-mono text-[#A5A19A] mt-1">
                 {formatMode === 'packaged'
                   ? 'Airtight consumer tins, pouches and value-added retail formulations'
                   : 'Direct estate harvest lots, raw commodities, and custom export grades'}
               </p>
             </div>
 
-            {/* Desktop Carousel Navigation Arrows */}
-            <div className="hidden sm:flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handleScrollLeft}
-                aria-label="Scroll products left"
-                className="w-9 h-9 rounded-xl bg-[#151517] hover:bg-[#1F1F24] border border-[#29292D] hover:border-white/20 text-[#A5A19A] hover:text-white flex items-center justify-center transition-all cursor-pointer"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={handleScrollRight}
-                aria-label="Scroll products right"
-                className="w-9 h-9 rounded-xl bg-[#151517] hover:bg-[#1F1F24] border border-[#29292D] hover:border-white/20 text-[#A5A19A] hover:text-white flex items-center justify-center transition-all cursor-pointer"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
+            {/* Currency Selector (INR ₹ / USD $ / AED د.إ) */}
+            {formatMode === 'packaged' && (
+              <div className="inline-flex items-center gap-1 bg-[#141416] border border-[#29292D] p-1 rounded-xl self-start sm:self-auto shadow-sm">
+                <span className="text-[10px] font-mono text-neutral-400 px-2 uppercase font-medium">Currency:</span>
+                <button
+                  type="button"
+                  onClick={() => setCurrency('INR')}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                    currency === 'INR'
+                      ? 'bg-[#D4AF37] text-black shadow-sm'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
+                  title="Display prices in Indian Rupees (₹)"
+                >
+                  INR (₹)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCurrency('USD')}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                    currency === 'USD'
+                      ? 'bg-[#D4AF37] text-black shadow-sm'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
+                  title="Display prices in US Dollars ($)"
+                >
+                  USD ($)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCurrency('AED')}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                    currency === 'AED'
+                      ? 'bg-[#D4AF37] text-black shadow-sm'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
+                  title="Display prices in UAE Dirhams (د.إ)"
+                >
+                  AED (د.إ)
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
         {/* =========================================================================
-            PRODUCTS CONTAINER: Packaged vs Agro Grid / Carousel
+            VERTICAL MULTI-COLUMN PRODUCT LISTING GRID
+            Cards wrap into the next row vertically instead of hiding in a horizontal scroll
             ========================================================================= */}
-        <div
-          ref={productCardsScrollRef}
-          className="w-full flex items-stretch gap-4 md:gap-5 overflow-x-auto pb-4 pt-1 scrollbar-none snap-x"
-        >
+        <div className="w-full">
           {formatMode === 'packaged' ? (
-            currentCategory.packagedProducts.map((pkgProduct) => (
-              <div
-                key={pkgProduct.id}
-                className="w-[260px] md:w-[280px] lg:w-[285px] flex-shrink-0 snap-start flex flex-col"
-              >
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+              {currentCategory.packagedProducts.map((pkgProduct) => (
                 <RetailProductCard
+                  key={pkgProduct.id}
                   product={pkgProduct}
                   onOpenEnquiry={(pName) =>
                     onOpenAgroEnquiry(
@@ -215,23 +195,21 @@ export default function UnifiedProductExplorer({
                     )
                   }
                 />
-              </div>
-            ))
+              ))}
+            </div>
           ) : (
-            currentCategory.agriculturalProducts.map((agroCommodity) => (
-              <div
-                key={agroCommodity.id}
-                className="w-[280px] md:w-[300px] lg:w-[320px] flex-shrink-0 snap-start flex flex-col"
-              >
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {currentCategory.agriculturalProducts.map((agroCommodity) => (
                 <AgroProductCard
+                  key={agroCommodity.id}
                   commodity={agroCommodity}
                   onRequestQuote={(name, origin, form) =>
                     onOpenAgroEnquiry(name, origin, form, 'quotation')
                   }
                   onViewSpecs={handleViewSpecs}
                 />
-              </div>
-            ))
+              ))}
+            </div>
           )}
         </div>
 

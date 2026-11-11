@@ -5,6 +5,7 @@ import { PackagedProductItem } from '../../data/unifiedProductsCatalog';
 import { useRetailCart } from '../../context/RetailCartContext';
 
 interface RetailProductCardProps {
+  key?: React.Key;
   product: PackagedProductItem;
   onOpenEnquiry?: (productName: string) => void;
 }
@@ -16,8 +17,17 @@ export default function RetailProductCard({
   const { currency, openCart } = useRetailCart();
   const [isAdded, setIsAdded] = useState(false);
 
-  const price = currency === 'USD' ? product.priceUSD : product.priceAED;
-  const currencySymbol = currency === 'USD' ? '$' : 'AED ';
+  const getFormattedPrice = () => {
+    if (currency === 'USD') {
+      return `$${product.priceUSD.toFixed(2)}`;
+    }
+    if (currency === 'AED') {
+      return `AED ${product.priceAED.toFixed(0)}`;
+    }
+    // Default: INR with ₹ symbol
+    const inrValue = product.priceINR || Math.round(product.priceUSD * 85);
+    return `₹${inrValue.toLocaleString('en-IN')}`;
+  };
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -97,11 +107,9 @@ export default function RetailProductCard({
 
           <div className="flex items-center gap-2.5">
             {/* Price */}
-            {price > 0 && (
-              <span className="text-xs font-mono font-bold text-[#D4AF37]">
-                {currencySymbol}{price.toFixed(currency === 'USD' ? 2 : 0)}
-              </span>
-            )}
+            <span className="text-xs font-mono font-bold text-[#D4AF37]">
+              {getFormattedPrice()}
+            </span>
 
             {/* Quick Add / Purchase Bag Button */}
             <button

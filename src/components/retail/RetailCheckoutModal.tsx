@@ -20,6 +20,7 @@ export default function RetailCheckoutModal() {
   const {
     items,
     itemCount,
+    subtotalINR,
     subtotalUSD,
     subtotalAED,
     isFreeShipping,
@@ -36,7 +37,7 @@ export default function RetailCheckoutModal() {
     phone: '',
     address: '',
     city: '',
-    country: 'United Arab Emirates',
+    country: 'India',
     postalCode: '',
     paymentMethod: 'card' as 'card' | 'applepay' | 'invoice' | 'whatsapp',
     shippingSpeed: 'standard' as 'standard' | 'express',
@@ -52,15 +53,26 @@ export default function RetailCheckoutModal() {
 
   if (!isCheckoutOpen) return null;
 
-  const currentSubtotal = currency === 'USD' ? subtotalUSD : subtotalAED;
-  const currencySymbol = currency === 'USD' ? '$' : 'AED ';
+  const currentSubtotal = currency === 'INR' ? subtotalINR : currency === 'USD' ? subtotalUSD : subtotalAED;
+  const currencySymbol = currency === 'INR' ? '₹' : currency === 'USD' ? '$' : 'AED ';
 
   // Shipping cost
-  const standardShippingCost = isFreeShipping ? 0 : (currency === 'USD' ? 6 : 22);
-  const expressShippingCost = currency === 'USD' ? 14 : 52;
+  const standardShippingCost = isFreeShipping ? 0 : (currency === 'INR' ? 149 : currency === 'USD' ? 6 : 22);
+  const expressShippingCost = currency === 'INR' ? 349 : currency === 'USD' ? 14 : 52;
   const shippingCost = formData.shippingSpeed === 'express' ? expressShippingCost : standardShippingCost;
 
   const finalTotal = currentSubtotal + shippingCost;
+
+  const getItemPrice = (variant: typeof items[0]['variant']) => {
+    if (currency === 'INR') {
+      return ('priceINR' in variant && (variant as { priceINR?: number }).priceINR) || Math.round(variant.priceUSD * 85);
+    }
+    return currency === 'USD' ? variant.priceUSD : variant.priceAED;
+  };
+
+  const formatAmount = (val: number) => {
+    return currency === 'USD' ? val.toFixed(2) : Math.round(val).toLocaleString('en-IN');
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -93,7 +105,7 @@ export default function RetailCheckoutModal() {
     const generatedOrderId = `AURA-RET-${Math.floor(100000 + Math.random() * 900000)}`;
 
     const itemsSummary = items
-      .map((i) => `${i.product.name} (${i.variant.name}) x ${i.quantity} = ${currencySymbol}${(currency === 'USD' ? i.variant.priceUSD : i.variant.priceAED) * i.quantity}`)
+      .map((i) => `${i.product.name} (${i.variant.name}) x ${i.quantity} = ${currencySymbol}${formatAmount(getItemPrice(i.variant) * i.quantity)}`)
       .join('\n');
 
     // Submit telemetry and notification to central Aura Exports email (contact@auraexport.co)
@@ -115,7 +127,7 @@ export default function RetailCheckoutModal() {
           destination_country: formData.country,
           estimated_quantity: `${itemCount} items`,
           packaging: 'Airtight Sealed Metal Tins',
-          message: `RETAIL SPICE POWDER ORDER #${generatedOrderId}\n\nDelivery Address:\n${formData.fullName}\n${formData.address}, ${formData.city}\n${formData.country} - ${formData.postalCode}\nPhone: ${formData.phone}\n\nShipping: ${formData.shippingSpeed.toUpperCase()} (${currencySymbol}${shippingCost})\nPayment Selected: ${formData.paymentMethod.toUpperCase()}\n\nItems Ordered:\n${itemsSummary}\n\nOrder Total: ${currencySymbol}${finalTotal.toFixed(2)}`,
+          message: `RETAIL SPICE POWDER ORDER #${generatedOrderId}\n\nDelivery Address:\n${formData.fullName}\n${formData.address}, ${formData.city}\n${formData.country} - ${formData.postalCode}\nPhone: ${formData.phone}\n\nShipping: ${formData.shippingSpeed.toUpperCase()} (${currencySymbol}${formatAmount(shippingCost)})\nPayment Selected: ${formData.paymentMethod.toUpperCase()}\n\nItems Ordered:\n${itemsSummary}\n\nOrder Total: ${currencySymbol}${formatAmount(finalTotal)}`,
         },
       });
     } catch {
@@ -207,7 +219,7 @@ export default function RetailCheckoutModal() {
                 <div className="flex justify-between items-center pt-2 border-t border-white/10 text-sm">
                   <span className="text-neutral-300 font-heading">Total Paid:</span>
                   <span className="text-[#E2BC86] font-mono font-bold text-base">
-                    {currencySymbol}{finalTotal.toFixed(2)}
+                    {currencySymbol}{formatAmount(finalTotal)}
                   </span>
                 </div>
               </div>
@@ -595,7 +607,7 @@ export default function RetailCheckoutModal() {
                           <p className="text-[10px] text-neutral-500 font-mono">Qty: {item.quantity}</p>
                         </div>
                         <span className="font-mono text-white font-semibold shrink-0">
-                          {currencySymbol}{((currency === 'USD' ? item.variant.priceUSD : item.variant.priceAED) * item.quantity).toFixed(2)}
+                          {currencySymbol}{formatAmount(getItemPrice(item.variant) * item.quantity)}
                         </span>
                       </div>
                     ))}
@@ -605,12 +617,12 @@ export default function RetailCheckoutModal() {
                   <div className="space-y-2 pt-4 mt-4 border-t border-white/10 text-xs">
                     <div className="flex justify-between text-neutral-400">
                       <span>Subtotal</span>
-                      <span className="font-mono text-white">{currencySymbol}{currentSubtotal.toFixed(2)}</span>
+                      <span className="font-mono text-white">{currencySymbol}{formatAmount(currentSubtotal)}</span>
                     </div>
                     <div className="flex justify-between text-neutral-400">
                       <span>Express Air Shipping</span>
                       <span className="font-mono text-white">
-                        {shippingCost === 0 ? <span className="text-emerald-400">FREE</span> : `${currencySymbol}${shippingCost.toFixed(2)}`}
+                        {shippingCost === 0 ? <span className="text-emerald-400">FREE</span> : `${currencySymbol}${formatAmount(shippingCost)}`}
                       </span>
                     </div>
                     <div className="flex justify-between text-neutral-400">
@@ -620,7 +632,7 @@ export default function RetailCheckoutModal() {
                     <div className="flex justify-between text-base font-heading font-medium text-white pt-3 border-t border-white/15">
                       <span>Total Amount</span>
                       <span className="text-xl font-mono text-[#E2BC86] font-bold">
-                        {currencySymbol}{finalTotal.toFixed(2)}
+                        {currencySymbol}{formatAmount(finalTotal)}
                       </span>
                     </div>
                   </div>
@@ -640,7 +652,7 @@ export default function RetailCheckoutModal() {
                     ) : (
                       <span className="flex items-center gap-2">
                         <Lock className="w-4 h-4" />
-                        <span>Place Order • {currencySymbol}{finalTotal.toFixed(2)}</span>
+                        <span>Place Order • {currencySymbol}{formatAmount(finalTotal)}</span>
                         <ArrowRight className="w-4 h-4" />
                       </span>
                     )}

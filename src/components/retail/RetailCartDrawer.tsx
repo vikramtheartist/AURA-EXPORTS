@@ -18,10 +18,13 @@ export default function RetailCartDrawer() {
   const {
     items,
     itemCount,
+    subtotalINR,
     subtotalUSD,
     subtotalAED,
+    freeShippingThresholdINR,
     freeShippingThresholdUSD,
     isFreeShipping,
+    amountNeededForFreeShippingINR,
     amountNeededForFreeShippingUSD,
     isCartDrawerOpen,
     closeCart,
@@ -37,9 +40,9 @@ export default function RetailCartDrawer() {
 
   if (!isCartDrawerOpen) return null;
 
-  const currentSubtotal = currency === 'USD' ? subtotalUSD : subtotalAED;
-  const currencySymbol = currency === 'USD' ? '$' : 'AED ';
-  const shippingThreshold = currency === 'USD' ? freeShippingThresholdUSD : 275;
+  const currentSubtotal = currency === 'INR' ? subtotalINR : currency === 'USD' ? subtotalUSD : subtotalAED;
+  const currencySymbol = currency === 'INR' ? '₹' : currency === 'USD' ? '$' : 'AED ';
+  const shippingThreshold = currency === 'INR' ? freeShippingThresholdINR : currency === 'USD' ? freeShippingThresholdUSD : 275;
   const progressPercent = Math.min(100, Math.round((currentSubtotal / shippingThreshold) * 100));
 
   return (
@@ -74,10 +77,17 @@ export default function RetailCartDrawer() {
             <div className="flex items-center bg-white/5 border border-white/10 rounded-lg p-0.5 text-[11px] font-mono">
               <button
                 type="button"
+                onClick={() => setCurrency('INR')}
+                className={`px-2 py-0.5 rounded ${currency === 'INR' ? 'bg-[#dcb782] text-black font-bold' : 'text-neutral-400 hover:text-white'}`}
+              >
+                ₹ INR
+              </button>
+              <button
+                type="button"
                 onClick={() => setCurrency('USD')}
                 className={`px-2 py-0.5 rounded ${currency === 'USD' ? 'bg-[#dcb782] text-black font-bold' : 'text-neutral-400 hover:text-white'}`}
               >
-                USD
+                $ USD
               </button>
               <button
                 type="button"
@@ -112,9 +122,13 @@ export default function RetailCartDrawer() {
               ) : (
                 <span>
                   Add{' '}
-                  <strong className="text-white">
+                  <strong>
                     {currencySymbol}
-                    {currency === 'USD' ? amountNeededForFreeShippingUSD.toFixed(2) : (amountNeededForFreeShippingUSD * 3.67).toFixed(0)}
+                    {currency === 'INR'
+                      ? amountNeededForFreeShippingINR.toLocaleString('en-IN')
+                      : currency === 'USD'
+                        ? amountNeededForFreeShippingUSD.toFixed(2)
+                        : (amountNeededForFreeShippingUSD * 3.67).toFixed(0)}
                   </strong>{' '}
                   more for Free Worldwide Express Air Shipping
                 </span>
@@ -152,7 +166,11 @@ export default function RetailCartDrawer() {
             </div>
           ) : (
             items.map((item) => {
-              const itemPrice = currency === 'USD' ? item.variant.priceUSD : item.variant.priceAED;
+              const itemPrice = currency === 'INR' 
+                ? (('priceINR' in item.variant && (item.variant as { priceINR?: number }).priceINR) || Math.round(item.variant.priceUSD * 85))
+                : currency === 'USD' 
+                  ? item.variant.priceUSD 
+                  : item.variant.priceAED;
               const itemTotal = itemPrice * item.quantity;
 
               return (
@@ -217,7 +235,7 @@ export default function RetailCartDrawer() {
                       {/* Total for item */}
                       <div className="text-right">
                         <span className="text-sm font-mono font-bold text-white">
-                          {currencySymbol}{itemTotal.toFixed(currency === 'USD' ? 2 : 0)}
+                          {currencySymbol}{currency === 'USD' ? itemTotal.toFixed(2) : Math.round(itemTotal).toLocaleString('en-IN')}
                         </span>
                       </div>
                     </div>
@@ -256,7 +274,7 @@ export default function RetailCartDrawer() {
               <div className="flex justify-between text-xs text-neutral-400 font-body">
                 <span>Subtotal ({itemCount} items)</span>
                 <span className="font-mono text-white font-medium">
-                  {currencySymbol}{currentSubtotal.toFixed(currency === 'USD' ? 2 : 0)}
+                  {currencySymbol}{currency === 'USD' ? currentSubtotal.toFixed(2) : Math.round(currentSubtotal).toLocaleString('en-IN')}
                 </span>
               </div>
               <div className="flex justify-between text-xs text-neutral-400 font-body">
@@ -272,7 +290,7 @@ export default function RetailCartDrawer() {
               <div className="flex justify-between text-base font-heading font-medium text-white pt-2 border-t border-white/10">
                 <span>Estimated Total</span>
                 <span className="font-mono text-lg text-[#E2BC86] font-bold">
-                  {currencySymbol}{currentSubtotal.toFixed(currency === 'USD' ? 2 : 0)}
+                  {currencySymbol}{currency === 'USD' ? currentSubtotal.toFixed(2) : Math.round(currentSubtotal).toLocaleString('en-IN')}
                 </span>
               </div>
               <p className="text-[10px] text-neutral-500 font-light">

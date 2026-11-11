@@ -10,16 +10,19 @@ export interface CartItem {
   quantity: number;
 }
 
-export type CurrencyCode = 'USD' | 'AED';
+export type CurrencyCode = 'INR' | 'USD' | 'AED';
 
 interface RetailCartContextType {
   items: CartItem[];
   itemCount: number;
+  subtotalINR: number;
   subtotalUSD: number;
   subtotalAED: number;
+  freeShippingThresholdINR: number;
   freeShippingThresholdUSD: number;
   freeShippingThresholdAED: number;
   isFreeShipping: boolean;
+  amountNeededForFreeShippingINR: number;
   amountNeededForFreeShippingUSD: number;
   isCartDrawerOpen: boolean;
   isCheckoutOpen: boolean;
@@ -57,11 +60,11 @@ export const RetailCartProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [currency, setCurrencyState] = useState<CurrencyCode>(() => {
     try {
       const saved = localStorage.getItem(CURRENCY_STORAGE_KEY);
-      if (saved === 'AED' || saved === 'USD') return saved;
+      if (saved === 'INR' || saved === 'AED' || saved === 'USD') return saved;
     } catch {
       // fallback
     }
-    return 'USD';
+    return 'INR';
   });
 
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
@@ -84,15 +87,24 @@ export const RetailCartProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }
   };
 
+  const freeShippingThresholdINR = 1499;
   const freeShippingThresholdUSD = 75;
   const freeShippingThresholdAED = 275;
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
+  const subtotalINR = items.reduce((sum, item) => sum + (Math.round(item.variant.priceUSD * 85)) * item.quantity, 0);
   const subtotalUSD = items.reduce((sum, item) => sum + item.variant.priceUSD * item.quantity, 0);
   const subtotalAED = items.reduce((sum, item) => sum + item.variant.priceAED * item.quantity, 0);
 
-  const isFreeShipping = currency === 'USD' ? subtotalUSD >= freeShippingThresholdUSD : subtotalAED >= freeShippingThresholdAED;
+  const isFreeShipping = 
+    currency === 'INR' 
+      ? subtotalINR >= freeShippingThresholdINR 
+      : currency === 'USD' 
+        ? subtotalUSD >= freeShippingThresholdUSD 
+        : subtotalAED >= freeShippingThresholdAED;
+
+  const amountNeededForFreeShippingINR = Math.max(0, freeShippingThresholdINR - subtotalINR);
   const amountNeededForFreeShippingUSD = Math.max(0, freeShippingThresholdUSD - subtotalUSD);
 
   const openCart = () => setIsCartDrawerOpen(true);
@@ -160,11 +172,14 @@ export const RetailCartProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       value={{
         items,
         itemCount,
+        subtotalINR,
         subtotalUSD,
         subtotalAED,
+        freeShippingThresholdINR,
         freeShippingThresholdUSD,
         freeShippingThresholdAED,
         isFreeShipping,
+        amountNeededForFreeShippingINR,
         amountNeededForFreeShippingUSD,
         isCartDrawerOpen,
         isCheckoutOpen,

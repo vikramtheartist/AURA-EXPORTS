@@ -85,9 +85,17 @@ export default function RetailProductDetailPage() {
   if (!product) return null;
 
   const currentVariant = product.variants.find((v) => v.id === selectedVariantId) || product.variants[0];
-  const price = currency === 'USD' ? currentVariant.priceUSD : currentVariant.priceAED;
-  const compareAt = currency === 'USD' ? currentVariant.compareAtUSD : currentVariant.compareAtAED;
-  const currencySymbol = currency === 'USD' ? '$' : 'AED ';
+  const price = currency === 'INR' 
+    ? (('priceINR' in currentVariant && (currentVariant as { priceINR?: number }).priceINR) || Math.round(currentVariant.priceUSD * 85))
+    : currency === 'USD' 
+      ? currentVariant.priceUSD 
+      : currentVariant.priceAED;
+  const compareAt = currency === 'INR'
+    ? (currentVariant.compareAtUSD ? Math.round(currentVariant.compareAtUSD * 85) : undefined)
+    : currency === 'USD' 
+      ? currentVariant.compareAtUSD 
+      : currentVariant.compareAtAED;
+  const currencySymbol = currency === 'INR' ? '₹' : currency === 'USD' ? '$' : 'AED ';
 
   const handleAddToCart = () => {
     addToCart(product, selectedVariantId, quantity);
@@ -212,16 +220,16 @@ export default function RetailProductDetailPage() {
             <div className="space-y-1.5">
               <div className="flex items-baseline gap-3">
                 <span className="text-3xl md:text-4xl font-heading font-bold text-white font-mono">
-                  {currencySymbol}{price.toFixed(currency === 'USD' ? 2 : 0)}
+                  {currencySymbol}{currency === 'USD' ? price.toFixed(2) : Math.round(price).toLocaleString('en-IN')}
                 </span>
                 {compareAt && (
                   <span className="text-lg font-mono text-neutral-500 line-through">
-                    {currencySymbol}{compareAt.toFixed(currency === 'USD' ? 2 : 0)}
+                    {currencySymbol}{currency === 'USD' ? compareAt.toFixed(2) : Math.round(compareAt).toLocaleString('en-IN')}
                   </span>
                 )}
                 {compareAt && (
                   <span className="text-xs font-mono bg-emerald-500/15 text-emerald-400 px-2.5 py-1 rounded-md font-bold">
-                    Save {currencySymbol}{(compareAt - price).toFixed(currency === 'USD' ? 2 : 0)}
+                    Save {currencySymbol}{currency === 'USD' ? (compareAt - price).toFixed(2) : Math.round(compareAt - price).toLocaleString('en-IN')}
                   </span>
                 )}
               </div>
@@ -253,7 +261,11 @@ export default function RetailProductDetailPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {product.variants.map((variant) => {
                   const isSelected = variant.id === selectedVariantId;
-                  const vPrice = currency === 'USD' ? variant.priceUSD : variant.priceAED;
+                  const vPrice = currency === 'INR'
+                    ? (('priceINR' in variant && (variant as { priceINR?: number }).priceINR) || Math.round(variant.priceUSD * 85))
+                    : currency === 'USD'
+                      ? variant.priceUSD
+                      : variant.priceAED;
 
                   return (
                     <button
@@ -274,7 +286,7 @@ export default function RetailProductDetailPage() {
                           {variant.weightGrams}g Net
                         </span>
                         <span className="text-xs font-mono font-bold text-[#E2BC86]">
-                          {currencySymbol}{vPrice.toFixed(currency === 'USD' ? 2 : 0)}
+                          {currencySymbol}{currency === 'USD' ? vPrice.toFixed(2) : Math.round(vPrice).toLocaleString('en-IN')}
                         </span>
                       </div>
                     </button>
@@ -327,7 +339,7 @@ export default function RetailProductDetailPage() {
                 className="w-full py-4 px-6 bg-gradient-to-r from-[#dcb782] to-[#E2BC86] hover:from-[#c9a26d] hover:to-[#d4a86a] text-black font-body font-bold text-xs uppercase tracking-wider rounded-xl shadow-[0_6px_25px_rgba(220,183,130,0.35)] flex items-center justify-center gap-2 cursor-pointer transition-all hover:scale-[1.01]"
               >
                 <Lock className="w-4 h-4" />
-                <span>Instant Checkout • {currencySymbol}{(price * quantity).toFixed(currency === 'USD' ? 2 : 0)}</span>
+                <span>Instant Checkout • {currencySymbol}{currency === 'USD' ? (price * quantity).toFixed(2) : Math.round(price * quantity).toLocaleString('en-IN')}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -526,7 +538,7 @@ export default function RetailProductDetailPage() {
                           <span className="text-[11px] text-neutral-400 font-mono mt-0.5 block">{m.estDays}</span>
                         </div>
                         <span className="text-xs font-mono font-bold text-[#E2BC86] mt-2">
-                          {currencySymbol}{currency === 'USD' ? m.priceUSD : m.priceAED}
+                          {currencySymbol}{currency === 'INR' ? Math.round(m.priceUSD * 85).toLocaleString('en-IN') : currency === 'USD' ? m.priceUSD : m.priceAED}
                         </span>
                       </div>
                     ))}
@@ -669,7 +681,7 @@ export default function RetailProductDetailPage() {
                     <Link to={`/products/agro-products/retail/${rel.slug}`}>{rel.name}</Link>
                   </h4>
                   <p className="text-xs font-mono text-white font-bold">
-                    {currencySymbol}{currency === 'USD' ? rel.variants[0].priceUSD : rel.variants[0].priceAED}
+                    {currencySymbol}{currency === 'INR' ? (('priceINR' in rel.variants[0] && (rel.variants[0] as { priceINR?: number }).priceINR) || Math.round(rel.variants[0].priceUSD * 85)).toLocaleString('en-IN') : currency === 'USD' ? rel.variants[0].priceUSD : rel.variants[0].priceAED}
                   </p>
                 </div>
                 <Link
@@ -704,7 +716,7 @@ export default function RetailProductDetailPage() {
                   {product.name}
                 </h4>
                 <p className="text-[11px] font-mono text-[#dcb782] truncate">
-                  {currentVariant.name} • {currencySymbol}{(price * quantity).toFixed(currency === 'USD' ? 2 : 0)}
+                  {currentVariant.name} • {currencySymbol}{currency === 'USD' ? (price * quantity).toFixed(2) : Math.round(price * quantity).toLocaleString('en-IN')}
                 </p>
               </div>
             </div>

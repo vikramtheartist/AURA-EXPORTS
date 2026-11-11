@@ -4,6 +4,7 @@ import { Package, ShieldCheck, ArrowRight, FileText, MapPin } from 'lucide-react
 import { AgroCommodityItem } from '../../data/unifiedProductsCatalog';
 
 interface AgroProductCardProps {
+  key?: React.Key;
   commodity: AgroCommodityItem;
   onRequestQuote: (commodityName: string, origin: string, form: string) => void;
   onViewSpecs: (commodity: AgroCommodityItem) => void;
