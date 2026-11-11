@@ -176,12 +176,12 @@ export default function UnifiedProductExplorer({
         </div>
 
         {/* =========================================================================
-            VERTICAL MULTI-COLUMN PRODUCT LISTING GRID
-            Cards wrap into the next row vertically instead of hiding in a horizontal scroll
+            VERTICAL 3-COLUMN PRODUCT LISTING GRID
+            Exact equal sizing, 3 tiles each row, generous luxury empty space & consistency
             ========================================================================= */}
         <div className="w-full">
           {formatMode === 'packaged' ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {currentCategory.packagedProducts.map((pkgProduct) => (
                 <RetailProductCard
                   key={pkgProduct.id}
@@ -198,7 +198,7 @@ export default function UnifiedProductExplorer({
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {currentCategory.agriculturalProducts.map((agroCommodity) => (
                 <AgroProductCard
                   key={agroCommodity.id}
