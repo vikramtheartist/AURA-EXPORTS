@@ -3,17 +3,18 @@ import { Link } from 'react-router-dom';
 import { 
   Sprout, 
   ArrowRight, 
-  ArrowUpRight, 
   ShieldCheck, 
   CheckCircle2, 
-  Layers, 
-  Search, 
+  PackageCheck, 
+  Globe, 
   Sparkles,
   MapPin,
-  HelpCircle
+  FileText
 } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import Breadcrumbs from '../components/procurement/Breadcrumbs';
+import UnifiedProductExplorer from '../components/products/UnifiedProductExplorer';
+import TechnicalSpecDrawer from '../components/agro/TechnicalSpecDrawer';
 import FeaturedTurmericSection from '../components/agro/FeaturedTurmericSection';
 import OriginSourcingSection from '../components/agro/OriginSourcingSection';
 import QualityCustomisationSection from '../components/agro/QualityCustomisationSection';
@@ -21,10 +22,9 @@ import ExportProcessSteps from '../components/agro/ExportProcessSteps';
 import FinalEnquirySection from '../components/agro/FinalEnquirySection';
 import AgroEnquiryModal from '../components/agro/AgroEnquiryModal';
 import FloatingQuickContact from '../components/agro/FloatingQuickContact';
+import { InstitutionalProduct } from '../data/institutionalAgroCatalog';
 
-import InstitutionalAgroCatalogueSection from '../components/agro/InstitutionalAgroCatalogueSection';
-import RetailSpicePowdersSection from '../components/agro/RetailSpicePowdersSection';
-import agroHeroImg from '../assets/images/agro_products_hero.jpg';
+import heroTurmericBowlImg from '../assets/images/explorer/hero_turmeric_bowl.jpg';
 
 export default function AgroProductsPage() {
   // Modal State
@@ -40,6 +40,9 @@ export default function AgroProductsPage() {
     form: 'Standard Export Grade',
     inquiryType: 'quotation',
   });
+
+  // Technical Drawer State
+  const [selectedProductForDrawer, setSelectedProductForDrawer] = useState<InstitutionalProduct | null>(null);
 
   const handleOpenEnquiry = (
     productName: string = 'Agricultural Sourcing',
@@ -57,7 +60,7 @@ export default function AgroProductsPage() {
   };
 
   return (
-    <div className="w-full pt-28 pb-24 bg-[#0a0a09] text-white" id="agro-products-landing">
+    <div className="w-full pt-28 pb-24 bg-[#0A0A0B] text-white" id="agro-products-landing">
       <SEOHead pageKey="agroProducts" />
 
       {/* Semantic Breadcrumbs */}
@@ -65,100 +68,118 @@ export default function AgroProductsPage() {
         items={[
           { label: 'Home', href: '/' },
           { label: 'Products', href: '/products' },
-          { label: 'Agro Products', href: '/products/agro-products' },
+          { label: 'Agro Products & Origins', href: '/products/agro-products' },
         ]}
       />
 
       {/* =========================================================================
-          SECTION 01 — HERO
+          SECTION B — PREMIUM HERO (Editorial Indian Sourcing & Export Enterprise)
           ========================================================================= */}
-      <header className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-20" id="agro-hero">
+      <header className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-16" id="agro-hero">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
           {/* Left Hero Content */}
           <div className="lg:col-span-7 flex flex-col gap-6">
-            <div className="inline-flex items-center gap-2 bg-white/5 border border-[#dcb782]/25 rounded-full px-4 py-1.5 w-fit shadow-sm">
-              <Sprout className="h-3.5 w-3.5 text-[#dcb782]" />
-              <span className="text-[11px] font-mono text-[#dcb782] tracking-[0.2em] uppercase font-bold">
-                AURA EXPORTS / AGRO PRODUCTS
+            <div className="inline-flex items-center gap-2 bg-[#151517] border border-[#D4AF37]/30 rounded-full px-4 py-1.5 w-fit shadow-sm">
+              <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" />
+              <span className="text-[11px] font-mono text-[#D4AF37] tracking-[0.25em] uppercase font-bold">
+                INDIA&apos;S FINEST ORIGINS
               </span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading text-white tracking-tight leading-[1.06] font-normal">
-              India&apos;s Finest Origins.{' '}
-              <span className="text-[#dcb782] italic font-normal block mt-1">
-                Sourced for the World.
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading text-[#F5F1E8] tracking-tight leading-[1.08] font-normal">
+              Pure Gourmet Spice Powders.{' '}
+              <span className="text-[#D4AF37] italic font-normal block mt-1">
+                Packed for Worldwide Pantry & Retail.
               </span>
             </h1>
 
-            <p className="text-[#D5C8B7] font-body text-base md:text-lg leading-relaxed font-light max-w-2xl">
-              Discover quality agricultural products sourced from India&apos;s established growing regions, with flexible product forms, buyer-specific specifications and customised export solutions.
+            <p className="text-[#A5A19A] font-body text-base md:text-lg leading-relaxed font-light max-w-2xl">
+              A curated portfolio of premium spices, agro products and natural ingredients from India&apos;s finest sourcing regions. Sourced with batch traceability, certified testing, and flexible packaging from retail tins to full container loads.
             </p>
 
+            {/* 4 Compact Value Propositions */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 border-t border-white/10">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-[#D4AF37]/10 border border-[#D4AF37]/20 flex items-center justify-center shrink-0">
+                  <Sprout className="w-4 h-4 text-[#D4AF37]" />
+                </div>
+                <div className="text-xs font-mono text-white font-medium">
+                  Single-Origin Sourcing
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-[#D4AF37]/10 border border-[#D4AF37]/20 flex items-center justify-center shrink-0">
+                  <ShieldCheck className="w-4 h-4 text-[#D4AF37]" />
+                </div>
+                <div className="text-xs font-mono text-white font-medium">
+                  Export-Grade Quality
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-[#D4AF37]/10 border border-[#D4AF37]/20 flex items-center justify-center shrink-0">
+                  <PackageCheck className="w-4 h-4 text-[#D4AF37]" />
+                </div>
+                <div className="text-xs font-mono text-white font-medium">
+                  Flexible Packaging
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-[#D4AF37]/10 border border-[#D4AF37]/20 flex items-center justify-center shrink-0">
+                  <Globe className="w-4 h-4 text-[#D4AF37]" />
+                </div>
+                <div className="text-xs font-mono text-white font-medium">
+                  Global Compliance
+                </div>
+              </div>
+            </div>
+
+            {/* Hero CTAs */}
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <a
-                href="#retail-spices-powders-collection"
-                className="bg-[#E2BC86] hover:bg-[#d4a86a] text-[#0A0A0B] transition-all font-body font-bold text-xs tracking-wider uppercase px-7 py-4 rounded-xl shadow-sm flex items-center gap-2 cursor-pointer hover:shadow-[0_8px_20px_rgba(226,188,134,0.25)]"
+                href="#unified-product-explorer"
+                className="bg-gradient-to-r from-[#D4AF37] to-[#E5C07B] hover:from-[#c5a02e] hover:to-[#d6b068] text-[#0A0A0B] transition-all font-body font-bold text-xs tracking-wider uppercase px-8 py-4 rounded-xl shadow-lg flex items-center gap-2 cursor-pointer hover:scale-[1.01]"
               >
-                <span>Shop Retail Spice Tins</span>
+                <span>Explore Products & Origins</span>
                 <ArrowRight className="h-4 w-4" />
-              </a>
-
-              <a
-                href="#explore-agricultural-products"
-                className="border border-white/20 hover:border-white/40 text-white hover:bg-white/5 transition-all font-body font-bold text-xs tracking-wider uppercase px-6 py-4 rounded-xl flex items-center gap-2 cursor-pointer"
-              >
-                <span>Bulk Agro Commodities</span>
               </a>
 
               <button
                 type="button"
-                onClick={() => handleOpenEnquiry('General Agro Sourcing', 'India', 'Export Grade', 'quotation')}
-                className="border border-[#252527] hover:border-white/30 text-neutral-300 hover:text-white hover:bg-white/5 transition-all font-body font-bold text-xs tracking-wider uppercase px-6 py-4 rounded-xl flex items-center gap-2 cursor-pointer"
+                onClick={() => handleOpenEnquiry('Export Commodity Portfolio', 'India', 'Full Container Load / Retail', 'quotation')}
+                className="border border-[#29292D] hover:border-white/30 bg-[#151517] text-white hover:bg-white/5 transition-all font-body font-bold text-xs tracking-wider uppercase px-7 py-4 rounded-xl flex items-center gap-2 cursor-pointer"
               >
-                <span>Request B2B RFQ</span>
-                <ArrowUpRight className="h-4 w-4 text-[#E2BC86]" />
+                <span>Request Export Quote</span>
+                <FileText className="h-4 w-4 text-[#D4AF37]" />
               </button>
             </div>
 
-            {/* Quick Sourcing Credentials */}
-            <div className="grid grid-cols-3 gap-4 pt-6 border-t border-white/10 mt-2">
-              <div className="flex flex-col">
-                <span className="text-[10px] font-mono text-[#ab8558] uppercase font-bold">Sourcing Origin</span>
-                <span className="text-sm font-semibold text-white mt-0.5">South India & Pan-India</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[10px] font-mono text-[#ab8558] uppercase font-bold">Product Formats</span>
-                <span className="text-sm font-semibold text-white mt-0.5">Raw, Milled & Pastes</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[10px] font-mono text-[#ab8558] uppercase font-bold">Export Corridors</span>
-                <span className="text-sm font-semibold text-white mt-0.5">Chennai, Tuticorin & Cochin</span>
-              </div>
-            </div>
           </div>
 
           {/* Right Hero Visual Column */}
           <div className="lg:col-span-5 relative w-full flex justify-center">
-            <div className="absolute -inset-4 bg-gradient-to-tr from-[#dcb782]/20 via-transparent to-transparent rounded-[2.5rem] blur-2xl opacity-50 pointer-events-none" />
-            <div className="relative rounded-[2.2rem] overflow-hidden border border-white/10 shadow-[0_30px_70px_rgba(0,0,0,0.9)] aspect-[4/3] w-full bg-[#121211]">
+            <div className="absolute -inset-4 bg-gradient-to-tr from-[#D4AF37]/20 via-transparent to-transparent rounded-[2.5rem] blur-2xl opacity-60 pointer-events-none" />
+            <div className="relative rounded-[2.2rem] overflow-hidden border border-white/10 shadow-[0_30px_70px_rgba(0,0,0,0.95)] aspect-[4/3] w-full bg-[#111113] group">
               <img
-                src={agroHeroImg}
-                alt="Aura Exports - Indian Agricultural Products Export Assortment"
-                className="w-full h-full object-cover"
+                src={heroTurmericBowlImg}
+                alt="Aura Exports - Pure Gourmet Spices & Agricultural Commodities"
+                className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
                 loading="eager"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
-              <div className="absolute bottom-5 left-5 right-5 backdrop-blur-md bg-black/60 border border-white/10 rounded-2xl p-4 flex items-center justify-between">
+              <div className="absolute bottom-5 left-5 right-5 backdrop-blur-md bg-black/65 border border-white/10 rounded-2xl p-4 flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] font-mono text-[#dcb782] tracking-wider uppercase font-bold block">
-                    B2B & RETAIL EXPORT GRADE
+                  <span className="text-[10px] font-mono text-[#D4AF37] tracking-[0.2em] uppercase font-bold block">
+                    TRACEABLE BATCH QUALITY
                   </span>
                   <span className="text-xs text-white font-medium">
-                    Airtight Tins · Turmeric · Tellicherry · Cardamom · Rice
+                    Salem Turmeric · Malabar Pepper · Alleppey Cardamom · Guntur Chilli
                   </span>
                 </div>
-                <ShieldCheck className="h-5 w-5 text-[#dcb782] shrink-0" />
+                <ShieldCheck className="h-5 w-5 text-[#D4AF37] shrink-0" />
               </div>
             </div>
           </div>
@@ -167,16 +188,24 @@ export default function AgroProductsPage() {
       </header>
 
       {/* =========================================================================
-          SECTION 02 — RETAIL & CONSUMER-PACKAGED SPICES POWDER COLLECTION
-          Modeled after Scandinavian gourmet boutique Krydderverket
+          SECTION C–G — UNIFIED AGRICULTURAL COMMODITIES & GOURMET PRODUCTS EXPLORER
+          Consolidates Retail Tins & Wholesale Commodities into One Dynamic Discovery System
           ========================================================================= */}
-      <RetailSpicePowdersSection />
+      <UnifiedProductExplorer
+        onOpenAgroEnquiry={handleOpenEnquiry}
+        onOpenSpecDrawer={(product) => setSelectedProductForDrawer(product)}
+      />
 
-      {/* =========================================================================
-          SECTION 03 — INSTITUTIONAL AGRO COMMODITIES CATALOGUE
-          3-tile grid for core commodities with technical drawer & RFQ modal
-          ========================================================================= */}
-      <InstitutionalAgroCatalogueSection />
+      {/* TECHNICAL SPECIFICATION DRAWER */}
+      <TechnicalSpecDrawer
+        product={selectedProductForDrawer}
+        isOpen={!!selectedProductForDrawer}
+        onClose={() => setSelectedProductForDrawer(null)}
+        onRequestQuotation={(product) => {
+          setSelectedProductForDrawer(null);
+          handleOpenEnquiry(product.name, product.origin.displayOrigin, product.grade, 'quotation');
+        }}
+      />
 
       {/* =========================================================================
           SECTION 03 — FEATURED PRODUCT: TURMERIC FROM TAMIL NADU
