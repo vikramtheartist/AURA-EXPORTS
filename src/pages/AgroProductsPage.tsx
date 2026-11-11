@@ -23,6 +23,7 @@ import AgroEnquiryModal from '../components/agro/AgroEnquiryModal';
 import FloatingQuickContact from '../components/agro/FloatingQuickContact';
 
 import InstitutionalAgroCatalogueSection from '../components/agro/InstitutionalAgroCatalogueSection';
+import RetailSpicePowdersSection from '../components/agro/RetailSpicePowdersSection';
 import agroHeroImg from '../assets/images/agro_products_hero.jpg';
 
 export default function AgroProductsPage() {
@@ -96,19 +97,26 @@ export default function AgroProductsPage() {
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <a
-                href="#explore-agricultural-products"
-                className="bg-[#E2BC86] hover:bg-[#d4a86a] text-[#0A0A0B] transition-all font-body font-bold text-xs tracking-wider uppercase px-8 py-4 rounded-xl shadow-sm flex items-center gap-2.5 cursor-pointer hover:shadow-[0_8px_20px_rgba(226,188,134,0.25)]"
+                href="#retail-spices-powders-collection"
+                className="bg-[#E2BC86] hover:bg-[#d4a86a] text-[#0A0A0B] transition-all font-body font-bold text-xs tracking-wider uppercase px-7 py-4 rounded-xl shadow-sm flex items-center gap-2 cursor-pointer hover:shadow-[0_8px_20px_rgba(226,188,134,0.25)]"
               >
-                <span>Explore Our Products</span>
+                <span>Shop Retail Spice Tins</span>
                 <ArrowRight className="h-4 w-4" />
+              </a>
+
+              <a
+                href="#explore-agricultural-products"
+                className="border border-white/20 hover:border-white/40 text-white hover:bg-white/5 transition-all font-body font-bold text-xs tracking-wider uppercase px-6 py-4 rounded-xl flex items-center gap-2 cursor-pointer"
+              >
+                <span>Bulk Agro Commodities</span>
               </a>
 
               <button
                 type="button"
                 onClick={() => handleOpenEnquiry('General Agro Sourcing', 'India', 'Export Grade', 'quotation')}
-                className="border border-[#252527] hover:border-white/30 text-white hover:bg-white/5 transition-all font-body font-bold text-xs tracking-wider uppercase px-7 py-4 rounded-xl flex items-center gap-2 cursor-pointer"
+                className="border border-[#252527] hover:border-white/30 text-neutral-300 hover:text-white hover:bg-white/5 transition-all font-body font-bold text-xs tracking-wider uppercase px-6 py-4 rounded-xl flex items-center gap-2 cursor-pointer"
               >
-                <span>Request a Quotation</span>
+                <span>Request B2B RFQ</span>
                 <ArrowUpRight className="h-4 w-4 text-[#E2BC86]" />
               </button>
             </div>
@@ -144,10 +152,10 @@ export default function AgroProductsPage() {
               <div className="absolute bottom-5 left-5 right-5 backdrop-blur-md bg-black/60 border border-white/10 rounded-2xl p-4 flex items-center justify-between">
                 <div>
                   <span className="text-[10px] font-mono text-[#dcb782] tracking-wider uppercase font-bold block">
-                    B2B AGRICULTURAL EXPORT
+                    B2B & RETAIL EXPORT GRADE
                   </span>
                   <span className="text-xs text-white font-medium">
-                    Spices · Turmeric · Cardamom · Chillies · Produce
+                    Airtight Tins · Turmeric · Tellicherry · Cardamom · Rice
                   </span>
                 </div>
                 <ShieldCheck className="h-5 w-5 text-[#dcb782] shrink-0" />
@@ -159,8 +167,14 @@ export default function AgroProductsPage() {
       </header>
 
       {/* =========================================================================
-          SECTION 02 — INSTITUTIONAL AGRO COMMODITIES CATALOGUE
-          3-tile grid for 6 core commodities with technical drawer & RFQ modal
+          SECTION 02 — RETAIL & CONSUMER-PACKAGED SPICES POWDER COLLECTION
+          Modeled after Scandinavian gourmet boutique Krydderverket
+          ========================================================================= */}
+      <RetailSpicePowdersSection />
+
+      {/* =========================================================================
+          SECTION 03 — INSTITUTIONAL AGRO COMMODITIES CATALOGUE
+          3-tile grid for core commodities with technical drawer & RFQ modal
           ========================================================================= */}
       <InstitutionalAgroCatalogueSection />
 

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowUpRight, Menu, X, ChevronDown, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Menu, X, ChevronDown, Sparkles, ShoppingBag } from 'lucide-react';
 import logoImg from '../assets/images/regenerated_image_1783707679777.png';
 import { useQuoteModal } from '../context/QuoteModalContext';
+import { useRetailCart } from '../context/RetailCartContext';
 
 interface NavbarProps {
   onNavigate?: (sectionId: string) => void;
@@ -20,6 +21,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const { openQuoteModal } = useQuoteModal();
+  const { openCart, itemCount } = useRetailCart();
 
   const handleLogoError = () => {
     setUseFallbackSvg(true);
@@ -220,6 +222,14 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                             className="hover:text-white transition-colors"
                           >
                             • Rice & Specialty Grains
+                          </Link>
+                          <Link 
+                            to="/products/agro-products#retail-spices-powders-collection"
+                            onClick={() => setIsProductsDropdownOpen(false)}
+                            className="text-[#dcb782] hover:text-white transition-colors font-medium flex items-center justify-between"
+                          >
+                            <span>• Gourmet Spice Powders (Retail Tins)</span>
+                            <span className="text-[9px] bg-[#dcb782]/20 text-[#dcb782] px-1.5 py-0.2 rounded font-mono font-bold">SHOP</span>
                           </Link>
                         </div>
 
@@ -447,8 +457,23 @@ export default function Navbar({ onNavigate }: NavbarProps) {
           })}
         </div>
 
-        {/* Right Side: Primary B2B CTA "Request a Quote" */}
+        {/* Right Side: Cart & Primary B2B CTA */}
         <div className="hidden lg:flex items-center gap-3 ml-5">
+          {/* Shopping Cart Trigger Button */}
+          <button
+            type="button"
+            onClick={openCart}
+            className="relative flex items-center justify-center w-11 h-11 rounded-xl bg-white/5 border border-white/10 hover:border-[#dcb782]/50 text-white hover:text-[#dcb782] transition-all cursor-pointer shadow-sm hover:bg-white/10"
+            aria-label={`Open Shopping Cart, ${itemCount} items`}
+          >
+            <ShoppingBag className="w-5 h-5" />
+            {itemCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 bg-[#dcb782] text-black text-[10px] font-mono font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-md animate-scale-in">
+                {itemCount}
+              </span>
+            )}
+          </button>
+
           <button
             type="button"
             onClick={() => openQuoteModal()}
@@ -460,15 +485,31 @@ export default function Navbar({ onNavigate }: NavbarProps) {
           </button>
         </div>
 
-        {/* Mobile Hamburger toggle */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="lg:hidden flex items-center justify-center text-white bg-black/40 border border-[#dcb782]/20 hover:bg-white/5 h-11 w-11 rounded-full cursor-pointer transition-colors backdrop-blur-md"
-          id="mobile-nav-toggle"
-          aria-label="Toggle navigation menu"
-        >
-          {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        {/* Mobile controls: Cart + Hamburger */}
+        <div className="lg:hidden flex items-center gap-2">
+          <button
+            type="button"
+            onClick={openCart}
+            className="relative flex items-center justify-center text-white bg-black/40 border border-[#dcb782]/20 hover:bg-white/5 h-11 w-11 rounded-full cursor-pointer transition-colors backdrop-blur-md"
+            aria-label={`Open Cart, ${itemCount} items`}
+          >
+            <ShoppingBag className="h-5 h-5 text-[#dcb782]" />
+            {itemCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-[#dcb782] text-black text-[10px] font-mono font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                {itemCount}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex items-center justify-center text-white bg-black/40 border border-[#dcb782]/20 hover:bg-white/5 h-11 w-11 rounded-full cursor-pointer transition-colors backdrop-blur-md"
+            id="mobile-nav-toggle"
+            aria-label="Toggle navigation menu"
+          >
+            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile Drawer menu */}
@@ -513,6 +554,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                             <Link to="/products/agro-products/fresh-drumsticks" onClick={() => setIsOpen(false)}>• Fresh Agricultural Produce</Link>
                             <Link to="/products/agro-products/moringa-leaf-powder" onClick={() => setIsOpen(false)}>• Moringa & Natural Botanicals</Link>
                             <Link to="/products/agro-products/rice-basmati-non-basmati" onClick={() => setIsOpen(false)}>• Rice & Specialty Grains</Link>
+                            <Link to="/products/agro-products#retail-spices-powders-collection" onClick={() => setIsOpen(false)} className="text-[#dcb782] font-semibold">• Gourmet Spice Powders (Retail Tins) ★</Link>
                           </div>
                         </div>
 

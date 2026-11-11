@@ -5,13 +5,17 @@ import CtaFooter from './components/CtaFooter';
 import ScrollToTop from './components/ScrollToTop';
 import AnalyticsProvider from './components/AnalyticsProvider';
 import { QuoteModalProvider } from './context/QuoteModalContext';
+import { RetailCartProvider } from './context/RetailCartContext';
 import RequestQuoteModal from './components/procurement/RequestQuoteModal';
+import RetailCartDrawer from './components/retail/RetailCartDrawer';
+import RetailCheckoutModal from './components/retail/RetailCheckoutModal';
 
 import HomePage from './pages/HomePage';
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const ProductsPage = lazy(() => import('./pages/ProductsPage'));
 const AgroProductsPage = lazy(() => import('./pages/AgroProductsPage'));
 const ProductDetailPage = lazy(() => import('./pages/ProductDetailPage'));
+const RetailProductDetailPage = lazy(() => import('./pages/RetailProductDetailPage'));
 const SpicesCategoryPage = lazy(() => import('./pages/SpicesCategoryPage'));
 const TurmericDetailPage = lazy(() => import('./pages/TurmericDetailPage'));
 const TurmericFlagshipPage = lazy(() => import('./pages/TurmericFlagshipPage'));
@@ -49,32 +53,38 @@ function RouteLoadingFallback() {
 
 export default function App() {
   return (
-    <QuoteModalProvider>
-      <div className="relative w-full min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden" id="app-root-container">
-        {/* Background spatial aesthetic */}
-        <div className="absolute inset-0 bg-[radial-gradient(#ffffff08_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-30" />
-        <div className="absolute top-[20%] left-[-10%] w-[50vw] h-[50vw] bg-neutral-900/40 rounded-full blur-[160px] pointer-events-none" />
-        <div className="absolute top-[60%] right-[-10%] w-[50vw] h-[50vw] bg-neutral-900/30 rounded-full blur-[160px] pointer-events-none" />
+    <RetailCartProvider>
+      <QuoteModalProvider>
+        <div className="relative w-full min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden" id="app-root-container">
+          {/* Background spatial aesthetic */}
+          <div className="absolute inset-0 bg-[radial-gradient(#ffffff08_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-30" />
+          <div className="absolute top-[20%] left-[-10%] w-[50vw] h-[50vw] bg-neutral-900/40 rounded-full blur-[160px] pointer-events-none" />
+          <div className="absolute top-[60%] right-[-10%] w-[50vw] h-[50vw] bg-neutral-900/30 rounded-full blur-[160px] pointer-events-none" />
 
-        {/* Global Request a Quote Modal */}
-        <RequestQuoteModal />
+          {/* Global Request a Quote Modal */}
+          <RequestQuoteModal />
 
-        {/* Core layout */}
-        <div className="relative z-10 flex flex-col w-full">
-          <ScrollToTop />
-          <AnalyticsProvider />
-          <Navbar />
+          {/* Global Retail Gourmet Cart Drawer & Checkout */}
+          <RetailCartDrawer />
+          <RetailCheckoutModal />
 
-          <div className="w-full flex-grow">
-            <Suspense fallback={<RouteLoadingFallback />}>
-              <Routes>
-                {/* Primary Canonical Pages */}
-                <Route path="/" element={<HomePage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/products" element={<ProductsPage />} />
-                <Route path="/products/agro-products" element={<AgroProductsPage />} />
-                <Route path="/products/agro-products/turmeric" element={<TurmericFlagshipPage />} />
-                <Route path="/products/agro-products/:productSlug" element={<ProductDetailPage />} />
+          {/* Core layout */}
+          <div className="relative z-10 flex flex-col w-full">
+            <ScrollToTop />
+            <AnalyticsProvider />
+            <Navbar />
+
+            <div className="w-full flex-grow">
+              <Suspense fallback={<RouteLoadingFallback />}>
+                <Routes>
+                  {/* Primary Canonical Pages */}
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="/products" element={<ProductsPage />} />
+                  <Route path="/products/agro-products" element={<AgroProductsPage />} />
+                  <Route path="/products/agro-products/turmeric" element={<TurmericFlagshipPage />} />
+                  <Route path="/products/agro-products/retail/:productSlug" element={<RetailProductDetailPage />} />
+                  <Route path="/products/agro-products/:productSlug" element={<ProductDetailPage />} />
                 <Route path="/products/fashion-lifestyle" element={<FashionLifestylePage />} />
                 <Route path="/products/fashion-lifestyle/:productSlug" element={<ProductDetailPage />} />
                 <Route path="/products/apparel-textiles" element={<ApparelTextilesPage />} />
@@ -118,6 +128,7 @@ export default function App() {
           <CtaFooter />
         </div>
       </div>
-    </QuoteModalProvider>
+      </QuoteModalProvider>
+    </RetailCartProvider>
   );
 }
