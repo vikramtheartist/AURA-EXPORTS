@@ -16,7 +16,7 @@ import { RETAIL_SPICES_CATALOG, RetailSpiceProduct } from '../../data/retailSpic
 import { useRetailCart } from '../../context/RetailCartContext';
 
 export default function RetailSpicePowdersSection() {
-  const { addToCart, buyNow, currency } = useRetailCart();
+  const { addToCart, buyNow, currency, setCurrency } = useRetailCart();
 
   // Search & Filter State
   const [searchQuery, setSearchQuery] = useState('');
@@ -127,8 +127,8 @@ export default function RetailSpicePowdersSection() {
               )}
             </div>
 
-            {/* Category Filter Pills */}
-            <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
+            {/* Category Filter Pills & Currency Switcher */}
+            <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
               <span className="text-xs font-mono text-neutral-400 hidden lg:inline mr-1 flex items-center gap-1">
                 <SlidersHorizontal className="w-3 h-3 text-[#dcb782]" />
                 Filter:
@@ -144,7 +144,7 @@ export default function RetailSpicePowdersSection() {
                     key={cat}
                     type="button"
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-4 py-2 rounded-xl text-xs font-mono transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                    className={`px-3.5 py-2 rounded-xl text-xs font-mono transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
                       isActive 
                         ? 'bg-[#dcb782] text-black font-bold shadow-md shadow-[#dcb782]/20' 
                         : 'bg-white/5 border border-white/10 text-neutral-300 hover:text-white hover:border-white/20'
@@ -157,6 +157,34 @@ export default function RetailSpicePowdersSection() {
                   </button>
                 );
               })}
+
+              {/* Currency Selector */}
+              <div className="inline-flex items-center gap-1 bg-black/60 border border-white/15 p-1 rounded-xl ml-auto md:ml-2">
+                <button
+                  type="button"
+                  onClick={() => setCurrency('USD')}
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold transition-all cursor-pointer ${
+                    currency === 'USD'
+                      ? 'bg-[#dcb782] text-black shadow-sm'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
+                  title="Show prices in US Dollars"
+                >
+                  USD ($)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCurrency('AED')}
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold transition-all cursor-pointer ${
+                    currency === 'AED'
+                      ? 'bg-[#dcb782] text-black shadow-sm'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
+                  title="Show prices in UAE Dirhams"
+                >
+                  AED (د.إ)
+                </button>
+              </div>
             </div>
 
           </div>
