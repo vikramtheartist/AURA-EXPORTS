@@ -233,72 +233,51 @@ export default function RetailSpicePowdersSection() {
                     </Link>
                   </div>
 
-                  {/* Card Content Area */}
-                  <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                  {/* Streamlined Clean Card Content */}
+                  <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                     
-                    {/* Title & Ratings */}
-                    <div>
-                      <div className="flex items-center justify-between gap-2 mb-1.5">
-                        <span className="text-[10px] font-mono text-[#dcb782] uppercase tracking-wider font-semibold">
-                          {product.origin}
-                        </span>
-                        <div className="flex items-center gap-1 text-[11px] font-mono text-amber-400">
-                          <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                          <span>{product.rating.score}</span>
-                          <span className="text-neutral-500">({product.rating.reviewCount})</span>
+                    {/* Rating & Title */}
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-1.5 text-[11px] font-mono text-amber-400">
+                        <div className="flex items-center">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
+                          ))}
                         </div>
+                        <span className="font-semibold text-white ml-0.5">{product.rating.score}</span>
+                        <span className="text-neutral-500">({product.rating.reviewCount})</span>
                       </div>
 
-                      <h3 className="text-lg font-heading font-medium text-white group-hover:text-[#dcb782] transition-colors leading-tight">
+                      <h3 className="text-lg font-heading font-medium text-white group-hover:text-[#dcb782] transition-colors leading-snug">
                         <Link to={`/products/agro-products/retail/${product.slug}`}>
                           {product.name}
                         </Link>
                       </h3>
-
-                      <p className="text-xs text-neutral-400 font-serif italic mt-0.5">
-                        {product.botanicalName}
-                      </p>
-
-                      <p className="text-xs text-neutral-300 font-body font-light line-clamp-2 mt-2 leading-relaxed">
-                        {product.shortDescription}
-                      </p>
                     </div>
 
-                    {/* Active Lab Assay Spec Chip */}
-                    <div className="bg-black/40 border border-white/5 rounded-xl p-2.5 text-[11px] font-mono text-neutral-300 flex items-center justify-between">
-                      <span className="text-[#ab8558]">Active Assay:</span>
-                      <span className="font-semibold text-white">{product.activeCompound}</span>
-                    </div>
-
-                    {/* Variant / Pack Size Selector Pills */}
-                    <div className="space-y-1.5">
-                      <div className="flex justify-between text-[11px] font-mono text-neutral-400">
-                        <span>Select Packaging Format:</span>
-                        <span className="text-[#dcb782] font-semibold">{currentVariant.weightGrams}g</span>
-                      </div>
-                      <div className="grid grid-cols-2 gap-1.5">
-                        {product.variants.slice(0, 2).map((variant) => (
-                          <button
-                            key={variant.id}
-                            type="button"
-                            onClick={() => handleVariantChange(product.id, variant.id)}
-                            className={`px-2.5 py-1.5 rounded-lg text-[11px] font-mono transition-all text-left truncate cursor-pointer ${
-                              variant.id === selectedVarId
-                                ? 'bg-[#dcb782]/20 border border-[#dcb782] text-white font-medium'
-                                : 'bg-white/5 border border-white/10 text-neutral-400 hover:text-white'
-                            }`}
-                          >
-                            {variant.name.split(' (')[0]}
-                          </button>
-                        ))}
-                      </div>
+                    {/* Variant / Pack Size Selector Pills (Compact) */}
+                    <div className="flex items-center gap-2">
+                      {product.variants.slice(0, 2).map((variant) => (
+                        <button
+                          key={variant.id}
+                          type="button"
+                          onClick={() => handleVariantChange(product.id, variant.id)}
+                          className={`flex-1 py-1.5 px-2.5 rounded-lg text-[11px] font-mono transition-all text-center truncate cursor-pointer ${
+                            variant.id === selectedVarId
+                              ? 'bg-[#dcb782]/20 border border-[#dcb782] text-white font-medium'
+                              : 'bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-white/20'
+                          }`}
+                        >
+                          {variant.weightGrams}g Tin
+                        </button>
+                      ))}
                     </div>
 
                     {/* Price & Primary Purchase Actions */}
                     <div className="pt-3 border-t border-white/10 space-y-3">
                       <div className="flex items-baseline justify-between">
                         <div className="flex items-baseline gap-2">
-                          <span className="text-xl font-heading font-bold text-white font-mono">
+                          <span className="text-2xl font-heading font-bold text-white font-mono">
                             {currencySymbol}{price.toFixed(currency === 'USD' ? 2 : 0)}
                           </span>
                           {compareAt && (
@@ -344,17 +323,6 @@ export default function RetailSpicePowdersSection() {
                           <span>Buy Now</span>
                           <ArrowRight className="w-3.5 h-3.5" />
                         </button>
-                      </div>
-
-                      {/* Full Specs Link */}
-                      <div className="text-center pt-1">
-                        <Link
-                          to={`/products/agro-products/retail/${product.slug}`}
-                          className="text-[11px] font-mono text-[#dcb782] hover:underline inline-flex items-center gap-1"
-                        >
-                          <span>View Full Lab Specs & Culinary Guide</span>
-                          <ArrowRight className="w-3 h-3" />
-                        </Link>
                       </div>
                     </div>
 
