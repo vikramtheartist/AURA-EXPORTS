@@ -93,7 +93,7 @@ export default function InstitutionalAgroCatalogueSection() {
                 onClick={() => setSelectedCategory(tab.id)}
                 className={`px-4 py-2 rounded-full text-xs font-mono tracking-wider uppercase transition-all cursor-pointer flex items-center gap-2 ${
                   isActive
-                    ? 'bg-[#D4AF37] text-[#0A0A0B] font-bold shadow-md'
+                    ? 'bg-[#E2BC86] text-[#0A0A0B] font-bold shadow-md'
                     : 'bg-[#141416] text-[#A5A19A] hover:text-[#F5F2EC] hover:bg-[#1E1E22] border border-[#1E1E22]'
                 }`}
               >
@@ -159,7 +159,7 @@ export default function InstitutionalAgroCatalogueSection() {
             <button
               type="button"
               onClick={() => setSelectedProductForRFQ(institutionalAgroProducts[0])}
-              className="bg-[#D4AF37] hover:bg-[#E5C07B] text-[#0A0A0B] text-xs font-mono font-bold uppercase tracking-wider px-6 py-3 rounded-xl transition-all shadow-md cursor-pointer"
+              className="bg-[#E2BC86] hover:bg-[#d4a86a] text-[#0A0A0B] text-xs font-mono font-bold uppercase tracking-wider px-6 py-3 rounded-xl transition-all shadow-md cursor-pointer"
             >
               Request Fresh Produce Quotation →
             </button>
@@ -167,7 +167,7 @@ export default function InstitutionalAgroCatalogueSection() {
         </div>
       ) : filteredProducts.length === 0 ? (
         <div className="rounded-2xl border border-[#1E1E22] bg-[#111113] p-12 text-center my-8">
-          <Filter className="h-8 w-8 text-[#D4AF37]/60 mx-auto mb-3" />
+          <Filter className="h-8 w-8 text-[#E2BC86]/60 mx-auto mb-3" />
           <h4 className="text-lg font-heading text-[#F5F2EC]">No commodities match your criteria</h4>
           <p className="text-xs text-[#A5A19A] font-light mt-1">
             Try adjusting your search query or selecting &quot;All Products&quot;.
@@ -178,7 +178,7 @@ export default function InstitutionalAgroCatalogueSection() {
               setSelectedCategory('all');
               setSearchQuery('');
             }}
-            className="mt-4 px-5 py-2 rounded-xl bg-[#D4AF37] text-[#0A0A0B] text-xs font-mono font-bold uppercase tracking-wider hover:bg-[#E5C07B] transition-colors cursor-pointer"
+            className="mt-4 px-5 py-2 rounded-xl bg-[#E2BC86] text-[#0A0A0B] text-xs font-mono font-bold uppercase tracking-wider hover:bg-[#d4a86a] transition-colors cursor-pointer"
           >
             Reset Filters
           </button>

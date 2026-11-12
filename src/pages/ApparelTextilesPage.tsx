@@ -306,7 +306,7 @@ export default function ApparelTextilesPage() {
                   onClick={() => setSelectedCategory(tab.id)}
                   className={`px-4 py-2 rounded-full text-xs font-mono tracking-wider uppercase transition-all cursor-pointer flex items-center gap-2 ${
                     isActive
-                      ? 'bg-[#D4AF37] text-[#0A0A0B] font-bold shadow-md'
+                      ? 'bg-[#E2BC86] text-[#0A0A0B] font-bold shadow-md'
                       : 'bg-[#141416] text-[#A5A19A] hover:text-[#F5F2EC] hover:bg-[#1E1E22] border border-[#1E1E22]'
                   }`}
                 >
@@ -669,7 +669,7 @@ export default function ApparelTextilesPage() {
                       type="button"
                       onClick={() => setEnquiryMode('quotation')}
                       className={`px-3.5 py-1.5 rounded-lg text-xs font-mono tracking-wider uppercase transition-all cursor-pointer ${
-                        enquiryMode === 'quotation' ? 'bg-[#D4AF37] text-[#0A0A0B] font-bold shadow-sm' : 'text-[#A5A19A] hover:text-white'
+                        enquiryMode === 'quotation' ? 'bg-[#E2BC86] text-[#0A0A0B] font-bold shadow-sm' : 'text-[#A5A19A] hover:text-white'
                       }`}
                     >
                       Quotation
@@ -678,7 +678,7 @@ export default function ApparelTextilesPage() {
                       type="button"
                       onClick={() => setEnquiryMode('sample')}
                       className={`px-3.5 py-1.5 rounded-lg text-xs font-mono tracking-wider uppercase transition-all cursor-pointer ${
-                        enquiryMode === 'sample' ? 'bg-[#D4AF37] text-[#0A0A0B] font-bold shadow-sm' : 'text-[#A5A19A] hover:text-white'
+                        enquiryMode === 'sample' ? 'bg-[#E2BC86] text-[#0A0A0B] font-bold shadow-sm' : 'text-[#A5A19A] hover:text-white'
                       }`}
                     >
                       Fabric Swatches
@@ -803,7 +803,7 @@ export default function ApparelTextilesPage() {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#D4AF37] text-[#0A0A0B] font-semibold text-xs tracking-wider uppercase hover:bg-[#E5C07B] transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+                        className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#E2BC86] text-[#0A0A0B] font-semibold text-xs tracking-wider uppercase hover:bg-[#d4a86a] transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
                       >
                         {isSubmitting ? <span>Submitting...</span> : <span>Request an Export Quotation</span>}
                       </button>
