@@ -250,10 +250,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                     {/* 3 Interactive Category Showcase Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4" onMouseLeave={() => setHoveredCard(null)}>
                       {productVerticals.map((vertical) => {
-                        const isHighlighted = hoveredCard
-                          ? hoveredCard === vertical.id
-                          : location.pathname.startsWith(vertical.path) ||
-                            (vertical.id === 'fashion' && !location.pathname.startsWith('/products/'));
+                        const isHighlighted = hoveredCard === vertical.id;
 
                         return (
                           <Link
@@ -267,7 +264,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                             className={`group relative rounded-[20px] overflow-hidden h-[268px] bg-[#111113] transition-all duration-300 block select-none ${
                               isHighlighted
                                 ? 'border border-[#D4AF78] shadow-[0_0_30px_rgba(212,175,120,0.22)] ring-1 ring-[#D4AF78]/40'
-                                : 'border border-[#222225] hover:border-[#D4AF78]/60 hover:shadow-[0_0_20px_rgba(212,175,120,0.12)]'
+                                : 'border border-[#222225] hover:border-[#D4AF78] hover:shadow-[0_0_30px_rgba(212,175,120,0.22)] hover:ring-1 hover:ring-[#D4AF78]/40'
                             }`}
                           >
                             {/* Visual Photography */}
