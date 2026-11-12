@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, ArrowUpRight, Check } from 'lucide-react';
+import { ArrowUpRight, Check } from 'lucide-react';
 import { InstitutionalProduct } from '../../data/institutionalAgroCatalog';
 
 interface ProductCardProps {
@@ -47,18 +47,10 @@ export default function ProductCard({
         {/* Product Name (Prominent Editorial Serif) */}
         <h3
           onClick={() => onViewSpecifications(product)}
-          className="font-heading text-2xl lg:text-[1.65rem] text-[#F5F2EC] font-medium leading-tight group-hover:text-[#E2BC86] transition-colors cursor-pointer mb-2"
+          className="font-heading text-2xl lg:text-[1.65rem] text-[#F5F2EC] font-medium leading-tight group-hover:text-[#E2BC86] transition-colors cursor-pointer mb-3"
         >
           {product.cardTitle}
         </h3>
-
-        {/* Sourcing Origin */}
-        <div className="flex items-center gap-1.5 text-xs font-mono text-[#A5A19A] mb-3">
-          <MapPin className="h-3 w-3 text-[#E2BC86] shrink-0" />
-          <span className="truncate" title={product.origin.displayOrigin}>
-            {product.origin.displayOrigin}
-          </span>
-        </div>
 
         {/* Concise One-Sentence Description (~15–20 words) */}
         <p className="text-xs text-[#A5A19A] font-light leading-relaxed mb-4 min-h-[38px]">

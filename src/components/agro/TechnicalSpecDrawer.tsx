@@ -3,7 +3,6 @@ import {
   X, 
   FileText, 
   ArrowUpRight, 
-  MapPin, 
   Check, 
   ShieldCheck, 
   Sparkles, 
@@ -12,10 +11,7 @@ import {
   Sprout, 
   Box, 
   Ship, 
-  ChevronDown, 
   Printer, 
-  CheckCircle2, 
-  Clock, 
   Layers
 } from 'lucide-react';
 import { InstitutionalProduct } from '../../data/institutionalAgroCatalog';
@@ -30,7 +26,8 @@ interface TechnicalSpecDrawerProps {
 }
 
 // =============================================================================
-// TAILORED PRODUCT SPECIFICATION OVERRIDES (MATCHING IMAGE 1 DESIGN DIRECTION)
+// TAILORED PRODUCT SPECIFICATION CONFIGS (EXACTLY MATCHING ATTACHED IMAGE)
+// ALL LOCATION NAMES (E.g. Erode, Salem, Tamil Nadu, Kerala, Gujarat) REMOVED
 // =============================================================================
 interface FormItem {
   id: string;
@@ -41,6 +38,7 @@ interface FormItem {
 interface ProductSpecConfig {
   eyebrow: string;
   customImage?: string;
+  description: string;
   badges: {
     origin: { label: string; sub: string };
     grade: { label: string; sub: string };
@@ -61,8 +59,9 @@ const PRODUCT_SPEC_CONFIGS: Record<string, ProductSpecConfig> = {
   'salem-turmeric': {
     eyebrow: 'EXPORT PRODUCT',
     customImage: turmericShowcaseImg,
+    description: 'Premium, high-curcumin turmeric fingers, double-polished and export-grade, single-origin estate sourcing.',
     badges: {
-      origin: { label: 'Single Origin', sub: 'Tamil Nadu' },
+      origin: { label: 'Single Origin', sub: 'Direct Sourced' },
       grade: { label: 'Export Grade', sub: 'Quality' },
       packaging: { label: 'Custom', sub: 'Packaging' },
     },
@@ -89,8 +88,9 @@ const PRODUCT_SPEC_CONFIGS: Record<string, ProductSpecConfig> = {
 
   'malabar-black-pepper': {
     eyebrow: 'EXPORT PRODUCT',
+    description: 'Select garbled black pepper calibrated for piperine density, volatile aroma and uniform berry diameter.',
     badges: {
-      origin: { label: 'Single Origin', sub: 'Kerala' },
+      origin: { label: 'Single Origin', sub: 'Direct Sourced' },
       grade: { label: 'Export Grade', sub: 'TGSEB / MG-1' },
       packaging: { label: 'Custom', sub: 'Packaging' },
     },
@@ -117,8 +117,9 @@ const PRODUCT_SPEC_CONFIGS: Record<string, ProductSpecConfig> = {
 
   'alleppey-green-cardamom': {
     eyebrow: 'EXPORT PRODUCT',
+    description: 'Extra-bold green cardamom pods with high volatile oil retention, dense seed fill, and brilliant green skin color.',
     badges: {
-      origin: { label: 'Single Origin', sub: 'Kerala' },
+      origin: { label: 'Single Origin', sub: 'Direct Sourced' },
       grade: { label: 'Export Grade', sub: 'Extra Bold (AGEB)' },
       packaging: { label: 'Custom', sub: 'Packaging' },
     },
@@ -145,8 +146,9 @@ const PRODUCT_SPEC_CONFIGS: Record<string, ProductSpecConfig> = {
 
   'sortex-cumin': {
     eyebrow: 'EXPORT PRODUCT',
+    description: 'Optically Sortex-passed aromatic cumin seeds cleaned to 99.5% purity with rich natural essential oil content.',
     badges: {
-      origin: { label: 'Single Origin', sub: 'Gujarat' },
+      origin: { label: 'Single Origin', sub: 'Direct Sourced' },
       grade: { label: 'Export Grade', sub: '99.5% Sortex' },
       packaging: { label: 'Custom', sub: 'Packaging' },
     },
@@ -172,9 +174,10 @@ const PRODUCT_SPEC_CONFIGS: Record<string, ProductSpecConfig> = {
 
   'red-chillies': {
     eyebrow: 'EXPORT PRODUCT',
+    description: 'Vibrant sun-cured whole red chillies graded for balanced capsaicin pungency, color value and zero stems.',
     badges: {
-      origin: { label: 'Single Origin', sub: 'Andhra Pradesh' },
-      grade: { label: 'Export Grade', sub: 'Guntur S4 / Teja' },
+      origin: { label: 'Single Origin', sub: 'Direct Sourced' },
+      grade: { label: 'Export Grade', sub: 'S4 / Teja' },
       packaging: { label: 'Custom', sub: 'Packaging' },
     },
     keySpecs: [
@@ -200,8 +203,9 @@ const PRODUCT_SPEC_CONFIGS: Record<string, ProductSpecConfig> = {
 
   'moringa-leaf-powder': {
     eyebrow: 'EXPORT PRODUCT',
+    description: 'Shadow-dried, micro-pulverized whole leaf powder without carriers or additives, lab-tested for maximum purity.',
     badges: {
-      origin: { label: 'Single Origin', sub: 'Tamil Nadu' },
+      origin: { label: 'Single Origin', sub: 'Direct Sourced' },
       grade: { label: 'Export Grade', sub: 'Micro-Pulverized' },
       packaging: { label: 'Custom', sub: 'Packaging' },
     },
@@ -227,8 +231,9 @@ const PRODUCT_SPEC_CONFIGS: Record<string, ProductSpecConfig> = {
 
   'rice-specialty-grains': {
     eyebrow: 'EXPORT PRODUCT',
+    description: 'Aged extra-long slender basmati rice exhibiting 2.5x elongation on cooking, zero sticky starch, and rich aroma.',
     badges: {
-      origin: { label: 'Single Origin', sub: 'Indo-Gangetic' },
+      origin: { label: 'Single Origin', sub: 'Direct Sourced' },
       grade: { label: 'Export Grade', sub: '1121 Extra Long' },
       packaging: { label: 'Custom', sub: 'Packaging' },
     },
@@ -255,7 +260,7 @@ const PRODUCT_SPEC_CONFIGS: Record<string, ProductSpecConfig> = {
 };
 
 // =============================================================================
-// MINIMALIST LINE ART SVG ICONS MATCHING IMAGE 1 FOR AVAILABLE FORMS
+// MINIMALIST LINE ART SVG ICONS MATCHING ATTACHED IMAGE FOR FORMS
 // =============================================================================
 function FormIcon({ type, className = 'w-6 h-6' }: { type: FormItem['iconType']; className?: string }) {
   switch (type) {
@@ -294,8 +299,8 @@ function FormIcon({ type, className = 'w-6 h-6' }: { type: FormItem['iconType'];
       return (
         <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <ellipse cx="12" cy="12" rx="7" ry="9" />
-          <circle cx="9.5" cy="10" r="1" fill="currentColor" />
-          <circle cx="14.5" cy="10" r="1" fill="currentColor" />
+          <circle cx="9.5" cy="10.5" r="1" fill="currentColor" />
+          <circle cx="14.5" cy="10.5" r="1" fill="currentColor" />
           <path d="M9.5 15 Q12 17 14.5 15" />
         </svg>
       );
@@ -336,7 +341,7 @@ function FormIcon({ type, className = 'w-6 h-6' }: { type: FormItem['iconType'];
 }
 
 // =============================================================================
-// HELPER TO RENDER KEY SPEC ICONS
+// KEY SPECIFICATION ICON HELPER
 // =============================================================================
 function KeySpecIcon({ type }: { type: 'flask' | 'droplet' | 'sparkle' | 'shield' }) {
   switch (type) {
@@ -363,8 +368,9 @@ export default function TechnicalSpecDrawer({
   // Config lookup with generic fallback for any product
   const config: ProductSpecConfig = (product && PRODUCT_SPEC_CONFIGS[product.id]) || {
     eyebrow: 'EXPORT PRODUCT',
+    description: product?.cardDescription || 'Single-origin agricultural commodity sourced for international export.',
     badges: {
-      origin: { label: 'Single Origin', sub: product?.origin.state || 'India' },
+      origin: { label: 'Single Origin', sub: 'Direct Sourced' },
       grade: { label: 'Export Grade', sub: 'Quality' },
       packaging: { label: 'Custom', sub: 'Packaging' },
     },
@@ -387,10 +393,10 @@ export default function TechnicalSpecDrawer({
     ],
   };
 
-  // Selected Form State (defaults to first available form)
+  // Selected Form State
   const [selectedFormId, setSelectedFormId] = useState<string>(() => config.forms[0]?.id || '');
 
-  // Full Laboratory COA Modal / Expandable State
+  // Full Laboratory COA Modal State
   const [isFullLabModalOpen, setIsFullLabModalOpen] = useState(false);
 
   // Sync selected form when product changes
@@ -432,6 +438,7 @@ export default function TechnicalSpecDrawer({
 
   const currentSelectedForm = config.forms.find((f) => f.id === selectedFormId)?.name || config.forms[0]?.name || 'Standard Export';
   const displayImage = config.customImage || product.image;
+  const hsnCode = product.hsnCodes[0]?.code || '09103020';
 
   const handleSampleClick = () => {
     if (onRequestSample) {
@@ -450,44 +457,76 @@ export default function TechnicalSpecDrawer({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 md:p-6 lg:p-8 animate-fadeIn overflow-y-auto">
       {/* Dark Overlay Backdrop */}
       <div
         onClick={onClose}
-        className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300"
+        className="fixed inset-0 bg-black/85 backdrop-blur-md transition-opacity duration-300"
         aria-hidden="true"
       />
 
-      {/* Slide-over Drawer Panel */}
+      {/* =======================================================================
+          UNIFIED LUXURY MODAL CARD CONTAINER (EXACTLY MATCHING ATTACHED IMAGE)
+          ======================================================================= */}
       <aside
         role="dialog"
         aria-modal="true"
-        aria-label={`${product.name} Product Details & Specifications`}
-        className="relative z-10 w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl h-full bg-[#0C0C0E] border-l border-[#252528] text-[#F2E9D9] flex flex-col justify-between shadow-[0_0_80px_rgba(0,0,0,0.9)] transition-transform duration-300 ease-out overflow-hidden"
+        aria-label={`${product.name} Product Details`}
+        className="relative z-10 w-full max-w-5xl rounded-[28px] sm:rounded-[32px] border border-[#28282B] bg-[#0A0A0C] text-[#F2E9D9] shadow-[0_25px_90px_rgba(0,0,0,0.95)] flex flex-col my-auto transition-transform duration-300 ease-out overflow-hidden"
       >
-        {/* Floating Close Button */}
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close product details"
-          className="absolute top-4 sm:top-5 right-4 sm:right-6 z-30 w-9 h-9 rounded-full bg-black/60 hover:bg-[#D4AF78] text-[#F2E9D9] hover:text-[#090909] border border-white/10 hover:border-[#D4AF78] flex items-center justify-center transition-all cursor-pointer shadow-lg backdrop-blur-md"
-        >
-          <X className="w-4 h-4 stroke-[2.2]" />
-        </button>
-
-        {/* =========================================================================
-            SCROLLABLE CONTENT AREA (SPLIT 2-COLUMN LUXURY EDITORIAL LAYOUT)
-            ========================================================================= */}
-        <div className="flex-1 overflow-y-auto px-5 sm:px-8 lg:px-10 py-6 sm:py-8 space-y-6">
+        
+        {/* =====================================================================
+            TOP HEADER BAR (AURA EXPORTS | CATEGORY · HSN [CODE]  ... [X])
+            ===================================================================== */}
+        <div className="px-6 sm:px-8 py-5 border-b border-[#1E1E22] flex items-center justify-between">
           
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left: Brand Logo Mark & Category/HSN */}
+          <div className="flex items-center">
+            <div className="flex flex-col">
+              <span className="font-heading font-bold text-lg sm:text-xl text-[#D4AF78] tracking-[0.14em] leading-none">
+                AURA
+              </span>
+              <span className="text-[8px] sm:text-[9px] font-mono tracking-[0.35em] text-[#A29B91] uppercase mt-0.5 leading-none">
+                EXPORTS
+              </span>
+            </div>
+
+            {/* Vertical Divider */}
+            <div className="h-5 sm:h-6 w-px bg-[#28282B] mx-4 sm:mx-5" />
+
+            {/* Category & HSN Code (NO location info) */}
+            <div className="text-[11px] sm:text-xs font-mono tracking-widest text-[#A29B91] uppercase flex items-center gap-2">
+              <span className="text-[#C4BDB3] font-medium">{product.category}</span>
+              <span className="text-[#55555A]">·</span>
+              <span className="text-[#A29B91]">HSN {hsnCode}</span>
+            </div>
+          </div>
+
+          {/* Right: Circular Dark Close Button (Matching Image) */}
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close product details"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#18181B] hover:bg-[#252528] text-[#8E8E93] hover:text-[#F2E9D9] border border-white/5 flex items-center justify-center transition-all cursor-pointer shadow-md"
+          >
+            <X className="w-4 h-4 stroke-[2.2]" />
+          </button>
+
+        </div>
+
+        {/* =====================================================================
+            MAIN BODY (SPLIT 2-COLUMN LUXURY EDITORIAL LAYOUT)
+            ===================================================================== */}
+        <div className="p-6 sm:p-8 lg:p-10 overflow-y-auto max-h-[calc(90vh-140px)]">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
             
-            {/* =====================================================================
-                LEFT COLUMN: PRODUCT PHOTOGRAPHY & 3 TRUST HIGHLIGHTS
-                ===================================================================== */}
+            {/* -----------------------------------------------------------------
+                LEFT COLUMN: PRODUCT PHOTOGRAPHY & 3 TRUST BADGES
+                ----------------------------------------------------------------- */}
             <div className="lg:col-span-5 flex flex-col space-y-4">
               
-              {/* Product Visual Container with Curved Silhouette */}
+              {/* Product Visual Container */}
               <div className="relative w-full aspect-[4/5] rounded-3xl overflow-hidden bg-[#141416] border border-[#252528] shadow-2xl group">
                 <img
                   src={displayImage}
@@ -497,11 +536,11 @@ export default function TechnicalSpecDrawer({
                 
                 {/* Natural Dark Gradient for Contrast */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
-                <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0C0C0E] to-transparent pointer-events-none" />
+                <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#0A0A0C] to-transparent pointer-events-none" />
               </div>
 
-              {/* 3 Trust Badges beneath Photo (Matching Image 1) */}
-              <div className="grid grid-cols-3 gap-2 p-3.5 bg-[#141416]/80 border border-[#252528] rounded-2xl">
+              {/* 3 Trust Badges beneath Photo (Location info removed per request) */}
+              <div className="grid grid-cols-3 gap-1 p-3 bg-[#121214] border border-[#252528] rounded-2xl">
                 
                 {/* Badge 1: Single Origin */}
                 <div className="flex flex-col items-center text-center gap-1 p-1">
@@ -540,52 +579,43 @@ export default function TechnicalSpecDrawer({
 
             </div>
 
-            {/* =====================================================================
-                RIGHT COLUMN: EDITORIAL METADATA, SPECS, FORMS & PACKAGING
-                ===================================================================== */}
-            <div className="lg:col-span-7 flex flex-col space-y-5">
+            {/* -----------------------------------------------------------------
+                RIGHT COLUMN: EYEBROW, TITLE, SPECS, FORMS & PACKAGING
+                ----------------------------------------------------------------- */}
+            <div className="lg:col-span-7 flex flex-col space-y-4 sm:space-y-5">
               
-              {/* Top Eyebrow Badge */}
+              {/* Eyebrow Badge */}
               <div>
-                <span className="inline-flex items-center px-3 py-1 rounded-full border border-[#D4AF78]/40 bg-[#D4AF78]/10 text-[10px] font-mono font-bold tracking-[0.2em] text-[#D4AF78] uppercase">
+                <span className="inline-flex items-center px-3.5 py-1 rounded-full border border-[#D4AF78]/40 bg-[#D4AF78]/10 text-[10px] font-mono font-bold tracking-[0.2em] text-[#D4AF78] uppercase">
                   {config.eyebrow}
                 </span>
               </div>
 
               {/* Product Headline (Editorial Serif Typography) */}
-              <div className="space-y-2">
-                <h2 className="font-heading text-2xl sm:text-3xl lg:text-[2.2rem] text-[#F2E9D9] font-normal leading-[1.15] tracking-tight">
+              <div className="space-y-1.5">
+                <h2 className="font-heading text-2xl sm:text-3xl lg:text-[2.5rem] text-[#F2E9D9] font-normal leading-[1.12] tracking-tight">
                   {product.name}
                 </h2>
 
-                {/* Origin Location & Botanical Name */}
-                <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-[#A29B91]">
-                  <div className="flex items-center gap-1.5 text-[#D4AF78]">
-                    <MapPin className="w-3.5 h-3.5 text-[#D4AF78] shrink-0" />
-                    <span>{product.origin.displayOrigin.replace(/\.$/, '')}</span>
+                {/* Botanical Name ONLY (Location info removed per user request) */}
+                {product.botanicalName && (
+                  <div>
+                    <span className="italic font-serif text-[#C4BDB3] text-sm tracking-wide">
+                      {product.botanicalName}
+                    </span>
                   </div>
-                  {product.botanicalName && (
-                    <>
-                      <span className="text-[#4E4E54]">|</span>
-                      <span className="italic font-serif text-[#C4BDB3]">
-                        {product.botanicalName}
-                      </span>
-                    </>
-                  )}
-                </div>
+                )}
               </div>
 
               {/* Concise Editorial Description */}
               <p className="text-xs sm:text-sm text-[#A29B91] font-light leading-relaxed">
-                {product.cardDescription || product.overviewDescription}
+                {config.description}
               </p>
 
-              {/* Thin Divider */}
-              <div className="w-full h-px bg-[#252528]" />
+              {/* Thin Divider Line */}
+              <div className="w-full h-px bg-[#222225]" />
 
-              {/* ===================================================================
-                  SECTION 1: KEY SPECIFICATIONS (4 CARDS)
-                  =================================================================== */}
+              {/* KEY SPECIFICATIONS (4 Cards) */}
               <div>
                 <h3 className="text-[11px] font-mono tracking-[0.2em] uppercase font-bold text-[#D4AF78] mb-3">
                   KEY SPECIFICATIONS
@@ -595,7 +625,7 @@ export default function TechnicalSpecDrawer({
                   {config.keySpecs.map((spec) => (
                     <div
                       key={spec.id}
-                      className="bg-[#141416] hover:bg-[#18181B] border border-[#26262A] hover:border-[#D4AF78]/40 rounded-2xl p-3 flex flex-col items-center justify-center text-center gap-1.5 min-h-[96px] transition-all duration-200"
+                      className="bg-[#131316] hover:bg-[#18181C] border border-[#222225] hover:border-[#D4AF78]/40 rounded-2xl p-3 flex flex-col items-center justify-center text-center gap-1.5 min-h-[96px] transition-all duration-200"
                     >
                       <KeySpecIcon type={spec.icon} />
                       <span className="text-[11px] font-mono text-[#A29B91] tracking-wide line-clamp-1">
@@ -609,12 +639,10 @@ export default function TechnicalSpecDrawer({
                 </div>
               </div>
 
-              {/* Thin Divider */}
-              <div className="w-full h-px bg-[#252528]" />
+              {/* Thin Divider Line */}
+              <div className="w-full h-px bg-[#222225]" />
 
-              {/* ===================================================================
-                  SECTION 2: AVAILABLE FORMS (INTERACTIVE TILES WITH SVG ICONS)
-                  =================================================================== */}
+              {/* AVAILABLE FORMS (Interactive Tiles) */}
               <div>
                 <h3 className="text-[11px] font-mono tracking-[0.2em] uppercase font-bold text-[#D4AF78] mb-3">
                   AVAILABLE FORMS
@@ -631,7 +659,7 @@ export default function TechnicalSpecDrawer({
                         className={`p-3 rounded-2xl border flex flex-col items-center justify-center gap-2 text-center transition-all cursor-pointer min-h-[88px] ${
                           isSelected
                             ? 'border-[#D4AF78] bg-[#D4AF78]/10 text-[#D4AF78] shadow-[0_0_20px_rgba(212,175,120,0.15)] ring-1 ring-[#D4AF78]/50'
-                            : 'border-[#26262A] bg-[#141416] hover:border-[#D4AF78]/40 text-[#A29B91] hover:text-[#F2E9D9]'
+                            : 'border-[#222225] bg-[#131316] hover:border-[#D4AF78]/40 text-[#A29B91] hover:text-[#F2E9D9]'
                         }`}
                       >
                         <FormIcon type={form.iconType} className="w-6 h-6" />
@@ -644,13 +672,11 @@ export default function TechnicalSpecDrawer({
                 </div>
               </div>
 
-              {/* Thin Divider */}
-              <div className="w-full h-px bg-[#252528]" />
+              {/* Thin Divider Line */}
+              <div className="w-full h-px bg-[#222225]" />
 
-              {/* ===================================================================
-                  SECTION 3: PACKAGING OPTIONS & EXPORT READINESS (2 COLUMNS)
-                  =================================================================== */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-1">
+              {/* PACKAGING OPTIONS & EXPORT READINESS */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-1">
                 
                 {/* Packaging Options */}
                 <div className="space-y-2">
@@ -691,21 +717,22 @@ export default function TechnicalSpecDrawer({
 
         </div>
 
-        {/* =========================================================================
-            STICKY BOTTOM ACTION BAR (FULL WIDTH)
-            ========================================================================= */}
-        <div className="border-t border-[#252528] bg-[#0E0E10]/95 backdrop-blur-md p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 sticky bottom-0 z-20">
+        {/* =====================================================================
+            BOTTOM ACTION BAR (FULL WIDTH, CLEAN DIVIDER)
+            ===================================================================== */}
+        <div className="px-6 sm:px-8 py-5 border-t border-[#1E1E22] bg-[#0A0A0C] flex flex-col sm:flex-row items-center justify-between gap-4">
           
-          {/* Left: Test Reports & Detailed Specifications Trigger */}
+          {/* Left: Test Reports Trigger */}
           <button
             type="button"
             onClick={() => setIsFullLabModalOpen(true)}
-            className="flex items-center gap-2 text-xs font-mono text-[#A29B91] hover:text-[#D4AF78] transition-colors cursor-pointer group text-left"
+            className="flex items-center gap-2.5 text-xs font-mono text-[#A29B91] hover:text-[#D4AF78] transition-colors cursor-pointer group text-left"
           >
             <FileText className="w-4 h-4 text-[#D4AF78] shrink-0 group-hover:scale-110 transition-transform" />
-            <span className="underline decoration-[#D4AF78]/40 underline-offset-4 group-hover:decoration-[#D4AF78]">
-              Need detailed specifications or test reports?
-            </span>
+            <div className="leading-tight">
+              <span>Need detailed specifications</span>
+              <span className="block">or test reports?</span>
+            </div>
           </button>
 
           {/* Right: Dual CTA Buttons */}
@@ -734,11 +761,11 @@ export default function TechnicalSpecDrawer({
 
         </div>
 
-        {/* =========================================================================
-            EXPANDED LABORATORY COA & REGULATORY MODAL (PROGRESSIVE DISCLOSURE)
-            ========================================================================= */}
+        {/* =====================================================================
+            EXPANDED LABORATORY COA & TECHNICAL SPEC SHEET
+            ===================================================================== */}
         {isFullLabModalOpen && (
-          <div className="absolute inset-0 z-40 bg-[#0C0C0E]/98 backdrop-blur-xl flex flex-col justify-between animate-fadeIn overflow-hidden">
+          <div className="absolute inset-0 z-40 bg-[#0A0A0C]/98 backdrop-blur-xl flex flex-col justify-between animate-fadeIn overflow-hidden">
             
             {/* Modal Header */}
             <div className="p-5 sm:p-6 border-b border-[#252528] flex items-center justify-between">
@@ -874,7 +901,7 @@ export default function TechnicalSpecDrawer({
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 border-t border-[#252528] bg-[#0E0E10] flex items-center justify-between">
+            <div className="p-4 border-t border-[#252528] bg-[#0A0A0C] flex items-center justify-between">
               <span className="text-xs font-mono text-[#A29B91]">
                 Custom COA batch testing & optical Sortex grading available on request.
               </span>

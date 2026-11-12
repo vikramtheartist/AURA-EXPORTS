@@ -190,12 +190,12 @@ export default function RetailProductCard({
 
           <div className="space-y-1.5 min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono text-[#D4AF78] uppercase tracking-wider">
-                {product.origin}
+              <span className="text-[10px] font-mono text-[#D4AF78] uppercase tracking-wider font-semibold">
+                {formatLabel}
               </span>
               <span className="text-[#77716A] text-xs">•</span>
               <span className="text-[10px] font-mono text-[#77716A]">
-                {formatLabel}
+                Single Origin
               </span>
             </div>
 
@@ -311,10 +311,10 @@ export default function RetailProductCard({
       {/* Card Content */}
       <div className="pt-5 px-1 flex-1 flex flex-col justify-between">
         <div>
-          {/* Origin & Format Eyebrow */}
+          {/* Format & Sourcing Eyebrow */}
           <div className="flex items-center justify-between text-[11px] font-mono text-[#77716A] mb-1.5">
-            <span className="text-[#D4AF78] truncate max-w-[65%]">{product.origin}</span>
-            <span>{formatLabel}</span>
+            <span className="text-[#D4AF78] uppercase tracking-wider font-medium">{formatLabel}</span>
+            <span>Single Origin</span>
           </div>
 
           {/* Product Name (Editorial Serif) */}
