@@ -286,8 +286,8 @@ export default function ApparelTextilesPage() {
         </div>
 
         {/* Filter Tabs & Real-Time Search */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10 pb-6 border-b border-[#1E1E22]">
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-10 pb-6 border-b border-[#1E1E22]">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 max-w-full shrink min-w-0">
             {filterTabs.map((tab) => {
               const isActive = selectedCategory === tab.id;
               return (
@@ -295,14 +295,14 @@ export default function ApparelTextilesPage() {
                   key={tab.id}
                   type="button"
                   onClick={() => setSelectedCategory(tab.id)}
-                  className={`px-4 py-2 rounded-full text-xs font-mono tracking-wider uppercase transition-all cursor-pointer flex items-center gap-2 ${
+                  className={`px-4 py-2 rounded-full text-xs font-mono tracking-wider uppercase transition-all cursor-pointer flex items-center gap-2 shrink-0 ${
                     isActive
                       ? 'bg-[#E2BC86] text-[#0A0A0B] font-bold shadow-md'
                       : 'bg-[#141416] text-[#A5A19A] hover:text-[#F5F2EC] hover:bg-[#1E1E22] border border-[#1E1E22]'
                   }`}
                 >
                   <span>{tab.label}</span>
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isActive ? 'bg-black/20 text-[#0A0A0B]' : 'bg-white/10 text-white/60'}`}>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${isActive ? 'bg-black/20 text-[#0A0A0B]' : 'bg-white/10 text-white/60'}`}>
                     {tab.count}
                   </span>
                 </button>

@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { Search, Sparkles, Filter, X, Sprout } from 'lucide-react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { Search, Sparkles, Filter, X, Sprout, ChevronDown, Check, Leaf } from 'lucide-react';
 import ProductCard from './ProductCard';
 import TechnicalSpecDrawer from './TechnicalSpecDrawer';
 import InstitutionalRFQModal from './InstitutionalRFQModal';
@@ -14,6 +14,32 @@ export default function InstitutionalAgroCatalogueSection() {
   // Filter & Search States
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isMoreOpen, setIsMoreOpen] = useState<boolean>(false);
+  const moreDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on outside click or Escape key
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (moreDropdownRef.current && !moreDropdownRef.current.contains(event.target as Node)) {
+        setIsMoreOpen(false);
+      }
+    }
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setIsMoreOpen(false);
+      }
+    }
+
+    if (isMoreOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isMoreOpen]);
 
   const filterTabs = [
     { id: 'all', label: 'All Products', count: institutionalAgroProducts.length },
@@ -23,6 +49,12 @@ export default function InstitutionalAgroCatalogueSection() {
     { id: 'botanicals', label: 'Botanical Ingredients', count: institutionalAgroProducts.filter((p) => p.category.includes('BOTANICAL')).length },
     { id: 'fresh', label: 'Fresh Produce', count: 1 },
   ];
+
+  // Core visible tabs (fits cleanly on one line without spilling over)
+  const PRIMARY_VISIBLE_LIMIT = 4;
+  const primaryTabs = filterTabs.slice(0, PRIMARY_VISIBLE_LIMIT);
+  const moreTabs = filterTabs.slice(PRIMARY_VISIBLE_LIMIT);
+  const activeMoreTab = moreTabs.find((tab) => tab.id === selectedCategory);
 
   const filteredProducts = useMemo(() => {
     if (selectedCategory === 'fresh') {
@@ -70,37 +102,183 @@ export default function InstitutionalAgroCatalogueSection() {
       </div>
 
       {/* Filter Tabs & Real-Time Search Controls */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10 pb-6 border-b border-[#1E1E22]">
-        {/* Category Filter Tabs */}
-        <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
-          {filterTabs.map((tab) => {
-            const isActive = selectedCategory === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setSelectedCategory(tab.id)}
-                className={`px-4 py-2 rounded-full text-xs font-mono tracking-wider uppercase transition-all cursor-pointer flex items-center gap-2 ${
-                  isActive
-                    ? 'bg-[#E2BC86] text-[#0A0A0B] font-bold shadow-md'
-                    : 'bg-[#141416] text-[#A5A19A] hover:text-[#F5F2EC] hover:bg-[#1E1E22] border border-[#1E1E22]'
-                }`}
-              >
-                <span>{tab.label}</span>
-                <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                    isActive ? 'bg-black/20 text-[#0A0A0B]' : 'bg-white/10 text-white/60'
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-10 pb-6 border-b border-[#1E1E22]">
+        {/* Category Filter Tabs & More Collapse - strictly single-line */}
+        <div className="flex items-center gap-2 min-w-0 max-w-full">
+          {/* Scrollable primary tabs */}
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 shrink min-w-0">
+            {primaryTabs.map((tab) => {
+              const isActive = selectedCategory === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedCategory(tab.id);
+                    setIsMoreOpen(false);
+                  }}
+                  className={`px-4 py-2 rounded-full text-xs font-mono tracking-wider uppercase transition-all cursor-pointer flex items-center gap-2 shrink-0 ${
+                    isActive
+                      ? 'bg-[#E2BC86] text-[#0A0A0B] font-bold shadow-md'
+                      : 'bg-[#141416] text-[#A5A19A] hover:text-[#F5F2EC] hover:bg-[#1E1E22] border border-[#1E1E22]'
                   }`}
                 >
-                  {tab.count}
-                </span>
-              </button>
-            );
-          })}
+                  <span>{tab.label}</span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                      isActive ? 'bg-black/20 text-[#0A0A0B]' : 'bg-white/10 text-white/60'
+                    }`}
+                  >
+                    {tab.count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* More Dropdown Trigger & Popover */}
+          <div className="relative shrink-0" ref={moreDropdownRef}>
+            <button
+              type="button"
+              onClick={() => setIsMoreOpen((prev) => !prev)}
+              aria-expanded={isMoreOpen}
+              aria-haspopup="menu"
+              className={`px-4 py-2 rounded-full text-xs font-mono tracking-wider uppercase transition-all cursor-pointer flex items-center gap-2 select-none shrink-0 ${
+                activeMoreTab
+                  ? 'bg-[#E2BC86] text-[#0A0A0B] font-bold shadow-md hover:bg-[#d4a86a]'
+                  : isMoreOpen
+                  ? 'bg-[#1E1E22] text-[#F5F2EC] border border-[#E2BC86]/50 shadow-sm'
+                  : 'bg-[#141416] text-[#A5A19A] hover:text-[#F5F2EC] hover:bg-[#1E1E22] border border-[#1E1E22]'
+              }`}
+            >
+              {activeMoreTab ? (
+                <>
+                  <span>{activeMoreTab.label}</span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-black/20 text-[#0A0A0B]">
+                    {activeMoreTab.count}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span>More</span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-white/10 text-white/60">
+                    +{moreTabs.length}
+                  </span>
+                </>
+              )}
+              <ChevronDown
+                className={`h-3.5 w-3.5 transition-transform duration-200 ${
+                  activeMoreTab ? 'text-[#0A0A0B]' : 'text-[#E2BC86]'
+                } ${isMoreOpen ? 'rotate-180' : ''}`}
+              />
+            </button>
+
+            {/* World-Class Dropdown Popover */}
+            {isMoreOpen && (
+              <div
+                className="absolute right-0 sm:left-0 top-full mt-2.5 z-50 w-72 sm:w-80 rounded-2xl bg-[#0c0c0e]/98 backdrop-blur-2xl border border-[#262629] p-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_25px_rgba(226,188,134,0.08)] animate-in fade-in zoom-in-95 duration-150"
+                role="menu"
+              >
+                <div className="px-3 py-1.5 flex items-center justify-between border-b border-[#1E1E22] mb-1.5">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#77736C]">
+                    Additional Categories
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/[0.04] text-[#E2BC86]/80 border border-white/5">
+                    {moreTabs.length} categories
+                  </span>
+                </div>
+
+                <div className="space-y-1">
+                  {moreTabs.map((tab) => {
+                    const isSelected = selectedCategory === tab.id;
+                    const Icon = tab.id === 'fresh' ? Sprout : Leaf;
+                    const description =
+                      tab.id === 'fresh'
+                        ? 'Cold-chain reefer corridors & fresh produce'
+                        : 'Ayurvedic herbs, extracts & natural botanicals';
+
+                    return (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedCategory(tab.id);
+                          setIsMoreOpen(false);
+                        }}
+                        className={`w-full p-2.5 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between group ${
+                          isSelected
+                            ? 'bg-[#E2BC86]/15 border border-[#E2BC86]/40 text-[#F5F2EC]'
+                            : 'hover:bg-[#1E1E22]/80 border border-transparent text-[#A5A19A] hover:text-[#F5F2EC]'
+                        }`}
+                        role="menuitem"
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div
+                            className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                              isSelected
+                                ? 'bg-[#E2BC86] text-[#0A0A0B]'
+                                : 'bg-[#141416] text-[#E2BC86]/80 group-hover:text-[#E2BC86] border border-[#222226]'
+                            }`}
+                          >
+                            <Icon className="h-4 w-4" />
+                          </div>
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2">
+                              <span
+                                className={`text-xs font-mono uppercase tracking-wider truncate ${
+                                  isSelected ? 'font-bold text-[#E2BC86]' : 'font-medium'
+                                }`}
+                              >
+                                {tab.label}
+                              </span>
+                            </div>
+                            <p className="text-[10px] text-[#77736C] font-light truncate mt-0.5">
+                              {description}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 shrink-0 ml-2">
+                          <span
+                            className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
+                              isSelected
+                                ? 'bg-[#E2BC86] text-[#0A0A0B] font-bold'
+                                : 'bg-white/10 text-white/60 group-hover:bg-white/15'
+                            }`}
+                          >
+                            {tab.count}
+                          </span>
+                          {isSelected && (
+                            <Check className="h-3.5 w-3.5 text-[#E2BC86]" />
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {activeMoreTab && (
+                  <div className="pt-2 mt-1.5 border-t border-[#1E1E22]">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedCategory('all');
+                        setIsMoreOpen(false);
+                      }}
+                      className="w-full py-2 px-3 rounded-lg text-[11px] font-mono text-[#77736C] hover:text-[#E2BC86] hover:bg-white/[0.03] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <X className="h-3 w-3" />
+                      <span>Reset to All Products</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Real-Time Live Search Input */}
-        <div className="relative w-full md:w-72">
+        <div className="relative w-full md:w-72 shrink-0">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#D4AF37]/70 pointer-events-none" />
           <input
             type="text"
