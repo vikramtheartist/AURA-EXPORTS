@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ChevronRight, Globe, ShieldCheck, MapPin, Building2, CheckCircle2, ArrowUpRight, Compass, Users } from 'lucide-react';
+import { Globe, ShieldCheck, MapPin, Building2, CheckCircle2, ArrowUpRight, Compass, Users } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
+import Breadcrumbs from '../components/procurement/Breadcrumbs';
 import philosophyImg from '../assets/images/temple_philosophy_png_1780419676440.png';
 
 export default function AboutPage() {
@@ -9,17 +10,7 @@ export default function AboutPage() {
       <SEOHead pageKey="about" />
 
       {/* Breadcrumbs */}
-      <nav aria-label="Breadcrumb" className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-8 flex items-center justify-between text-xs font-mono tracking-wider text-[#ab8558]/80 font-bold">
-        <Link to="/" className="flex items-center gap-1.5 hover:text-white transition-colors">
-          <ArrowLeft className="h-3.5 w-3.5" />
-          <span>AURA EXPORTS HOME</span>
-        </Link>
-        <div className="flex items-center gap-2">
-          <span>ENTERPRISE</span>
-          <ChevronRight className="h-3 w-3" />
-          <span className="text-white">ABOUT AURA EXPORTS</span>
-        </div>
-      </nav>
+      <Breadcrumbs items={[{ label: 'About Us', href: '/about' }]} />
 
       {/* Primary Header: Commercial Identity */}
       <header className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-16">

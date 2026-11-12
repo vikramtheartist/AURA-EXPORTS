@@ -120,11 +120,11 @@ export default function RetailProductDetailPage() {
         {/* Semantic Breadcrumbs */}
         <Breadcrumbs
           items={[
-            { label: 'Home', href: '/' },
             { label: 'Agro Products', href: '/products/agro-products' },
             { label: 'Retail Spices', href: '/products/agro-products#retail-spices-powders-collection' },
             { label: product.name, href: `/products/agro-products/retail/${product.slug}` },
           ]}
+          className="!px-0 !max-w-none"
         />
 
         {/* Back link */}

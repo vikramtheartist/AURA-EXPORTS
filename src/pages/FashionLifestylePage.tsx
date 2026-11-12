@@ -171,8 +171,6 @@ export default function FashionLifestylePage() {
       {/* Semantic Breadcrumbs */}
       <Breadcrumbs
         items={[
-          { label: 'Home', href: '/' },
-          { label: 'Products', href: '/products' },
           { label: 'Fashion & Lifestyle', href: '/products/fashion-lifestyle' },
         ]}
       />
@@ -185,13 +183,6 @@ export default function FashionLifestylePage() {
           
           {/* Left Text Column */}
           <div className="lg:col-span-7 flex flex-col gap-6">
-            <div className="inline-flex items-center gap-2 bg-[#141416] border border-[#D4AF37]/30 rounded-full px-4 py-1.5 w-fit shadow-sm">
-              <Crown className="h-3.5 w-3.5 text-[#D4AF37]" />
-              <span className="text-[11px] font-mono text-[#D4AF37] tracking-[0.2em] uppercase font-bold">
-                AURA EXPORTS / FASHION & LIFESTYLE
-              </span>
-            </div>
-
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading text-[#F5F2EC] tracking-tight leading-[1.06] font-normal">
               India&apos;s Craftsmanship.{' '}
               <span className="text-[#D4AF37] italic font-normal block mt-1">

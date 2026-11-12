@@ -7,6 +7,7 @@ import {
   FileText
 } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
+import Breadcrumbs from '../components/procurement/Breadcrumbs';
 import UnifiedProductExplorer from '../components/products/UnifiedProductExplorer';
 import TechnicalSpecDrawer from '../components/agro/TechnicalSpecDrawer';
 import AgroEnquiryModal from '../components/agro/AgroEnquiryModal';
@@ -76,18 +77,10 @@ export default function BuyRetailPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-20 relative z-10 mb-8 sm:mb-12">
           
           {/* Breadcrumb Navigation: ← AURA EXPORTS / BUY RETAIL */}
-          <nav aria-label="Breadcrumbs" className="mb-6">
-            <div className="flex items-center gap-2 text-[11px] font-mono tracking-[0.2em] uppercase text-[#A29B91]">
-              <Link 
-                to="/" 
-                className="flex items-center gap-1.5 hover:text-[#F2E9D9] transition-colors"
-              >
-                <span>← AURA EXPORTS</span>
-              </Link>
-              <span className="text-[#77716A]">/</span>
-              <span className="text-[#F2E9D9] font-semibold">BUY RETAIL</span>
-            </div>
-          </nav>
+          <Breadcrumbs
+            items={[{ label: 'Buy Retail', href: '/buy-retail' }]}
+            className="!px-0 !mb-6 !max-w-none"
+          />
 
           {/* Split Hero Composition */}
           <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 lg:gap-8 items-center min-h-[400px] lg:min-h-[430px]">

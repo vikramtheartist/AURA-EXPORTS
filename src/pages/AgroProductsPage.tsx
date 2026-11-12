@@ -63,8 +63,6 @@ export default function AgroProductsPage() {
       {/* Semantic Breadcrumbs */}
       <Breadcrumbs
         items={[
-          { label: 'Home', href: '/' },
-          { label: 'Products', href: '/products' },
           { label: 'Agro Products', href: '/products/agro-products' },
         ]}
       />
@@ -77,13 +75,6 @@ export default function AgroProductsPage() {
           
           {/* Left Hero Content */}
           <div className="lg:col-span-7 flex flex-col gap-6">
-            <div className="inline-flex items-center gap-2 bg-white/5 border border-[#dcb782]/25 rounded-full px-4 py-1.5 w-fit shadow-sm">
-              <Sprout className="h-3.5 w-3.5 text-[#dcb782]" />
-              <span className="text-[11px] font-mono text-[#dcb782] tracking-[0.2em] uppercase font-bold">
-                AURA EXPORTS / AGRO PRODUCTS
-              </span>
-            </div>
-
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading text-white tracking-tight leading-[1.06] font-normal">
               India&apos;s Finest Origins.{' '}
               <span className="text-[#dcb782] italic font-normal block mt-1">

@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
-import { ArrowLeft, ChevronRight, FileText } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
+import Breadcrumbs from '../components/procurement/Breadcrumbs';
 
 export default function TermsPage() {
   return (
@@ -11,17 +11,7 @@ export default function TermsPage() {
         canonical="https://auraexport.co/terms"
       />
 
-      <nav aria-label="Breadcrumb" className="max-w-4xl mx-auto px-6 mb-8 flex items-center justify-between text-xs font-mono tracking-wider text-[#ab8558]/80 font-bold">
-        <Link to="/" className="flex items-center gap-1.5 hover:text-white transition-colors">
-          <ArrowLeft className="h-3.5 w-3.5" />
-          <span>AURA EXPORTS HOME</span>
-        </Link>
-        <div className="flex items-center gap-2">
-          <span>LEGAL</span>
-          <ChevronRight className="h-3 w-3" />
-          <span className="text-white">TERMS OF USE</span>
-        </div>
-      </nav>
+      <Breadcrumbs items={[{ label: 'Terms of Use', href: '/terms' }]} className="!max-w-4xl !px-6" />
 
       <main className="max-w-4xl mx-auto px-6">
         <header className="mb-12 border-b border-white/10 pb-8">

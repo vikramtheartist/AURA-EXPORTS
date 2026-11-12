@@ -22,6 +22,7 @@ import {
   BadgeCheck
 } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
+import Breadcrumbs from '../components/procurement/Breadcrumbs';
 
 type VerificationStatus = 'AVAILABLE' | 'AVAILABLE_ON_REQUEST' | 'REQUIRES_CONFIRMATION' | 'NOT_CURRENTLY_PROVIDED';
 
@@ -218,17 +219,7 @@ export default function QualityPage() {
       <SEOHead pageKey="quality" />
 
       {/* Breadcrumb Navigation */}
-      <nav aria-label="Breadcrumb" className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-8 flex items-center justify-between text-xs font-mono tracking-wider text-[#ab8558]/80 font-bold">
-        <Link to="/" className="flex items-center gap-1.5 hover:text-white transition-colors">
-          <ArrowLeft className="h-3.5 w-3.5" />
-          <span>AURA EXPORTS HOME</span>
-        </Link>
-        <div className="flex items-center gap-2">
-          <span>ASSURANCE</span>
-          <ChevronRight className="h-3 w-3" />
-          <span className="text-white">QUALITY & COMPLIANCE</span>
-        </div>
-      </nav>
+      <Breadcrumbs items={[{ label: 'Quality & Compliance', href: '/quality-compliance' }]} />
 
       {/* Semantic Page Header */}
       <header className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-16">
