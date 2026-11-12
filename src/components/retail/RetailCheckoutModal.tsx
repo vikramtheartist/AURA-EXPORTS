@@ -65,7 +65,7 @@ export default function RetailCheckoutModal() {
 
   const getItemPrice = (variant: typeof items[0]['variant']) => {
     if (currency === 'INR') {
-      return ('priceINR' in variant && (variant as { priceINR?: number }).priceINR) || Math.round(variant.priceUSD * 85);
+      return variant.priceINR ?? Math.round(variant.priceUSD * 85);
     }
     return currency === 'USD' ? variant.priceUSD : variant.priceAED;
   };

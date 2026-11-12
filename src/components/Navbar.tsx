@@ -51,6 +51,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
     { label: 'Home', path: '/', id: 'home' },
     { label: 'About Us', path: '/about', id: 'about' },
     { label: 'Our Products', path: '/products', id: 'products', hasDropdown: true },
+    { label: 'Buy Retail', path: '/buy-retail', id: 'buy-retail', isRetail: true },
     { label: 'Our Approach', path: '/export-process', id: 'approach' },
     { label: 'Quality', path: '/quality-compliance', id: 'quality' },
     { label: 'Contact', path: '/contact', id: 'contact' },
@@ -68,6 +69,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
     if (link.id === 'home') return location.pathname === '/';
     if (link.id === 'about') return location.pathname === '/about';
     if (link.id === 'products') return location.pathname.startsWith('/products');
+    if (link.id === 'buy-retail') return location.pathname === '/buy-retail' || location.pathname === '/retail' || location.pathname.startsWith('/buy-retail/');
     if (link.id === 'approach') return location.pathname === '/export-process';
     if (link.id === 'quality') return location.pathname === '/quality-compliance';
     if (link.id === 'contact') return location.pathname === '/contact';
@@ -224,12 +226,12 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                             • Rice & Specialty Grains
                           </Link>
                           <Link 
-                            to="/products/agro-products#retail-spices-powders-collection"
+                            to="/buy-retail"
                             onClick={() => setIsProductsDropdownOpen(false)}
                             className="text-[#dcb782] hover:text-white transition-colors font-medium flex items-center justify-between"
                           >
                             <span>• Gourmet Spice Powders (Retail Tins)</span>
-                            <span className="text-[9px] bg-[#dcb782]/20 text-[#dcb782] px-1.5 py-0.2 rounded font-mono font-bold">SHOP</span>
+                            <span className="text-[9px] bg-[#dcb782]/20 text-[#dcb782] px-1.5 py-0.5 rounded font-mono font-bold">SHOP</span>
                           </Link>
                         </div>
 
@@ -465,6 +467,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
             onClick={openCart}
             className="relative flex items-center justify-center w-11 h-11 rounded-xl bg-white/5 border border-white/10 hover:border-[#dcb782]/50 text-white hover:text-[#dcb782] transition-all cursor-pointer shadow-sm hover:bg-white/10"
             aria-label={`Open Shopping Cart, ${itemCount} items`}
+            id="nav-cart-trigger"
           >
             <ShoppingBag className="w-5 h-5" />
             {itemCount > 0 && (
@@ -492,6 +495,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
             onClick={openCart}
             className="relative flex items-center justify-center text-white bg-black/40 border border-[#dcb782]/20 hover:bg-white/5 h-11 w-11 rounded-full cursor-pointer transition-colors backdrop-blur-md"
             aria-label={`Open Cart, ${itemCount} items`}
+            id="mobile-cart-toggle"
           >
             <ShoppingBag className="h-5 h-5 text-[#dcb782]" />
             {itemCount > 0 && (
@@ -549,12 +553,15 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                           </Link>
                           <div className="pl-3 flex flex-col gap-1 text-xs text-white/70">
                             <Link to="/products/agro-products" onClick={() => setIsOpen(false)}>• Spices & Seasonings</Link>
+                            <Link to="/buy-retail" onClick={() => setIsOpen(false)} className="text-[#dcb782] font-semibold flex items-center justify-between">
+                              <span>• Gourmet Spice Powders (Retail Tins)</span>
+                              <span className="text-[9px] bg-[#dcb782]/20 text-[#dcb782] px-1.5 py-0.5 rounded font-mono font-bold">SHOP</span>
+                            </Link>
                             <Link to="/products/agro-products/turmeric" onClick={() => setIsOpen(false)}>• Turmeric (Fingers & Powder)</Link>
                             <Link to="/products/agro-products/dried-red-chillies" onClick={() => setIsOpen(false)}>• Chillies & Chilli Products</Link>
                             <Link to="/products/agro-products/fresh-drumsticks" onClick={() => setIsOpen(false)}>• Fresh Agricultural Produce</Link>
                             <Link to="/products/agro-products/moringa-leaf-powder" onClick={() => setIsOpen(false)}>• Moringa & Natural Botanicals</Link>
                             <Link to="/products/agro-products/rice-basmati-non-basmati" onClick={() => setIsOpen(false)}>• Rice & Specialty Grains</Link>
-                            <Link to="/products/agro-products#retail-spices-powders-collection" onClick={() => setIsOpen(false)} className="text-[#dcb782] font-semibold">• Gourmet Spice Powders (Retail Tins) ★</Link>
                           </div>
                         </div>
 
@@ -614,9 +621,16 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                   key={link.id}
                   to={link.path}
                   onClick={() => setIsOpen(false)}
-                  className="font-heading italic text-2xl text-[#dfd1b9] hover:text-[#fbfbeb] transition-all"
+                  className={`font-heading italic text-2xl text-[#dfd1b9] hover:text-[#fbfbeb] transition-all flex items-center gap-2 ${
+                    link.id === 'buy-retail' ? 'text-[#dcb782]' : ''
+                  }`}
                 >
-                  {link.label}
+                  <span>{link.label}</span>
+                  {link.id === 'buy-retail' && (
+                    <span className="text-[10px] font-mono uppercase bg-[#dcb782]/20 text-[#dcb782] px-2 py-0.5 rounded-full font-bold border border-[#dcb782]/30 not-italic">
+                      Shop
+                    </span>
+                  )}
                 </Link>
               );
             })}

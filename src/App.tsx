@@ -6,6 +6,7 @@ import ScrollToTop from './components/ScrollToTop';
 import AnalyticsProvider from './components/AnalyticsProvider';
 import { QuoteModalProvider } from './context/QuoteModalContext';
 import { RetailCartProvider } from './context/RetailCartContext';
+import { WishlistProvider } from './context/WishlistContext';
 import RequestQuoteModal from './components/procurement/RequestQuoteModal';
 import RetailCartDrawer from './components/retail/RetailCartDrawer';
 import RetailCheckoutModal from './components/retail/RetailCheckoutModal';
@@ -13,6 +14,7 @@ import RetailCheckoutModal from './components/retail/RetailCheckoutModal';
 import HomePage from './pages/HomePage';
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const ProductsPage = lazy(() => import('./pages/ProductsPage'));
+const BuyRetailPage = lazy(() => import('./pages/BuyRetailPage'));
 const AgroProductsPage = lazy(() => import('./pages/AgroProductsPage'));
 const ProductDetailPage = lazy(() => import('./pages/ProductDetailPage'));
 const RetailProductDetailPage = lazy(() => import('./pages/RetailProductDetailPage'));
@@ -54,7 +56,8 @@ function RouteLoadingFallback() {
 export default function App() {
   return (
     <RetailCartProvider>
-      <QuoteModalProvider>
+      <WishlistProvider>
+        <QuoteModalProvider>
         <div className="relative w-full min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden" id="app-root-container">
           {/* Background spatial aesthetic */}
           <div className="absolute inset-0 bg-[radial-gradient(#ffffff08_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-30" />
@@ -81,54 +84,58 @@ export default function App() {
                   <Route path="/" element={<HomePage />} />
                   <Route path="/about" element={<AboutPage />} />
                   <Route path="/products" element={<ProductsPage />} />
+                  <Route path="/buy-retail" element={<BuyRetailPage />} />
+                  <Route path="/retail" element={<BuyRetailPage />} />
+                  <Route path="/buy-retail/:productSlug" element={<RetailProductDetailPage />} />
                   <Route path="/products/agro-products" element={<AgroProductsPage />} />
                   <Route path="/products/agro-products/turmeric" element={<TurmericFlagshipPage />} />
                   <Route path="/products/agro-products/retail/:productSlug" element={<RetailProductDetailPage />} />
                   <Route path="/products/agro-products/:productSlug" element={<ProductDetailPage />} />
-                <Route path="/products/fashion-lifestyle" element={<FashionLifestylePage />} />
-                <Route path="/products/fashion-lifestyle/:productSlug" element={<ProductDetailPage />} />
-                <Route path="/products/apparel-textiles" element={<ApparelTextilesPage />} />
-                <Route path="/products/apparel-textiles/kanjivaram-silk-saree" element={<KanjivaramSareePage />} />
-                <Route path="/products/apparel-textiles/:productSlug" element={<ProductDetailPage />} />
-                <Route path="/products/:categorySlug/:productSlug" element={<ProductDetailPage />} />
-                <Route path="/products/spices" element={<Navigate to="/products/agro-products" replace />} />
-                <Route path="/products/spices/turmeric" element={<TurmericFlagshipPage />} />
-                <Route path="/products/jewelry" element={<Navigate to="/products/fashion-lifestyle" replace />} />
-                <Route path="/products/textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
-                <Route path="/quality-compliance" element={<QualityPage />} />
-                <Route path="/export-process" element={<ExportProcessPage />} />
-                <Route path="/faqs" element={<FaqsPage />} />
-                <Route path="/contact" element={<ContactPage />} />
-                <Route path="/request-quote" element={<RequestQuotePage />} />
-                <Route path="/card" element={<DigitalBusinessCardPage />} />
-                <Route path="/business-card" element={<DigitalBusinessCardPage />} />
+                  <Route path="/products/fashion-lifestyle" element={<FashionLifestylePage />} />
+                  <Route path="/products/fashion-lifestyle/:productSlug" element={<ProductDetailPage />} />
+                  <Route path="/products/apparel-textiles" element={<ApparelTextilesPage />} />
+                  <Route path="/products/apparel-textiles/kanjivaram-silk-saree" element={<KanjivaramSareePage />} />
+                  <Route path="/products/apparel-textiles/:productSlug" element={<ProductDetailPage />} />
+                  <Route path="/products/:categorySlug/:productSlug" element={<ProductDetailPage />} />
+                  <Route path="/products/spices" element={<Navigate to="/products/agro-products" replace />} />
+                  <Route path="/products/spices/turmeric" element={<TurmericFlagshipPage />} />
+                  <Route path="/products/jewelry" element={<Navigate to="/products/fashion-lifestyle" replace />} />
+                  <Route path="/products/textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
+                  <Route path="/quality-compliance" element={<QualityPage />} />
+                  <Route path="/export-process" element={<ExportProcessPage />} />
+                  <Route path="/faqs" element={<FaqsPage />} />
+                  <Route path="/contact" element={<ContactPage />} />
+                  <Route path="/request-quote" element={<RequestQuotePage />} />
+                  <Route path="/card" element={<DigitalBusinessCardPage />} />
+                  <Route path="/business-card" element={<DigitalBusinessCardPage />} />
 
-                {/* Legal & Governance Routes */}
-                <Route path="/privacy" element={<PrivacyPolicyPage />} />
-                <Route path="/terms" element={<TermsPage />} />
-                <Route path="/terms-of-trade" element={<TermsOfTradePage />} />
+                  {/* Legal & Governance Routes */}
+                  <Route path="/privacy" element={<PrivacyPolicyPage />} />
+                  <Route path="/terms" element={<TermsPage />} />
+                  <Route path="/terms-of-trade" element={<TermsOfTradePage />} />
 
-                {/* Canonical Redirects / Aliases */}
-                <Route path="/agro-products" element={<Navigate to="/products/agro-products" replace />} />
-                <Route path="/spices" element={<Navigate to="/products/agro-products" replace />} />
-                <Route path="/products/turmeric" element={<Navigate to="/products/agro-products/turmeric" replace />} />
-                <Route path="/turmeric" element={<Navigate to="/products/agro-products/turmeric" replace />} />
-                <Route path="/fashion-lifestyle" element={<Navigate to="/products/fashion-lifestyle" replace />} />
-                <Route path="/jewelry" element={<Navigate to="/products/fashion-lifestyle" replace />} />
-                <Route path="/textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
-                <Route path="/apparel-textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
-                <Route path="/quality" element={<Navigate to="/quality-compliance" replace />} />
+                  {/* Canonical Redirects / Aliases */}
+                  <Route path="/agro-products" element={<Navigate to="/products/agro-products" replace />} />
+                  <Route path="/spices" element={<Navigate to="/products/agro-products" replace />} />
+                  <Route path="/products/turmeric" element={<Navigate to="/products/agro-products/turmeric" replace />} />
+                  <Route path="/turmeric" element={<Navigate to="/products/agro-products/turmeric" replace />} />
+                  <Route path="/fashion-lifestyle" element={<Navigate to="/products/fashion-lifestyle" replace />} />
+                  <Route path="/jewelry" element={<Navigate to="/products/fashion-lifestyle" replace />} />
+                  <Route path="/textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
+                  <Route path="/apparel-textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
+                  <Route path="/quality" element={<Navigate to="/quality-compliance" replace />} />
 
-                {/* 404 Fallback */}
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </Suspense>
+                  {/* 404 Fallback */}
+                  <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+              </Suspense>
+            </div>
+
+            <CtaFooter />
           </div>
-
-          <CtaFooter />
         </div>
-      </div>
       </QuoteModalProvider>
-    </RetailCartProvider>
+    </WishlistProvider>
+  </RetailCartProvider>
   );
 }

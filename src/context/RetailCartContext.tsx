@@ -93,7 +93,10 @@ export const RetailCartProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  const subtotalINR = items.reduce((sum, item) => sum + (Math.round(item.variant.priceUSD * 85)) * item.quantity, 0);
+  const subtotalINR = items.reduce(
+    (sum, item) => sum + (item.variant.priceINR ?? Math.round(item.variant.priceUSD * 85)) * item.quantity,
+    0
+  );
   const subtotalUSD = items.reduce((sum, item) => sum + item.variant.priceUSD * item.quantity, 0);
   const subtotalAED = items.reduce((sum, item) => sum + item.variant.priceAED * item.quantity, 0);
 

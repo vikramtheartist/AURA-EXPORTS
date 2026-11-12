@@ -42,6 +42,12 @@ const routes = [
     canonical: 'https://auraexport.co/products',
   },
   {
+    path: '/buy-retail',
+    title: 'Buy Retail Gourmet Spices Online | Aura Exports Retail & D2C Store',
+    description: 'Shop pure single-origin Indian spices online. Direct Salem turmeric powder, Alleppey green cardamom, Guntur chillies, and gourmet tins. Pan-India and global doorstep delivery.',
+    canonical: 'https://auraexport.co/buy-retail',
+  },
+  {
     path: '/products/agro-products',
     title: 'Indian Agricultural Exporters & Spices Wholesale | Tamil Nadu & Kerala Origins | Aura Exports',
     description: 'South India agricultural export and sourcing partner based in Chennai. Direct wholesale sourcing of Salem turmeric fingers, Alleppey green cardamom, Malabar black pepper, cumin seeds, chillies and moringa powder.',
@@ -58,42 +64,6 @@ const routes = [
     title: 'Rice & Specialty Grains Exporter India | Basmati & South Indian Rice Wholesale | Aura Exports',
     description: 'Indian rice exporter based in Chennai. Sourcing premium 1121 Steam, Pusa & Traditional Basmati rice, and South Indian staples (Sona Masoori, Ponni & Matta) for UAE & GCC wholesale and retail distribution.',
     canonical: 'https://auraexport.co/products/agro-products/rice-basmati-non-basmati',
-  },
-  {
-    path: '/products/agro-products/retail/salem-turmeric-powder',
-    title: 'Pure Salem Turmeric Powder (Airtight Tin) | Single-Origin Gourmet Spices | Aura Exports',
-    description: 'Buy pure single-origin Salem Turmeric Powder with 4.8%–5.4% active curcumin. Cryo-milled below 38°C in airtight black & gold metal tins. Worldwide express shipping.',
-    canonical: 'https://auraexport.co/products/agro-products/retail/salem-turmeric-powder',
-  },
-  {
-    path: '/products/agro-products/retail/tellicherry-black-pepper',
-    title: 'Malabar Tellicherry Black Pepper Powder | TGSEB Jumbo Berries | Aura Exports',
-    description: 'Gourmet cold-crushed Malabar Tellicherry black pepper powder from Kerala. Extra-bold TGSEB berries, high piperine heat, and rich woody-citrus notes in airtight metal tins.',
-    canonical: 'https://auraexport.co/products/agro-products/retail/tellicherry-black-pepper',
-  },
-  {
-    path: '/products/agro-products/retail/alleppey-cardamom-powder',
-    title: 'Alleppey Green Cardamom Powder | 100% Whole Green Pods | Aura Exports',
-    description: 'Pure cold-milled Alleppey Green Cardamom from Idukki, Kerala. Fragrant sweet eucalyptus-citrus aroma for baking, chai, and Arabic coffee in luxury airtight tins.',
-    canonical: 'https://auraexport.co/products/agro-products/retail/alleppey-cardamom-powder',
-  },
-  {
-    path: '/products/agro-products/retail/guntur-sannam-chilli',
-    title: 'Guntur Sannam Red Chilli Powder | Pure Fiery Ruby Red | Aura Exports',
-    description: 'Authentic destemmed Guntur Sannam red chilli powder from Andhra Pradesh. Vibrant crimson color and clean 40,000 SHU heat, zero synthetic dyes or fillers.',
-    canonical: 'https://auraexport.co/products/agro-products/retail/guntur-sannam-chilli',
-  },
-  {
-    path: '/products/agro-products/retail/coorg-ginger-powder',
-    title: 'Coorg Sun-Dried Ginger Powder | Clean Zesty Warmth | Aura Exports',
-    description: 'Shade-grown organic Coorg ginger powder. Micro-pulverized 100-mesh silk grade for instant teas, tonics, and artisanal gingerbread. Unbleached and sulfur-free.',
-    canonical: 'https://auraexport.co/products/agro-products/retail/coorg-ginger-powder',
-  },
-  {
-    path: '/products/agro-products/retail/imperial-garam-masala',
-    title: 'Royal Imperial Garam Masala Blend | 12 Whole Spices | Aura Exports',
-    description: 'Small-batch cast-iron roasted 12-spice royal garam masala blend. Cloves, green & black cardamom, mace, nutmeg, Ceylon cinnamon, and Tellicherry pepper.',
-    canonical: 'https://auraexport.co/products/agro-products/retail/imperial-garam-masala',
   },
   {
     path: '/products/fashion-lifestyle',

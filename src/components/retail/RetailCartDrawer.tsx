@@ -167,7 +167,7 @@ export default function RetailCartDrawer() {
           ) : (
             items.map((item) => {
               const itemPrice = currency === 'INR' 
-                ? (('priceINR' in item.variant && (item.variant as { priceINR?: number }).priceINR) || Math.round(item.variant.priceUSD * 85))
+                ? (item.variant.priceINR ?? Math.round(item.variant.priceUSD * 85))
                 : currency === 'USD' 
                   ? item.variant.priceUSD 
                   : item.variant.priceAED;

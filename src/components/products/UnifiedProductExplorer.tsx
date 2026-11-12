@@ -1,40 +1,134 @@
-import React, { useState, useMemo } from 'react';
-import { Sparkles } from 'lucide-react';
+import { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { 
+  Search, 
+  X, 
+  RotateCcw,
+  LayoutGrid,
+  List,
+  SlidersHorizontal
+} from 'lucide-react';
 import { 
   UNIFIED_PRODUCT_CATEGORIES, 
   UnifiedProductCategory, 
-  AgroCommodityItem 
+  ALL_RETAIL_PRODUCTS,
+  PackagedProductItem
 } from '../../data/unifiedProductsCatalog';
 import CategorySelector from './CategorySelector';
-import ProductModeSwitcher, { ProductFormatMode } from './ProductModeSwitcher';
 import RetailProductCard from './RetailProductCard';
-import AgroProductCard from './AgroProductCard';
 import TrustQualityStrip from './TrustQualityStrip';
 import ExportConversionBanner from './ExportConversionBanner';
-import { institutionalAgroProducts, InstitutionalProduct } from '../../data/institutionalAgroCatalog';
 import { useRetailCart } from '../../context/RetailCartContext';
 
 interface UnifiedProductExplorerProps {
-  onOpenAgroEnquiry: (
+  onOpenAgroEnquiry?: (
     productName: string,
     origin: string,
     form: string,
     inquiryType?: 'quotation' | 'sample' | 'specifications' | 'packaging'
   ) => void;
-  onOpenSpecDrawer?: (product: InstitutionalProduct) => void;
+  onOpenSpecDrawer?: (product: any) => void;
 }
+
+type ProductFormFilter = 'all' | 'powder' | 'whole' | 'paste' | 'seasoning' | 'wellness';
+type PriceRangeFilter = 'all' | 'under150' | '150-300' | 'above300';
+type SortOption = 'popularity' | 'price-asc' | 'price-desc' | 'name-asc' | 'new-arrivals';
+type ViewMode = 'grid' | 'list';
 
 export default function UnifiedProductExplorer({
   onOpenAgroEnquiry,
-  onOpenSpecDrawer,
 }: UnifiedProductExplorerProps) {
-  // Category State
-  const [selectedCategoryId, setSelectedCategoryId] = useState<UnifiedProductCategory['id']>('turmeric');
-
-  // Format Switcher Mode ('packaged' vs 'agro')
-  const [formatMode, setFormatMode] = useState<ProductFormatMode>('packaged');
-
+  const [searchParams, setSearchParams] = useSearchParams();
   const { currency, setCurrency } = useRetailCart();
+
+  // Initialize state from URL query parameters
+  const categoryParam = (searchParams.get('category') as UnifiedProductCategory['id']) || 'all';
+  const formatParam = (searchParams.get('format') as ProductFormFilter) || 'all';
+  const searchParam = searchParams.get('search') || '';
+  const sortParam = (searchParams.get('sort') as SortOption) || 'popularity';
+  const priceParam = (searchParams.get('price') as PriceRangeFilter) || 'all';
+  const inStockParam = searchParams.get('inStock') === 'true';
+  const viewParam = (searchParams.get('view') as ViewMode) || 'grid';
+
+  // Category State
+  const [selectedCategoryId, setSelectedCategoryId] = useState<UnifiedProductCategory['id']>(categoryParam);
+
+  // Search, Filter, Sort & View States
+  const [searchQuery, setSearchQuery] = useState(searchParam);
+  const [selectedForm, setSelectedForm] = useState<ProductFormFilter>(formatParam);
+  const [selectedPriceRange, setSelectedPriceRange] = useState<PriceRangeFilter>(priceParam);
+  const [inStockOnly, setInStockOnly] = useState(inStockParam);
+  const [sortBy, setSortBy] = useState<SortOption>(sortParam);
+  const [viewMode, setViewMode] = useState<ViewMode>(viewParam);
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+
+  // Synchronize state with URL parameters
+  const updateUrlParams = (updates: Record<string, string | null>) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      Object.entries(updates).forEach(([key, value]) => {
+        if (!value || value === 'all' || value === '' || value === 'popularity' || value === 'grid' || value === 'false') {
+          next.delete(key);
+        } else {
+          next.set(key, value);
+        }
+      });
+      return next;
+    }, { replace: true });
+  };
+
+  // Category change handler
+  const handleSelectCategory = (catId: UnifiedProductCategory['id']) => {
+    setSelectedCategoryId(catId);
+    updateUrlParams({ category: catId === 'all' ? null : catId });
+  };
+
+  // Search input handler
+  const handleSearchChange = (val: string) => {
+    setSearchQuery(val);
+    updateUrlParams({ search: val.trim() ? val.trim() : null });
+  };
+
+  // Format pill handler
+  const handleFormatChange = (form: ProductFormFilter) => {
+    setSelectedForm(form);
+    updateUrlParams({ format: form === 'all' ? null : form });
+  };
+
+  // Sort handler
+  const handleSortChange = (sort: SortOption) => {
+    setSortBy(sort);
+    updateUrlParams({ sort: sort === 'popularity' ? null : sort });
+  };
+
+  // Price handler
+  const handlePriceChange = (price: PriceRangeFilter) => {
+    setSelectedPriceRange(price);
+    updateUrlParams({ price: price === 'all' ? null : price });
+  };
+
+  // In stock handler
+  const handleInStockChange = (checked: boolean) => {
+    setInStockOnly(checked);
+    updateUrlParams({ inStock: checked ? 'true' : null });
+  };
+
+  // View mode handler
+  const handleViewModeChange = (mode: ViewMode) => {
+    setViewMode(mode);
+    updateUrlParams({ view: mode === 'grid' ? null : mode });
+  };
+
+  // Reset all filters
+  const handleResetFilters = () => {
+    setSearchQuery('');
+    setSelectedForm('all');
+    setSelectedPriceRange('all');
+    setInStockOnly(false);
+    setSortBy('popularity');
+    setSelectedCategoryId('all');
+    setSearchParams({}, { replace: true });
+  };
 
   // Active Category Data
   const currentCategory = useMemo(() => {
@@ -44,105 +138,140 @@ export default function UnifiedProductExplorer({
     );
   }, [selectedCategoryId]);
 
-  const handleViewSpecs = (commodity: AgroCommodityItem) => {
-    if (commodity.institutionalId && onOpenSpecDrawer) {
-      const match = institutionalAgroProducts.find((p) => p.id === commodity.institutionalId);
-      if (match) {
-        onOpenSpecDrawer(match);
-        return;
+  // Base list of products depending on selected category
+  const baseCategoryProducts = useMemo(() => {
+    if (selectedCategoryId === 'all') {
+      return ALL_RETAIL_PRODUCTS;
+    }
+    return currentCategory.packagedProducts;
+  }, [selectedCategoryId, currentCategory]);
+
+  // Filtered & Sorted Products
+  const displayedProducts = useMemo(() => {
+    let result = [...baseCategoryProducts];
+
+    // Search query filter
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.origin.toLowerCase().includes(q) ||
+          p.descriptor.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q)
+      );
+    }
+
+    // Form/Format filter
+    if (selectedForm !== 'all') {
+      if (selectedForm === 'wellness') {
+        result = result.filter(
+          (p) => p.productType === 'capsules' || p.productType === 'personal-care'
+        );
+      } else {
+        result = result.filter((p) => p.productType === selectedForm);
       }
     }
 
-    // Fallback: navigate or scroll to specifications link
-    if (commodity.specificationsSlug) {
-      if (commodity.specificationsSlug.startsWith('#')) {
-        const el = document.querySelector(commodity.specificationsSlug);
-        el?.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        window.location.href = commodity.specificationsSlug;
+    // Price range filter
+    if (selectedPriceRange !== 'all') {
+      if (selectedPriceRange === 'under150') {
+        result = result.filter((p) => p.priceINR < 150);
+      } else if (selectedPriceRange === '150-300') {
+        result = result.filter((p) => p.priceINR >= 150 && p.priceINR <= 300);
+      } else if (selectedPriceRange === 'above300') {
+        result = result.filter((p) => p.priceINR > 300);
       }
     }
-  };
+
+    // In Stock Only
+    if (inStockOnly) {
+      result = result.filter((p) => p.inStock);
+    }
+
+    // Sort order
+    if (sortBy === 'price-asc') {
+      result.sort((a, b) => a.priceINR - b.priceINR);
+    } else if (sortBy === 'price-desc') {
+      result.sort((a, b) => b.priceINR - a.priceINR);
+    } else if (sortBy === 'name-asc') {
+      result.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === 'new-arrivals') {
+      result.reverse();
+    }
+
+    return result;
+  }, [baseCategoryProducts, searchQuery, selectedForm, selectedPriceRange, inStockOnly, sortBy]);
+
+  // Check if any filter is active
+  const hasActiveFilters =
+    searchQuery.trim() !== '' ||
+    selectedForm !== 'all' ||
+    selectedPriceRange !== 'all' ||
+    inStockOnly ||
+    selectedCategoryId !== 'all';
 
   return (
     <section
       id="unified-product-explorer"
-      className="w-full bg-[#0A0A0B] text-white pt-6 pb-20 relative"
-      aria-label="Unified Agricultural Commodities & Gourmet Products Explorer"
+      className="w-full text-white pt-2 pb-16 relative"
+      aria-label="AURA Gourmet Retail Storefront"
     >
-      {/* Anchor compatibility IDs for existing links and bookmarks */}
-      <div id="retail-spices-powders-collection" className="relative -top-24 pointer-events-none" />
-      <div id="explore-agricultural-products" className="relative -top-24 pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
-        
-        {/* =========================================================================
-            SECTION C: SECTION HEADING & VISUAL CATEGORY SELECTOR
-            ========================================================================= */}
-        <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-10 space-y-3">
-          <div className="inline-flex items-center gap-2 bg-[#151517] border border-[#D4AF37]/30 rounded-full px-4 py-1.5 shadow-sm">
-            <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" />
-            <span className="text-[10px] font-mono text-[#D4AF37] tracking-[0.2em] uppercase font-bold">
-              UNIFIED COMMODITIES & GOURMET EXPLORER
-            </span>
-          </div>
-
-          <h2 className="text-3xl md:text-5xl font-heading text-[#F5F1E8] tracking-tight font-normal">
-            Explore Our Origins & Products
-          </h2>
-
-          <p className="text-[#A5A19A] font-body text-sm md:text-base font-light max-w-2xl">
-            Select a product category to explore its sourcing origins, bulk commodities and finished products.
-          </p>
-        </div>
-
-        {/* Category Horizontal Selector */}
-        <div className="mb-8">
-          <CategorySelector
-            selectedCategoryId={selectedCategoryId}
-            onSelectCategory={(catId) => setSelectedCategoryId(catId)}
-          />
-        </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-20 space-y-6">
 
         {/* =========================================================================
-            SECTION E: PRODUCT FORMAT SWITCHER (Packaged vs Agro)
+            1. CATEGORY SELECTOR STRIP
             ========================================================================= */}
-        <div className="mb-6">
-          <ProductModeSwitcher
-            currentMode={formatMode}
-            onModeChange={(mode) => setFormatMode(mode)}
-            packagedCount={currentCategory.packagedProducts.length}
-            agroCount={currentCategory.agriculturalProducts.length}
-          />
+        <CategorySelector
+          selectedCategoryId={selectedCategoryId}
+          onSelectCategory={handleSelectCategory}
+        />
 
-          {/* Section Sub-header & Currency Switcher Bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-8 mb-6 pb-4 border-b border-white/10">
-            <div>
-              <h3 className="text-xl md:text-2xl font-heading font-medium text-[#F5F1E8]">
-                {formatMode === 'packaged'
-                  ? `${currentCategory.name} Finished Products`
-                  : `${currentCategory.name} Agricultural Commodities`}
-              </h3>
-              <p className="text-xs font-mono text-[#A5A19A] mt-1">
-                {formatMode === 'packaged'
-                  ? 'Airtight consumer tins, pouches and value-added retail formulations'
-                  : 'Direct estate harvest lots, raw commodities, and custom export grades'}
-              </p>
+        {/* =========================================================================
+            2. SEARCH AND PRODUCT DISCOVERY TOOLBAR
+            ========================================================================= */}
+        <div className="pt-2 space-y-4">
+          <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+            
+            {/* Left: Large Search Input */}
+            <div className="relative flex-1 max-w-xl">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#77716A]" />
+              <input
+                id="retail-search-input"
+                type="text"
+                value={searchQuery}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                placeholder="Search spices by name or origin..."
+                className="w-full bg-[#121212] border border-[#292929] focus:border-[#D4AF78] text-[#F2E9D9] placeholder-[#77716A] text-xs sm:text-sm rounded-xl pl-10 pr-9 py-2.5 outline-none transition-colors"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => handleSearchChange('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#77716A] hover:text-[#F2E9D9] cursor-pointer"
+                  title="Clear search"
+                  aria-label="Clear search"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
 
-            {/* Currency Selector (INR ₹ / USD $ / AED د.إ) */}
-            {formatMode === 'packaged' && (
-              <div className="inline-flex items-center gap-1 bg-[#141416] border border-[#29292D] p-1 rounded-xl self-start sm:self-auto shadow-sm">
-                <span className="text-[10px] font-mono text-neutral-400 px-2 uppercase font-medium">Currency:</span>
+            {/* Right: Currency Selector & Mobile Filter Toggle */}
+            <div className="flex flex-wrap items-center gap-2.5">
+              
+              {/* Currency Selector */}
+              <div className="inline-flex items-center gap-1 bg-[#121212] border border-[#292929] p-1 rounded-xl">
+                <span className="text-[10px] font-mono text-[#77716A] px-2 uppercase font-medium">Currency</span>
                 <button
                   type="button"
                   onClick={() => setCurrency('INR')}
                   className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                     currency === 'INR'
-                      ? 'bg-[#D4AF37] text-black shadow-sm'
-                      : 'text-neutral-400 hover:text-white'
+                      ? 'bg-[#D4AF78] text-[#090909]'
+                      : 'text-[#A29B91] hover:text-[#F2E9D9]'
                   }`}
-                  title="Display prices in Indian Rupees (₹)"
+                  title="Indian Rupees (₹)"
                 >
                   INR (₹)
                 </button>
@@ -151,10 +280,10 @@ export default function UnifiedProductExplorer({
                   onClick={() => setCurrency('USD')}
                   className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                     currency === 'USD'
-                      ? 'bg-[#D4AF37] text-black shadow-sm'
-                      : 'text-neutral-400 hover:text-white'
+                      ? 'bg-[#D4AF78] text-[#090909]'
+                      : 'text-[#A29B91] hover:text-[#F2E9D9]'
                   }`}
-                  title="Display prices in US Dollars ($)"
+                  title="US Dollars ($)"
                 >
                   USD ($)
                 </button>
@@ -163,68 +292,231 @@ export default function UnifiedProductExplorer({
                   onClick={() => setCurrency('AED')}
                   className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                     currency === 'AED'
-                      ? 'bg-[#D4AF37] text-black shadow-sm'
-                      : 'text-neutral-400 hover:text-white'
+                      ? 'bg-[#D4AF78] text-[#090909]'
+                      : 'text-[#A29B91] hover:text-[#F2E9D9]'
                   }`}
-                  title="Display prices in UAE Dirhams (د.إ)"
+                  title="UAE Dirhams (د.إ)"
                 >
                   AED (د.إ)
                 </button>
               </div>
-            )}
+
+              {/* Mobile Filter Toggle */}
+              <button
+                type="button"
+                onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
+                className="lg:hidden inline-flex items-center gap-1.5 px-3 py-2 bg-[#121212] border border-[#292929] text-xs font-mono text-[#F2E9D9] rounded-xl cursor-pointer"
+              >
+                <SlidersHorizontal className="w-3.5 h-3.5 text-[#D4AF78]" />
+                <span>Filters {hasActiveFilters && '•'}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* =========================================================================
+              3. PRODUCT FORMAT FILTERS ROW
+              ========================================================================= */}
+          <div className={`pt-1 ${isMobileFiltersOpen ? 'block' : 'hidden lg:block'}`}>
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+              
+              {/* Form Filter Pills */}
+              <div className="flex flex-wrap items-center gap-1.5">
+                {[
+                  { id: 'all', label: 'All Formats' },
+                  { id: 'powder', label: 'Powders' },
+                  { id: 'whole', label: 'Whole Spices' },
+                  { id: 'seasoning', label: 'Seasonings' },
+                  { id: 'paste', label: 'Pastes' },
+                  { id: 'wellness', label: 'Wellness & Care' },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => handleFormatChange(tab.id as ProductFormFilter)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer ${
+                      selectedForm === tab.id
+                        ? 'bg-[#D4AF78] text-[#090909] font-bold'
+                        : 'bg-[#181818] border border-[#292929] text-[#A29B91] hover:text-[#F2E9D9] hover:border-[#D4AF78]/30'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Price Range Filter & In-stock Checkbox */}
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-1.5 text-xs font-mono text-[#A29B91]">
+                  <span>Price:</span>
+                  <select
+                    value={selectedPriceRange}
+                    onChange={(e) => handlePriceChange(e.target.value as PriceRangeFilter)}
+                    className="bg-[#121212] border border-[#292929] text-[#F2E9D9] text-xs font-mono py-1 px-2.5 rounded-lg outline-none focus:border-[#D4AF78]/50 cursor-pointer"
+                  >
+                    <option value="all" className="bg-[#121212]">All Prices</option>
+                    <option value="under150" className="bg-[#121212]">Under ₹150</option>
+                    <option value="150-300" className="bg-[#121212]">₹150 – ₹300</option>
+                    <option value="above300" className="bg-[#121212]">Above ₹300</option>
+                  </select>
+                </div>
+
+                <label className="flex items-center gap-1.5 text-xs font-mono text-[#A29B91] cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={inStockOnly}
+                    onChange={(e) => handleInStockChange(e.target.checked)}
+                    className="rounded bg-[#121212] border-[#292929] text-[#D4AF78] focus:ring-0 cursor-pointer"
+                  />
+                  <span>In Stock Only</span>
+                </label>
+
+                {/* Reset Filters CTA */}
+                {hasActiveFilters && (
+                  <button
+                    type="button"
+                    onClick={handleResetFilters}
+                    className="inline-flex items-center gap-1 text-[11px] font-mono text-[#D4AF78] hover:underline cursor-pointer ml-auto md:ml-0"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    <span>Reset</span>
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
         {/* =========================================================================
-            VERTICAL 3-COLUMN PRODUCT LISTING GRID
-            Exact equal sizing, 3 tiles each row, generous luxury empty space & consistency
+            4. PRODUCT CATALOGUE SECTION HEADER & VIEW SWITCHER
             ========================================================================= */}
-        <div className="w-full">
-          {formatMode === 'packaged' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-              {currentCategory.packagedProducts.map((pkgProduct) => (
-                <RetailProductCard
-                  key={pkgProduct.id}
-                  product={pkgProduct}
-                  onOpenEnquiry={(pName) =>
-                    onOpenAgroEnquiry(
-                      pName,
-                      currentCategory.origin.location,
-                      'Retail Consumer Packaging',
-                      'quotation'
-                    )
-                  }
-                />
-              ))}
+        <div id="product-catalogue" className="pt-6">
+          <div className="flex items-baseline justify-between mb-6 pb-3 border-b border-[#292929]">
+            <div className="flex items-baseline gap-3">
+              <h2 className="text-xl sm:text-2xl font-heading font-normal text-[#F2E9D9]">
+                {selectedCategoryId === 'all'
+                  ? 'All Gourmet Retail Products'
+                  : `${currentCategory.name} Collection`}
+              </h2>
+              <span className="text-xs font-mono text-[#77716A]">
+                Showing {displayedProducts.length} {displayedProducts.length === 1 ? 'item' : 'items'}
+              </span>
             </div>
+
+            <div className="flex items-center gap-3">
+              {/* Grid / List View Toggle */}
+              <div className="inline-flex items-center bg-[#121212] border border-[#292929] rounded-xl p-0.5">
+                <button
+                  type="button"
+                  onClick={() => handleViewModeChange('grid')}
+                  className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                    viewMode === 'grid'
+                      ? 'bg-[#D4AF78] text-[#090909]'
+                      : 'text-[#77716A] hover:text-[#F2E9D9]'
+                  }`}
+                  aria-label="Grid view"
+                  title="Grid view"
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleViewModeChange('list')}
+                  className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                    viewMode === 'list'
+                      ? 'bg-[#D4AF78] text-[#090909]'
+                      : 'text-[#77716A] hover:text-[#F2E9D9]'
+                  }`}
+                  aria-label="List view"
+                  title="List view"
+                >
+                  <List className="w-4 h-4" />
+                </button>
+              </div>
+
+              {selectedCategoryId !== 'all' && (
+                <button
+                  type="button"
+                  onClick={() => handleSelectCategory('all')}
+                  className="text-xs font-mono text-[#D4AF78] hover:underline cursor-pointer hidden sm:inline-block"
+                >
+                  ← View All
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* =========================================================================
+              5. PRODUCT CATALOGUE: 3-COLUMN LUXURY GRID OR LIST VIEW
+              ========================================================================= */}
+          {displayedProducts.length > 0 ? (
+            viewMode === 'grid' ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 transition-all duration-300">
+                {displayedProducts.map((pkgProduct) => (
+                  <RetailProductCard
+                    key={pkgProduct.id}
+                    product={pkgProduct}
+                    isListView={false}
+                    onOpenEnquiry={(pName) =>
+                      onOpenAgroEnquiry?.(
+                        pName,
+                        currentCategory.origin.location,
+                        'Retail Consumer Packaging',
+                        'quotation'
+                      )
+                    }
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-4 transition-all duration-300">
+                {displayedProducts.map((pkgProduct) => (
+                  <RetailProductCard
+                    key={pkgProduct.id}
+                    product={pkgProduct}
+                    isListView={true}
+                    onOpenEnquiry={(pName) =>
+                      onOpenAgroEnquiry?.(
+                        pName,
+                        currentCategory.origin.location,
+                        'Retail Consumer Packaging',
+                        'quotation'
+                      )
+                    }
+                  />
+                ))}
+              </div>
+            )
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-              {currentCategory.agriculturalProducts.map((agroCommodity) => (
-                <AgroProductCard
-                  key={agroCommodity.id}
-                  commodity={agroCommodity}
-                  onRequestQuote={(name, origin, form) =>
-                    onOpenAgroEnquiry(name, origin, form, 'quotation')
-                  }
-                  onViewSpecs={handleViewSpecs}
-                />
-              ))}
+            <div className="w-full bg-[#121212] border border-[#292929] rounded-2xl p-12 text-center my-8">
+              <p className="text-[#F2E9D9] font-heading text-xl mb-2 font-normal">
+                No Products Match Your Criteria
+              </p>
+              <p className="text-xs sm:text-sm font-sans text-[#A29B91] max-w-md mx-auto mb-6 font-light">
+                Try adjusting your search query, clearing price or format filters, or switching back to All Products.
+              </p>
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="px-5 py-2.5 rounded-xl bg-[#D4AF78] text-[#090909] font-mono text-xs font-bold hover:bg-[#E5C07B] transition-colors cursor-pointer"
+              >
+                Clear All Filters
+              </button>
             </div>
           )}
         </div>
 
         {/* =========================================================================
-            SECTION F: TRUST & QUALITY STRIP
+            6. TRUST & QUALITY STRIP
             ========================================================================= */}
         <TrustQualityStrip />
 
         {/* =========================================================================
-            SECTION G: EXPORT CONVERSION BANNER
+            7. EXPORT CONVERSION BANNER (B2B WHOLESALE CROSS-LINK)
             ========================================================================= */}
         <ExportConversionBanner
           onOpenQuote={() =>
-            onOpenAgroEnquiry(
-              `${currentCategory.name} Export Commodity`,
+            onOpenAgroEnquiry?.(
+              `${selectedCategoryId === 'all' ? 'Indian Spices' : currentCategory.name} Export Commodity`,
               currentCategory.origin.location,
               'Commercial Export Order',
               'quotation'

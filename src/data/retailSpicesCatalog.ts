@@ -9,6 +9,9 @@ export interface RetailProductVariant {
   id: string;
   name: string;
   weightGrams: number;
+  priceINR?: number;
+  mrpINR?: number;
+  sku?: string;
   priceUSD: number;
   priceAED: number;
   compareAtUSD?: number;
