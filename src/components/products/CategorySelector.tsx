@@ -112,22 +112,17 @@ export default function CategorySelector({
               type="button"
               className={`group relative flex flex-col items-center justify-between rounded-2xl p-2.5 sm:p-3 h-[112px] sm:h-[118px] transition-all duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF78] select-none text-left snap-start ${
                 isSelected
-                  ? 'bg-[#181818] border border-[#D4AF78] shadow-[0_0_24px_rgba(212,175,120,0.18)] scale-[1.01]'
-                  : 'bg-[#121212] border border-[#292929] hover:border-[#D4AF78]/40 hover:bg-[#181818]'
+                  ? 'bg-[#D4AF78] text-[#090909] border border-[#D4AF78] shadow-[0_4px_25px_rgba(212,175,120,0.35)] scale-[1.02]'
+                  : 'bg-[#121212] border border-[#292929] hover:border-[#D4AF78]/40 hover:bg-[#181818] text-[#F2E9D9]'
               }`}
             >
-              {/* Subtle Warm Amber Gradient Sheen on Selected State */}
-              {isSelected && (
-                <div className="absolute inset-0 bg-gradient-to-b from-[#D4AF78]/10 via-transparent to-transparent pointer-events-none rounded-2xl" />
-              )}
-
               {/* Top: Thumbnail Image or Icon */}
               <div className="w-full flex-1 flex items-center justify-center relative overflow-hidden pt-1">
                 {isAllProducts ? (
                   <div
                     className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all ${
                       isSelected
-                        ? 'bg-[#D4AF78]/20 text-[#D4AF78] border border-[#D4AF78]/50'
+                        ? 'bg-black/15 text-[#090909] border border-black/20'
                         : 'bg-white/[0.04] text-[#A29B91] group-hover:text-[#F2E9D9] border border-white/[0.06]'
                     }`}
                   >
@@ -150,7 +145,7 @@ export default function CategorySelector({
                 <span
                   className={`block text-xs sm:text-sm font-heading tracking-wide transition-colors truncate ${
                     isSelected
-                      ? 'text-[#F2E9D9] font-medium'
+                      ? 'text-[#090909] font-bold'
                       : 'text-[#A29B91] group-hover:text-[#F2E9D9]'
                   }`}
                 >
@@ -160,7 +155,7 @@ export default function CategorySelector({
                 <span
                   className={`block text-[10px] sm:text-[11px] font-mono tracking-wider mt-0.5 transition-colors ${
                     isSelected
-                      ? 'text-[#D4AF78] font-medium'
+                      ? 'text-[#090909]/80 font-bold'
                       : 'text-[#77716A] group-hover:text-[#A29B91]'
                   }`}
                 >

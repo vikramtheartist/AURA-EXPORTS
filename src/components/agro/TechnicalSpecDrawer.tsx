@@ -457,28 +457,28 @@ export default function TechnicalSpecDrawer({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 md:p-6 lg:p-8 animate-fadeIn overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex justify-end animate-fadeIn overflow-hidden">
       {/* Dark Overlay Backdrop */}
       <div
         onClick={onClose}
-        className="fixed inset-0 bg-black/85 backdrop-blur-md transition-opacity duration-300"
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300"
         aria-hidden="true"
       />
 
       {/* =======================================================================
-          UNIFIED LUXURY MODAL CARD CONTAINER (EXACTLY MATCHING ATTACHED IMAGE)
+          SLIDE-OVER LUXURY DRAWER PANEL (EXACTLY MATCHING ATTACHED IMAGE)
           ======================================================================= */}
       <aside
         role="dialog"
         aria-modal="true"
         aria-label={`${product.name} Product Details`}
-        className="relative z-10 w-full max-w-5xl rounded-[28px] sm:rounded-[32px] border border-[#28282B] bg-[#0A0A0C] text-[#F2E9D9] shadow-[0_25px_90px_rgba(0,0,0,0.95)] flex flex-col my-auto transition-transform duration-300 ease-out overflow-hidden"
+        className="relative z-10 w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl h-full bg-[#0A0A0C] border-l border-[#28282B] text-[#F2E9D9] shadow-[0_0_80px_rgba(0,0,0,0.95)] flex flex-col justify-between transition-transform duration-300 ease-out overflow-hidden"
       >
         
         {/* =====================================================================
             TOP HEADER BAR (AURA EXPORTS | CATEGORY · HSN [CODE]  ... [X])
             ===================================================================== */}
-        <div className="px-6 sm:px-8 py-5 border-b border-[#1E1E22] flex items-center justify-between">
+        <div className="px-6 sm:px-8 py-5 border-b border-[#1E1E22] flex items-center justify-between shrink-0 bg-[#0A0A0C]">
           
           {/* Left: Brand Logo Mark & Category/HSN */}
           <div className="flex items-center">
@@ -517,17 +517,17 @@ export default function TechnicalSpecDrawer({
         {/* =====================================================================
             MAIN BODY (SPLIT 2-COLUMN LUXURY EDITORIAL LAYOUT)
             ===================================================================== */}
-        <div className="p-6 sm:p-8 lg:p-10 overflow-y-auto max-h-[calc(90vh-140px)]">
+        <div className="flex-1 p-6 sm:p-8 lg:p-10 overflow-y-auto">
           
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
             
             {/* -----------------------------------------------------------------
-                LEFT COLUMN: PRODUCT PHOTOGRAPHY & 3 TRUST BADGES
+                LEFT COLUMN: VERTICALLY FULL-HEIGHT PHOTOGRAPHY & 3 TRUST BADGES
                 ----------------------------------------------------------------- */}
-            <div className="lg:col-span-5 flex flex-col space-y-4">
+            <div className="lg:col-span-5 flex flex-col justify-between space-y-4">
               
-              {/* Product Visual Container */}
-              <div className="relative w-full aspect-[4/5] rounded-3xl overflow-hidden bg-[#141416] border border-[#252528] shadow-2xl group">
+              {/* Product Visual Container (Same width, vertically full height) */}
+              <div className="relative w-full flex-1 min-h-[460px] sm:min-h-[520px] lg:min-h-[580px] rounded-3xl overflow-hidden bg-[#141416] border border-[#252528] shadow-2xl group">
                 <img
                   src={displayImage}
                   alt={`${product.name} Indian Export Commodity`}
@@ -536,11 +536,11 @@ export default function TechnicalSpecDrawer({
                 
                 {/* Natural Dark Gradient for Contrast */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
-                <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#0A0A0C] to-transparent pointer-events-none" />
+                <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0A0A0C] to-transparent pointer-events-none" />
               </div>
 
               {/* 3 Trust Badges beneath Photo (Location info removed per request) */}
-              <div className="grid grid-cols-3 gap-1 p-3 bg-[#121214] border border-[#252528] rounded-2xl">
+              <div className="grid grid-cols-3 gap-1 p-3 bg-[#121214] border border-[#252528] rounded-2xl shrink-0">
                 
                 {/* Badge 1: Single Origin */}
                 <div className="flex flex-col items-center text-center gap-1 p-1">
@@ -720,7 +720,7 @@ export default function TechnicalSpecDrawer({
         {/* =====================================================================
             BOTTOM ACTION BAR (FULL WIDTH, CLEAN DIVIDER)
             ===================================================================== */}
-        <div className="px-6 sm:px-8 py-5 border-t border-[#1E1E22] bg-[#0A0A0C] flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="px-6 sm:px-8 py-5 border-t border-[#1E1E22] bg-[#0A0A0C] flex flex-col sm:flex-row items-center justify-between gap-4 shrink-0">
           
           {/* Left: Test Reports Trigger */}
           <button
