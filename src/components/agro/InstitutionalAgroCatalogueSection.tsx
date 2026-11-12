@@ -9,6 +9,7 @@ export default function InstitutionalAgroCatalogueSection() {
   // Drawer & Modal States
   const [selectedProductForDrawer, setSelectedProductForDrawer] = useState<InstitutionalProduct | null>(null);
   const [selectedProductForRFQ, setSelectedProductForRFQ] = useState<InstitutionalProduct | null>(null);
+  const [rfqInitialForm, setRfqInitialForm] = useState<string | undefined>(undefined);
 
   // Filter & Search States
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -227,6 +228,14 @@ export default function InstitutionalAgroCatalogueSection() {
         onClose={() => setSelectedProductForDrawer(null)}
         onRequestQuotation={(product, notes) => {
           setSelectedProductForDrawer(null);
+          const formMatch = notes?.match(/Form:\s*([^)]+)/);
+          setRfqInitialForm(formMatch ? formMatch[1].trim() : undefined);
+          setSelectedProductForRFQ(product);
+        }}
+        onRequestSample={(product, notes) => {
+          setSelectedProductForDrawer(null);
+          const formMatch = notes?.match(/Form:\s*([^)]+)/);
+          setRfqInitialForm(formMatch ? formMatch[1].trim() : undefined);
           setSelectedProductForRFQ(product);
         }}
       />
@@ -235,7 +244,11 @@ export default function InstitutionalAgroCatalogueSection() {
       <InstitutionalRFQModal
         product={selectedProductForRFQ}
         isOpen={Boolean(selectedProductForRFQ)}
-        onClose={() => setSelectedProductForRFQ(null)}
+        initialForm={rfqInitialForm}
+        onClose={() => {
+          setSelectedProductForRFQ(null);
+          setRfqInitialForm(undefined);
+        }}
       />
     </section>
   );

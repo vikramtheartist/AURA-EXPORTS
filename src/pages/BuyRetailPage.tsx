@@ -224,7 +224,24 @@ export default function BuyRetailPage() {
           product={selectedProductForDrawer}
           isOpen={!!selectedProductForDrawer}
           onClose={() => setSelectedProductForDrawer(null)}
-          onRequestQuotation={() => handleOpenAgroEnquiry(selectedProductForDrawer.name, selectedProductForDrawer.origin, selectedProductForDrawer.form, 'quotation')}
+          onRequestQuotation={(product, notes) => {
+            const formMatch = notes?.match(/Form:\s*([^)]+)/);
+            handleOpenAgroEnquiry(
+              product.name,
+              product.origin.displayOrigin,
+              formMatch ? formMatch[1].trim() : 'Standard Export Grade',
+              'quotation'
+            );
+          }}
+          onRequestSample={(product, notes) => {
+            const formMatch = notes?.match(/Form:\s*([^)]+)/);
+            handleOpenAgroEnquiry(
+              product.name,
+              product.origin.displayOrigin,
+              formMatch ? formMatch[1].trim() : 'Standard Export Grade',
+              'sample'
+            );
+          }}
         />
       )}
 
