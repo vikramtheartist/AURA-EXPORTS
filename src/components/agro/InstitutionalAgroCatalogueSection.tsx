@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Sparkles, Filter, X, ShieldCheck, Sprout } from 'lucide-react';
+import { Search, Sparkles, Filter, X, Sprout } from 'lucide-react';
 import ProductCard from './ProductCard';
 import TechnicalSpecDrawer from './TechnicalSpecDrawer';
 import InstitutionalRFQModal from './InstitutionalRFQModal';
@@ -61,23 +61,12 @@ export default function InstitutionalAgroCatalogueSection() {
   return (
     <section className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-28" id="explore-agricultural-products">
       {/* Section Header */}
-      <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-12">
-        <div className="inline-flex items-center gap-2 bg-[#141416] border border-[#D4AF37]/25 rounded-full px-4 py-1.5 mb-4 shadow-sm">
-          <ShieldCheck className="h-3.5 w-3.5 text-[#D4AF37]" />
-          <span className="text-[10px] font-mono text-[#D4AF37] tracking-[0.2em] uppercase font-bold">
-            INSTITUTIONAL AGRO COMMODITIES CATALOGUE
-          </span>
-        </div>
-
+      <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-10">
         <h2 className="text-3xl md:text-5xl font-heading text-[#F5F2EC] font-normal leading-tight">
           Explore Our Agricultural Portfolio
         </h2>
 
-        <p className="text-sm md:text-base text-[#A5A19A] font-light leading-relaxed mt-4 max-w-2xl">
-          Discover certified Indian agricultural commodities sourced directly from origin. Access verified laboratory parameters, flexible processing options, and institutional export packaging.
-        </p>
-
-        <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37]/40 to-transparent mt-6" />
+        <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#E2BC86]/40 to-transparent mt-6" />
       </div>
 
       {/* Filter Tabs & Real-Time Search Controls */}

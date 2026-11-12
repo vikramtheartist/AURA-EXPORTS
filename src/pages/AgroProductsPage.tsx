@@ -141,18 +141,7 @@ export default function AgroProductsPage() {
                 className="w-full h-full object-cover"
                 loading="eager"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
-              <div className="absolute bottom-5 left-5 right-5 backdrop-blur-md bg-black/60 border border-white/10 rounded-2xl p-4 flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] font-mono text-[#dcb782] tracking-wider uppercase font-bold block">
-                    B2B AGRICULTURAL EXPORT
-                  </span>
-                  <span className="text-xs text-white font-medium">
-                    Spices · Turmeric · Cardamom · Chillies · Produce
-                  </span>
-                </div>
-                <ShieldCheck className="h-5 w-5 text-[#dcb782] shrink-0" />
-              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
             </div>
           </div>
 
