@@ -291,7 +291,7 @@ export default function Hero({ onNavigate }: HeroProps) {
             className="max-w-xl font-body font-light leading-relaxed text-left text-base md:text-lg text-[#D5C8B7]"
             id="hero-subtext"
           >
-            Empowering exports, enriching lives. Connecting international B2B buyers with verified Indian agricultural commodities, handcrafted artisanal jewellery, and regional handloom textiles.
+            AURA Enterprise Exports is an Indian B2B export and sourcing company connecting international buyers with verified Indian suppliers across agro commodities, spices, apparel, textiles and fashion accessories.
           </motion.p>
 
           {/* Hero CTA */}

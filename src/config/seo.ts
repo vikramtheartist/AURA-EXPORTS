@@ -51,7 +51,7 @@ export const organizationJsonLd = {
     '@type': 'PostalAddress',
     addressLocality: 'Chennai',
     addressRegion: 'Tamil Nadu',
-    addressCountry: 'IN',
+    addressCountry: 'India',
   },
   contactPoint: [
     {
@@ -90,8 +90,9 @@ export const websiteJsonLd = {
   '@type': 'WebSite',
   '@id': `${SITE_BASE_URL}/#website`,
   name: 'AURA Enterprise Exports',
+  alternateName: 'AURA',
   url: `${SITE_BASE_URL}/`,
-  description: BUSINESS_POSITIONING,
+  description: 'AURA Enterprise Exports (OPC) Private Limited is an India-based B2B export and sourcing company connecting global buyers with Indian agro products, spices, apparel and textiles.',
   publisher: {
     '@id': `${SITE_BASE_URL}/#organization`,
   },
@@ -99,12 +100,24 @@ export const websiteJsonLd = {
 };
 
 /**
+ * Unified Homepage Schema Graph
+ * Combines Organization and WebSite into a single consistent JSON-LD graph.
+ */
+export const homeJsonLdGraph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    organizationJsonLd,
+    websiteJsonLd,
+  ],
+};
+
+/**
  * Global Page SEO Configurations
  */
 export const seoConfigs: Record<string, PageSEOConfig> = {
   home: {
-    title: 'AURA Enterprise Exports | Indian B2B Export & Sourcing Company',
-    description: 'AURA Enterprise Exports (OPC) Private Limited is an India-based export and sourcing company connecting international buyers with trusted Indian suppliers of agro commodities, spices, apparel and textiles.',
+    title: 'AURA Enterprise Exports | Indian Export & Sourcing Company',
+    description: 'AURA Enterprise Exports (OPC) Private Limited is an India-based B2B export and sourcing company connecting global buyers with Indian agro products, spices, apparel and textiles.',
     canonical: `${SITE_BASE_URL}/`,
     keywords: [
       'AURA Enterprise Exports',
@@ -119,7 +132,7 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
     ogType: 'website',
     ogImage: DEFAULT_OG_IMAGE,
     robots: 'index, follow',
-    jsonLd: [organizationJsonLd, websiteJsonLd],
+    jsonLd: homeJsonLdGraph,
   },
 
   about: {
