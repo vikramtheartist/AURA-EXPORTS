@@ -12,27 +12,34 @@ export interface PageSEOConfig {
 
 export const SITE_BASE_URL = 'https://auraexport.co';
 export const DEFAULT_OG_IMAGE = `${SITE_BASE_URL}/og-image.png`;
-export const BRAND_NAME = 'Aura Exports';
+export const BRAND_NAME = 'AURA';
+export const LEGAL_NAME = 'AURA ENTERPRISE EXPORTS (OPC) PRIVATE LIMITED';
+export const BRAND_TAGLINE = 'PURE & ETHICAL SOURCES';
+export const BUSINESS_POSITIONING = 'Premium Indian Sourcing, Export & Import Enterprise';
 
 /**
  * Enterprise Organization / Corporation Schema.
- * Uses verified business details without invented coordinates, fabricated claims, or assumptions.
+ * Connected with stable @id https://auraexport.co/#organization.
  */
-export const corporationJsonLd = {
+export const organizationJsonLd = {
   '@context': 'https://schema.org',
-  '@type': ['Corporation', 'Organization'],
+  '@type': ['Organization', 'Corporation'],
+  '@id': `${SITE_BASE_URL}/#organization`,
   name: BRAND_NAME,
-  alternateName: ['Aura Exports', 'AURA EXPORTS'],
-  url: SITE_BASE_URL,
-  logo: `${SITE_BASE_URL}/favicon.svg`,
+  legalName: LEGAL_NAME,
+  alternateName: ['AURA Enterprise Exports', 'Aura Enterprise Exports', 'Aura Exports'],
+  url: `${SITE_BASE_URL}/`,
+  logo: {
+    '@type': 'ImageObject',
+    '@id': `${SITE_BASE_URL}/#logo`,
+    url: `${SITE_BASE_URL}/favicon.svg`,
+    caption: 'AURA Enterprise Exports',
+  },
   image: DEFAULT_OG_IMAGE,
-  description: 'Chennai-based Indian export company and wholesale sourcing partner connecting international B2B buyers with agricultural commodities, South Indian spices, handcrafted artisanal jewellery, and regional handloom textiles.',
+  email: 'contact@auraexport.co',
+  description: 'Indian export, import and premium sourcing enterprise connecting international B2B buyers with certified agro commodities, spices, apparel and textiles.',
   address: {
     '@type': 'PostalAddress',
-    streetAddress: 'No 11/1A, VOC Street, Pattukottai Muthu Kumaraswamy Street, Baby Nagar, Velachery',
-    addressLocality: 'Chennai',
-    addressRegion: 'Tamil Nadu',
-    postalCode: '600042',
     addressCountry: 'IN',
   },
   contactPoint: [
@@ -46,43 +53,38 @@ export const corporationJsonLd = {
     },
   ],
   knowsAbout: [
+    'AURA Enterprise Exports',
     'Indian Export Company',
-    'South India Exporters',
-    'Chennai Export Company',
-    'Tamil Nadu Exporters',
-    'India Wholesale Suppliers',
-    'Indian Agricultural Exporters',
-    'Turmeric Exporter India',
+    'India B2B Sourcing Company',
+    'Indian Agro Products Exporter',
+    'Indian Spices Exporter',
     'Salem Turmeric Exporter',
-    'Erode Turmeric Supplier',
-    'Indian Turmeric Fingers Wholesale',
-    'Kerala Cardamom Exporter',
+    'Alleppey Green Cardamom Supplier',
     'Malabar Black Pepper Supplier',
-    'Indian Cumin Seeds Exporter',
-    'Indian Red Chilli Exporter',
-    'Moringa Powder Exporter India',
-    'Indian Fashion Jewellery Exporter',
-    'South Indian Temple Jewellery Wholesale',
-    'Indian Kundan Jewellery Supplier',
-    'Meenakari Jewellery Exporter',
-    'Indian CZ Fashion Jewellery Wholesale',
     'Indian Textile Exporter',
-    'Kanchipuram Silk Saree Exporter',
-    'Indian Handloom Fabric Supplier',
-    'Indian Cotton Fabric Exporter',
-    'Indian Linen Fabric Exporter',
+    'Indian Apparel Sourcing Partner',
+    'Handcrafted Fashion Jewellery Export',
   ],
   areaServed: ['US', 'CA', 'GB', 'AE', 'SA', 'DE', 'FR', 'AU', 'SG', 'MY', 'JP'],
 };
 
+// Corporation Schema backward-compatible alias
+export const corporationJsonLd = organizationJsonLd;
+
 /**
- * WebSite Schema without retired SearchAction
+ * WebSite Schema with publisher link to #organization
  */
 export const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: BRAND_NAME,
-  url: SITE_BASE_URL,
+  '@id': `${SITE_BASE_URL}/#website`,
+  name: 'AURA Enterprise Exports',
+  url: `${SITE_BASE_URL}/`,
+  description: BUSINESS_POSITIONING,
+  publisher: {
+    '@id': `${SITE_BASE_URL}/#organization`,
+  },
+  inLanguage: 'en-US',
 };
 
 /**
@@ -90,53 +92,53 @@ export const websiteJsonLd = {
  */
 export const seoConfigs: Record<string, PageSEOConfig> = {
   home: {
-    title: 'Indian Export Company | South India Wholesale Exporters & Sourcing Partner | Aura Exports',
-    description: 'Aura Exports is an export and sourcing partner based in Chennai, Tamil Nadu, India. Sourcing Indian agricultural commodities, South Indian spices, handcrafted fashion jewellery, and regional handloom textiles for global B2B buyers.',
+    title: 'AURA Enterprise Exports | Indian Export & Sourcing Company',
+    description: 'AURA Enterprise Exports (OPC) Private Limited is an India-based export and sourcing company connecting international buyers with trusted Indian suppliers of agro commodities, spices, apparel and textiles.',
     canonical: `${SITE_BASE_URL}/`,
     keywords: [
+      'AURA Enterprise Exports',
+      'AURA Exports India',
       'Indian Export Company',
-      'South India Exporters',
-      'Chennai Export Company',
-      'Tamil Nadu Exporters',
-      'India Wholesale Suppliers',
-      'Indian Sourcing Company',
-      'Indian Agricultural Exporters',
+      'India B2B Sourcing Company',
+      'Indian Product Sourcing Partner',
+      'Indian Agro Products Exporter',
+      'Indian Spices Exporter',
+      'Indian Textile Exporter',
     ],
     ogType: 'website',
     ogImage: DEFAULT_OG_IMAGE,
     robots: 'index, follow',
-    jsonLd: [corporationJsonLd, websiteJsonLd],
+    jsonLd: [organizationJsonLd, websiteJsonLd],
   },
 
   about: {
-    title: 'About Aura Exports | Chennai-Based Indian Export Company & Sourcing Mission',
-    description: 'Learn about Aura Exports, an international sourcing and export enterprise operating from Chennai, Tamil Nadu. Connecting international buyers with Indian agricultural, jewellery, and textile products.',
+    title: 'About AURA Enterprise Exports | Pure & Ethical Indian Sourcing',
+    description: 'Discover AURA Enterprise Exports (OPC) Private Limited: our mission, ethical sourcing governance, export corridors, and commitment to global B2B trade excellence.',
     canonical: `${SITE_BASE_URL}/about`,
     keywords: [
-      'Chennai Export Company',
-      'South India Exporters',
+      'About AURA Enterprise Exports',
       'Indian Sourcing Partner',
-      'Tamil Nadu Export Company',
+      'Chennai Export Company',
+      'Tamil Nadu Exporters',
     ],
     ogType: 'website',
     ogImage: DEFAULT_OG_IMAGE,
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
-      { name: 'About Aura Exports', item: `${SITE_BASE_URL}/about` },
+      { name: 'About AURA Enterprise Exports', item: `${SITE_BASE_URL}/about` },
     ],
-    jsonLd: corporationJsonLd,
+    jsonLd: organizationJsonLd,
   },
 
   products: {
-    title: 'Indian Products Catalogue | Agriculture, Jewellery & Textiles Wholesale Export | Aura Exports',
-    description: 'Explore Aura Exports\' three export verticals: Indian agricultural commodities and spices, handcrafted artisanal jewellery, and regional handloom textiles for global B2B procurement.',
+    title: 'Export Products Catalogue | Agro Commodities, Textiles & Jewellery | AURA',
+    description: 'Explore AURA Enterprise Exports\' institutional procurement portfolio: Indian agricultural commodities, South Indian spices, artisanal fashion jewellery, and regional handlooms.',
     canonical: `${SITE_BASE_URL}/products`,
     keywords: [
       'Indian Wholesale Suppliers',
       'Indian Export Products',
-      'South India Exporters Catalogue',
-      'B2B Indian Sourcing',
+      'B2B Indian Sourcing Catalogue',
     ],
     ogType: 'website',
     ogImage: DEFAULT_OG_IMAGE,
@@ -148,19 +150,15 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   },
 
   agroProducts: {
-    title: 'Indian Agricultural Exporters & Spices Wholesale | Tamil Nadu & Kerala Origins | Aura Exports',
-    description: 'South India agricultural export and sourcing partner based in Chennai. Direct wholesale sourcing of Salem turmeric fingers, Alleppey green cardamom, Malabar black pepper, cumin seeds, chillies and moringa powder.',
+    title: 'Indian Agro Products Exporter | Spices, Grains & Commodities | AURA',
+    description: 'Direct-from-origin Indian agricultural commodities exporter. Bulk sourcing for Salem turmeric, Alleppey cardamom, Tellicherry pepper, Guntur chillies, and grains.',
     canonical: `${SITE_BASE_URL}/products/agro-products`,
     keywords: [
-      'Indian Agricultural Exporters',
-      'Tamil Nadu Agricultural Exporters',
-      'Indian Spice Exporters',
-      'Turmeric Exporter India',
-      'Kerala Cardamom Exporter',
-      'Malabar Black Pepper Supplier',
-      'Indian Cumin Seeds Exporter',
-      'Indian Red Chilli Exporter',
-      'Moringa Powder Exporter India',
+      'Indian Agro Products Exporter',
+      'Indian Spices Exporter',
+      'Turmeric Exporter from India',
+      'Cardamom Exporter from India',
+      'Indian Agricultural Commodities Supplier',
     ],
     ogType: 'website',
     ogImage: DEFAULT_OG_IMAGE,
@@ -224,15 +222,14 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   },
 
   turmeric: {
-    title: 'Salem Turmeric Exporter India | Erode Turmeric Powder & Fingers Wholesale | Aura Exports',
-    description: 'Indian turmeric exporter sourcing Salem double-polished fingers, unpolished fingers, and cold-milled powder from Erode and Salem, Tamil Nadu growing regions. Product specifications and quotations available upon enquiry.',
+    title: 'Salem Turmeric Fingers Exporter India | High Curcumin Bulk Export | AURA',
+    description: 'Export-grade Salem double-polished turmeric fingers with 3.5%–4.5% curcumin content. Direct origin sourcing from Tamil Nadu with certified lab parameters.',
     canonical: `${SITE_BASE_URL}/products/agro-products/turmeric`,
     keywords: [
-      'Turmeric Exporter India',
+      'Turmeric Exporter from India',
       'Salem Turmeric Exporter',
-      'Erode Turmeric Supplier',
       'Indian Turmeric Fingers Wholesale',
-      'Turmeric Powder India',
+      'High Curcumin Turmeric India',
     ],
     ogType: 'product',
     ogImage: DEFAULT_OG_IMAGE,
@@ -263,16 +260,14 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   },
 
   fashionLifestyle: {
-    title: 'Indian Fashion Jewellery Exporter | South Indian Temple & Kundan Jewellery Wholesale | Aura Exports',
-    description: 'Indian fashion jewellery exporter based in Chennai. Wholesale sourcing of handcrafted South Indian temple jewellery, Jaipur Jadau Kundan and Meenakari bridal suites, and contemporary CZ fashion jewellery.',
+    title: 'Indian Fashion & Lifestyle Exporter | Artisanal Jewellery & Wellness | AURA',
+    description: 'B2B export of Indian artisanal jewellery, temple jewelry, Kundan, contemporary CZ, and wellness products crafted for global luxury markets.',
     canonical: `${SITE_BASE_URL}/products/fashion-lifestyle`,
     keywords: [
       'Indian Fashion Jewellery Exporter',
       'South Indian Temple Jewellery Wholesale',
       'Indian Kundan Jewellery Supplier',
-      'Meenakari Jewellery Exporter',
-      'Indian CZ Fashion Jewellery Wholesale',
-      'Indian Artisan Jewellery Export',
+      'Indian Artisanal Jewellery Export',
     ],
     ogType: 'website',
     ogImage: DEFAULT_OG_IMAGE,
@@ -312,8 +307,8 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   },
 
   jewelry: {
-    title: 'Indian Fashion Jewellery Exporter | South Indian Temple & Kundan Jewellery Wholesale | Aura Exports',
-    description: 'Indian fashion jewellery exporter based in Chennai. Wholesale sourcing of handcrafted South Indian temple jewellery, Jaipur Jadau Kundan and Meenakari bridal suites, and contemporary CZ fashion jewellery.',
+    title: 'Indian Fashion & Lifestyle Exporter | Artisanal Jewellery & Wellness | AURA',
+    description: 'B2B export of Indian artisanal jewellery, temple jewelry, Kundan, contemporary CZ, and wellness products crafted for global luxury markets.',
     canonical: `${SITE_BASE_URL}/products/fashion-lifestyle`,
     keywords: [
       'Indian Fashion Jewellery Exporter',
@@ -331,15 +326,14 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   },
 
   apparelTextiles: {
-    title: 'Indian Textile Exporter | Kanchipuram Silk, Handloom Fabrics & Cotton | Aura Exports',
-    description: 'Indian textile export company connecting global buyers with Kanchipuram silk sarees, regional handloom fabrics, cotton and linen yardage sourced from established Indian weaving clusters.',
+    title: 'Indian Textile Exporter & Apparel Sourcing | Cotton, Silk & Handloom | AURA',
+    description: 'Verified Indian textile exporter and apparel manufacturer sourcing partner. Organic cotton, heritage silk, regional handlooms, and custom private-label garment export.',
     canonical: `${SITE_BASE_URL}/products/apparel-textiles`,
     keywords: [
       'Indian Textile Exporter',
-      'Kanchipuram Silk Saree Exporter',
-      'Indian Handloom Fabric Supplier',
-      'Indian Cotton Fabric Exporter',
-      'Indian Linen Fabric Exporter',
+      'Indian Apparel Manufacturer and Exporter',
+      'Cotton Textile Sourcing India',
+      'Indian Garment Sourcing Company',
     ],
     ogType: 'website',
     ogImage: DEFAULT_OG_IMAGE,
@@ -379,8 +373,8 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   },
 
   textiles: {
-    title: 'Indian Textile Exporter | Kanchipuram Silk, Handloom Fabrics & Cotton | Aura Exports',
-    description: 'Indian textile export company connecting global buyers with Kanchipuram silk sarees, regional handloom fabrics, cotton and linen yardage sourced from established Indian weaving clusters.',
+    title: 'Indian Textile Exporter & Apparel Sourcing | Cotton, Silk & Handloom | AURA',
+    description: 'Verified Indian textile exporter and apparel manufacturer sourcing partner. Organic cotton, heritage silk, regional handlooms, and custom private-label garment export.',
     canonical: `${SITE_BASE_URL}/products/apparel-textiles`,
     keywords: [
       'Indian Textile Exporter',
@@ -398,7 +392,7 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   },
 
   kanjivaramSaree: {
-    title: 'Kanchipuram Silk Saree Exporter | Handloom Pure Silk Sarees India | Aura Exports',
+    title: 'Kanchipuram Silk Saree Exporter | Handloom Pure Silk Sarees India | AURA',
     description: 'Direct exporter of traditional Kanchipuram silk sarees with three-ply Murukku Pattu yarn, Korvai contrast borders, and heritage motifs sourced from Kanchipuram, Tamil Nadu.',
     canonical: `${SITE_BASE_URL}/products/apparel-textiles/kanjivaram-silk-saree`,
     keywords: [
@@ -437,12 +431,12 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   },
 
   quality: {
-    title: 'Export Quality Assurance & Inspection | Aura Exports',
-    description: 'Overview of Aura Exports\'s export quality assurance and pre-shipment inspection processes for agricultural commodities, fashion jewellery, and textiles.',
+    title: 'Export Quality Assurance & Laboratory Testing | AURA Enterprise Exports',
+    description: 'Stringent export quality verification: NABL-accredited laboratory testing, phytosanitary compliance, multi-tier lot sampling, and container stuffing inspections.',
     canonical: `${SITE_BASE_URL}/quality-compliance`,
     keywords: [
-      'Indian Export Quality Testing',
       'Export Quality Assurance',
+      'Indian Export Quality Testing',
       'Pre-Shipment Inspection India',
       'Export Standards India',
     ],
@@ -456,14 +450,14 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   },
 
   exportProcess: {
-    title: 'Indian Export Execution & Logistics Process | Incoterms FOB & CIF | Aura Exports',
-    description: 'Understand Aura Exports\'s 5-step international B2B export process: enquiry review, specification confirmation, commercial terms, dispatch coordination, and shipping documentation.',
+    title: 'Export Process & Procurement Workflow | AURA Enterprise Exports',
+    description: 'Structured international export procedure: from RFQ and sample analysis to LC terms, freight forwarding, customs clearance, and port-to-port logistics.',
     canonical: `${SITE_BASE_URL}/export-process`,
     keywords: [
-      'Indian Export Logistics',
+      'Export Process India',
+      'B2B Procurement Workflow',
+      'International Trade Logistics',
       'Chennai Port Container Shipping',
-      'FOB CIF Export India',
-      'International B2B Procurement Process',
     ],
     ogType: 'website',
     ogImage: DEFAULT_OG_IMAGE,
@@ -475,7 +469,7 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   },
 
   faqs: {
-    title: 'B2B Procurement FAQs | Indian Export Trade Desk | Aura Exports',
+    title: 'B2B Procurement FAQs | Indian Export Trade Desk | AURA Enterprise Exports',
     description: 'Frequently asked questions for international importers: minimum order quantities (MOQ), sample dispatch policies, export documentation, payment terms, and logistics coordination.',
     canonical: `${SITE_BASE_URL}/faqs`,
     keywords: [
@@ -497,15 +491,15 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
       mainEntity: [
         {
           '@type': 'Question',
-          name: 'What products does Aura Exports export from India?',
+          name: 'What products does AURA Enterprise Exports export from India?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Aura Exports specializes in three core verticals: Agricultural commodities and spices (Salem turmeric, Alleppey green cardamom, Malabar black pepper, cumin seeds, red chillies, moringa), handcrafted fashion jewellery (South Indian temple jewellery, Jadau Kundan, Meenakari), and heritage textiles (Kanchipuram silk sarees, handloom fabrics, cotton and linen).',
+            text: 'AURA Enterprise Exports specializes in three core verticals: Agricultural commodities and spices (Salem turmeric, Alleppey green cardamom, Malabar black pepper, cumin seeds, red chillies, moringa), handcrafted fashion jewellery (South Indian temple jewellery, Jadau Kundan, Meenakari), and heritage textiles (Kanchipuram silk sarees, handloom fabrics, cotton and linen).',
           },
         },
         {
           '@type': 'Question',
-          name: 'Where is Aura Exports located and which ports do you ship through?',
+          name: 'Where is AURA Enterprise Exports located and which ports do you ship through?',
           acceptedAnswer: {
             '@type': 'Answer',
             text: 'Our corporate office and trade desk are located in Chennai, Tamil Nadu, India. Maritime shipments originate primarily from Chennai Seaport (INMAA) and Tuticorin (INTUT), with air freight dispatched via Chennai International Airport (MAA).',
@@ -532,14 +526,14 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   },
 
   contact: {
-    title: 'Contact Aura Exports Desk | Chennai Export Office & RFQ Support',
-    description: 'Connect directly with Aura Exports officers in Chennai, Tamil Nadu, India. WhatsApp support (+91 9361990229), direct phone calls, corporate email, or commercial quotation requests.',
+    title: 'Contact AURA Enterprise Exports Desk | Chennai Export Office & RFQ Support',
+    description: 'Connect directly with AURA Enterprise Exports trade desk in Chennai, Tamil Nadu, India. WhatsApp support (+91 9361990229), direct phone calls, corporate email, or commercial quotation requests.',
     canonical: `${SITE_BASE_URL}/contact`,
     keywords: [
       'Contact Indian Exporter',
       'Chennai Trade Desk',
       'Indian Export Consultation',
-      'Aura Exports Contact',
+      'AURA Enterprise Exports Contact',
     ],
     ogType: 'website',
     ogImage: DEFAULT_OG_IMAGE,
@@ -551,7 +545,7 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   },
 
   requestQuote: {
-    title: 'Request B2B Export Quotation | Wholesale Sourcing Intake | Aura Exports',
+    title: 'Request B2B Export Quotation | Wholesale Sourcing Intake | AURA Enterprise Exports',
     description: 'Submit an initial B2B export Request for Quote (RFQ) for Indian agricultural commodities, handcrafted jewellery, or handloom fabrics. Receive an itemised commercial quotation based on your target specifications.',
     canonical: `${SITE_BASE_URL}/request-quote`,
     keywords: [
@@ -569,7 +563,7 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   },
 
   notFound: {
-    title: '404 — Page Not Found | Aura Exports',
+    title: '404 — Page Not Found | AURA Enterprise Exports',
     description: 'The requested page could not be located in our international trade directory.',
     canonical: `${SITE_BASE_URL}/404`,
     robots: 'noindex, nofollow',

@@ -5,7 +5,7 @@
 
 export const COMPANY_CONTACT = {
   brandName: 'Aura Exports',
-  legalEntity: 'AURA ENTERPRISE EXPORTS (OPC) PVT LTD',
+  legalEntity: 'AURA ENTERPRISE EXPORTS (OPC) PRIVATE LIMITED',
   corporateEmail: 'contact@auraexport.co',
   tradeDeskEmail: 'trade@auraexport.co',
   

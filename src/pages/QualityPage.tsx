@@ -47,8 +47,8 @@ const VERIFICATION_DOCS: VerificationDoc[] = [
     issuerOrScope: 'Ministry of Corporate Affairs (MCA), Government of India',
     status: 'AVAILABLE',
     statusText: 'AVAILABLE',
-    description: 'Statutory incorporation confirmation of Aura Exports (AURA ENTERPRISE EXPORTS (OPC) PVT LTD) as an incorporated private enterprise under the Companies Act.',
-    verifiedDetails: 'Legal Entity: AURA ENTERPRISE EXPORTS (OPC) PVT LTD | Brand: Aura Exports | Base: Chennai, Tamil Nadu, India'
+    description: 'Statutory incorporation confirmation of Aura Exports (AURA ENTERPRISE EXPORTS (OPC) PRIVATE LIMITED) as an incorporated private enterprise under the Companies Act.',
+    verifiedDetails: 'Legal Entity: AURA ENTERPRISE EXPORTS (OPC) PRIVATE LIMITED | Brand: Aura Exports | Base: Chennai, Tamil Nadu, India'
   },
   {
     id: 'comp-cin-gst',

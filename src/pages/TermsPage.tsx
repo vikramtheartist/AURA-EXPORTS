@@ -25,7 +25,7 @@ export default function TermsPage() {
             Terms of Use
           </h1>
           <p className="text-sm font-body text-[#dfd1b9]/70 font-light">
-            Entity: <strong>Aura Exports</strong> (Statutory: AURA ENTERPRISE EXPORTS (OPC) PVT LTD) | Operating Base: Chennai, Tamil Nadu, India
+            Entity: <strong>Aura Exports</strong> (Statutory: AURA ENTERPRISE EXPORTS (OPC) PRIVATE LIMITED) | Operating Base: Chennai, Tamil Nadu, India
           </p>
         </header>
 
@@ -33,14 +33,14 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-heading text-white font-semibold mb-3">1. Scope of Digital Storefront</h2>
             <p>
-              This website is an institutional B2B trade portal published by Aura Exports (AURA ENTERPRISE EXPORTS (OPC) PVT LTD). Content presented—including product descriptions, category classifications, and technical assay summaries—is provided for commercial procurement scoping and does not constitute a self-executing commercial offer until a formal Proforma Invoice or Sale Contract is issued.
+              This website is an institutional B2B trade portal published by Aura Exports (AURA ENTERPRISE EXPORTS (OPC) PRIVATE LIMITED). Content presented—including product descriptions, category classifications, and technical assay summaries—is provided for commercial procurement scoping and does not constitute a self-executing commercial offer until a formal Proforma Invoice or Sale Contract is issued.
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-heading text-white font-semibold mb-3">2. Intellectual Property & Brand Assets</h2>
             <p>
-              All proprietary brand marks, typography, editorial imagery, and technical dossiers published on auraexport.co are the exclusive property of Aura Exports (AURA ENTERPRISE EXPORTS (OPC) PVT LTD).
+              All proprietary brand marks, typography, editorial imagery, and technical dossiers published on auraexport.co are the exclusive property of Aura Exports (AURA ENTERPRISE EXPORTS (OPC) PRIVATE LIMITED).
             </p>
           </section>
 

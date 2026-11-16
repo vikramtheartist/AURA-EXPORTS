@@ -25,7 +25,7 @@ export default function PrivacyPolicyPage() {
             Privacy Policy
           </h1>
           <p className="text-sm font-body text-[#dfd1b9]/70 font-light">
-            Entity: <strong>Aura Exports</strong> (Statutory: AURA ENTERPRISE EXPORTS (OPC) PVT LTD) | Operating Base: Chennai, Tamil Nadu, India
+            Entity: <strong>Aura Exports</strong> (Statutory: AURA ENTERPRISE EXPORTS (OPC) PRIVATE LIMITED) | Operating Base: Chennai, Tamil Nadu, India
           </p>
         </header>
 
@@ -33,7 +33,7 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2 className="text-xl font-heading text-white font-semibold mb-3">1. Commercial Confidentiality Commitment</h2>
             <p>
-              Aura Exports (AURA ENTERPRISE EXPORTS (OPC) PVT LTD) recognizes that international sourcing requirements, target product formulations, private-label artwork, and volume forecasts represent proprietary commercial assets. All RFQ submissions and procurement consultations are held in strict commercial confidence.
+              Aura Exports (AURA ENTERPRISE EXPORTS (OPC) PRIVATE LIMITED) recognizes that international sourcing requirements, target product formulations, private-label artwork, and volume forecasts represent proprietary commercial assets. All RFQ submissions and procurement consultations are held in strict commercial confidence.
             </p>
           </section>
 

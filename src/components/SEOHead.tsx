@@ -80,7 +80,7 @@ export default function SEOHead(props: SEOHeadProps) {
     }
     setMetaTag('property', 'og:type', ogType);
     setMetaTag('property', 'og:image', ogImage);
-    setMetaTag('property', 'og:site_name', 'Aura Exports');
+    setMetaTag('property', 'og:site_name', 'AURA');
 
     // 5. Twitter / X Card
     setMetaTag('name', 'twitter:card', 'summary_large_image');

@@ -147,7 +147,7 @@ export default function DigitalBusinessCardPage() {
           <div className="flex items-start gap-3">
             <Building2 className="w-4 h-4 text-[#dcb782] shrink-0 mt-0.5" />
             <div>
-              <p className="font-semibold text-white">Aura Global Trade (OPC) Private Limited</p>
+              <p className="font-semibold text-white">AURA ENTERPRISE EXPORTS (OPC) PRIVATE LIMITED</p>
               <p className="text-[11px] text-[#dfd1b9]/70 font-mono mt-0.5">
                 CIN: U46909TN2025OPC181977 &nbsp;·&nbsp; IEC: BZEPO5124M
               </p>

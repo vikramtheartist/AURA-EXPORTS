@@ -7,7 +7,7 @@ export default function NotFoundPage() {
     <div className="w-full min-h-[75vh] flex flex-col items-center justify-center text-center px-6 py-32 relative select-none">
       <SEOHead
         title="404 — Route Not Found | Aura Exports"
-        description="The requested route does not exist in our global trade directory."
+        description="The requested route does not exist in our international export directory."
       />
 
       {/* Decorative subtle glows */}

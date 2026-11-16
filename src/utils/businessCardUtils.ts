@@ -42,7 +42,7 @@ export function generateVCardString(data: BusinessCardData = AURA_CARD_DATA): st
     'VERSION:3.0',
     `N:;${data.fullName};;;`,
     `FN:${data.fullName}`,
-    `ORG:${data.organization};Aura Global Trade (OPC) Private Limited`,
+    `ORG:${data.organization};AURA ENTERPRISE EXPORTS (OPC) PRIVATE LIMITED`,
     `TITLE:${data.title}`,
     `TEL;TYPE=CELL,VOICE,PREF:${data.phoneClean}`,
     `EMAIL;TYPE=WORK,INTERNET,PREF:${data.email}`,

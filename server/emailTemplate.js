@@ -372,7 +372,7 @@ export function generateEmailHtml(enquiry) {
 
     <!-- Footer -->
     <div class="footer">
-      <div>Aura Exports (Aura Global Trade (OPC) Private Limited) · Chennai, Tamil Nadu, India</div>
+      <div>AURA Enterprise Exports (AURA ENTERPRISE EXPORTS (OPC) PRIVATE LIMITED) · Chennai, Tamil Nadu, India</div>
       <div style="margin-top: 4px;">Automated Institutional Commercial Dispatch · Inquiries: contact@auraexport.co</div>
     </div>
   </div>

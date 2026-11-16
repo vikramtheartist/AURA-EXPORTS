@@ -36,7 +36,7 @@ export default function AboutPage() {
               <span className="text-[11px] font-mono text-[#dcb782] uppercase tracking-wider block mb-1">01 / WHO WE ARE</span>
               <h2 className="text-lg font-heading text-white font-medium mb-2">Registered Entity</h2>
               <p className="text-xs text-[#dfd1b9]/75 font-light leading-relaxed">
-                Operating as <strong>Aura Exports</strong> (Incorporated as AURA ENTERPRISE EXPORTS (OPC) PVT LTD), dedicated to institutional cross-border B2B commerce and transparent trade governance.
+                Operating as <strong>Aura Exports</strong> (Incorporated as AURA ENTERPRISE EXPORTS (OPC) PRIVATE LIMITED), dedicated to institutional cross-border B2B commerce and transparent trade governance.
               </p>
             </div>
             <span className="text-[10px] font-mono text-[#ab8558] block pt-3 border-t border-white/5">

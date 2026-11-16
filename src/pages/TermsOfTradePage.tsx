@@ -26,7 +26,7 @@ export default function TermsOfTradePage() {
             Commercial Terms of Trade
           </h1>
           <p className="text-sm font-body text-[#dfd1b9]/70 font-light">
-            Entity: <strong>Aura Exports</strong> (Statutory: AURA ENTERPRISE EXPORTS (OPC) PVT LTD) | Operating Corridor: Chennai / Tuticorin Seaports, India
+            Entity: <strong>Aura Exports</strong> (Statutory: AURA ENTERPRISE EXPORTS (OPC) PRIVATE LIMITED) | Operating Corridor: Chennai / Tuticorin Seaports, India
           </p>
         </header>
 
