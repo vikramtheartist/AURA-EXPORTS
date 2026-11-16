@@ -189,8 +189,19 @@ for (const route of routes) {
     `<meta name="twitter:description" content="${route.description}" />`
   );
 
+  // 1. Directory entrypoint: /route/index.html (serves https://auraexport.co/route/ with HTTP 200)
   fs.writeFileSync(path.join(targetDir, 'index.html'), pageHtml);
-  console.log(`✓ Generated static route: ${route.path}/index.html`);
+
+  // 2. Clean URL flat entrypoint: /route.html (serves https://auraexport.co/route directly with HTTP 200 on GitHub Pages, preventing 301 trailing slash redirects and canonical loops)
+  const cleanPath = route.path.replace(/^\//, '');
+  const flatFilePath = path.join(distDir, `${cleanPath}.html`);
+  const flatFileDir = path.dirname(flatFilePath);
+  if (!fs.existsSync(flatFileDir)) {
+    fs.mkdirSync(flatFileDir, { recursive: true });
+  }
+  fs.writeFileSync(flatFilePath, pageHtml);
+
+  console.log(`✓ Generated static route: ${route.path}/index.html & ${cleanPath}.html`);
 }
 
 console.log(`\nSuccessfully generated ${routes.length} static route entry points for GitHub Pages.`);
