@@ -14,7 +14,7 @@ export default function ProductsPage() {
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
-          { label: 'Products', href: '/products' },
+          { label: 'Products', href: '/products/' },
         ]}
       />
 
@@ -137,13 +137,13 @@ export default function ProductsPage() {
           </p>
           <div className="flex flex-wrap gap-4 mt-2">
             <Link
-              to="/request-quote"
+              to="/request-quote/"
               className="bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold text-xs tracking-wider uppercase px-8 py-3.5 rounded-xl hover:from-white hover:to-[#dcb782] transition-all shadow-xl"
             >
               Submit Trade RFQ
             </Link>
             <Link
-              to="/quality-compliance"
+              to="/quality-compliance/"
               className="border border-white/10 hover:border-white text-white text-xs font-body font-bold tracking-wider uppercase px-6 py-3.5 rounded-xl hover:bg-white/5 transition-all"
             >
               Verify Quality & Compliance

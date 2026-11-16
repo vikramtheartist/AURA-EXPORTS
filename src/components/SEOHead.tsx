@@ -55,6 +55,18 @@ export default function SEOHead(props: SEOHeadProps) {
       tag.setAttribute('href', href);
     };
 
+    // Helper to normalize trailing-slash canonical URLs
+    const normalizeCanonicalUrl = (url?: string) => {
+      if (!url) return url;
+      // Do not append trailing slash if URL has a query, fragment, or file extension
+      if (url.endsWith('/') || url.includes('?') || url.includes('#') || /\.[a-z0-9]+$/i.test(url)) {
+        return url;
+      }
+      return `${url}/`;
+    };
+
+    const finalCanonical = normalizeCanonicalUrl(canonical);
+
     // 2. Standard Meta Tags
     if (description) {
       setMetaTag('name', 'description', description);
@@ -64,8 +76,8 @@ export default function SEOHead(props: SEOHeadProps) {
     }
 
     // 3. Canonical URL
-    if (canonical) {
-      setLinkTag('canonical', canonical);
+    if (finalCanonical) {
+      setLinkTag('canonical', finalCanonical);
     }
 
     // 4. Open Graph Tags
@@ -75,8 +87,8 @@ export default function SEOHead(props: SEOHeadProps) {
     if (description) {
       setMetaTag('property', 'og:description', description);
     }
-    if (canonical) {
-      setMetaTag('property', 'og:url', canonical);
+    if (finalCanonical) {
+      setMetaTag('property', 'og:url', finalCanonical);
     }
     setMetaTag('property', 'og:type', ogType);
     setMetaTag('property', 'og:image', ogImage);
@@ -106,7 +118,7 @@ export default function SEOHead(props: SEOHeadProps) {
           '@type': 'ListItem',
           position: idx + 1,
           name: crumb.name,
-          item: crumb.item,
+          item: normalizeCanonicalUrl(crumb.item),
         })),
       };
     }

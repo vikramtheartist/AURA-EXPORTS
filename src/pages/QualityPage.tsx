@@ -219,7 +219,7 @@ export default function QualityPage() {
       <SEOHead pageKey="quality" />
 
       {/* Breadcrumb Navigation */}
-      <Breadcrumbs items={[{ label: 'Quality & Compliance', href: '/quality-compliance' }]} />
+      <Breadcrumbs items={[{ label: 'Quality & Compliance', href: '/quality-compliance/' }]} />
 
       {/* Semantic Page Header */}
       <header className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-16">
@@ -586,13 +586,13 @@ export default function QualityPage() {
 
           <div className="flex flex-col sm:flex-row items-center gap-4 shrink-0 w-full sm:w-auto">
             <Link
-              to="/contact"
+              to="/contact/"
               className="w-full sm:w-auto text-center px-6 py-3 rounded-xl border border-[#dcb782]/30 text-[#dcb782] hover:bg-white/5 font-body font-bold text-xs tracking-wider uppercase transition-all"
             >
               Contact Trade Desk
             </Link>
             <Link
-              to="/request-quote"
+              to="/request-quote/"
               className="w-full sm:w-auto text-center bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold text-xs tracking-wider uppercase px-6 py-3 rounded-xl hover:opacity-95 transition-all shadow-md flex items-center justify-center gap-2"
             >
               Initiate RFQ Intake <ArrowUpRight className="h-4 w-4" />

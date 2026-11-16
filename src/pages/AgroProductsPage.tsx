@@ -63,7 +63,7 @@ export default function AgroProductsPage() {
       {/* Semantic Breadcrumbs */}
       <Breadcrumbs
         items={[
-          { label: 'Agro Products', href: '/products/agro-products' },
+          { label: 'Agro Products', href: '/products/agro-products/' },
         ]}
       />
 
@@ -156,7 +156,7 @@ export default function AgroProductsPage() {
             </div>
           </div>
           <Link
-            to="/buy-retail"
+            to="/buy-retail/"
             className="shrink-0 inline-flex items-center gap-2 bg-[#dcb782] hover:bg-[#e6c99c] text-black font-body font-bold text-xs uppercase px-5 py-2.5 rounded-xl transition-all cursor-pointer shadow-sm hover:scale-[1.02]"
           >
             <span>Explore Buy Retail Shop</span>

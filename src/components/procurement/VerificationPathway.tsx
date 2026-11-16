@@ -66,14 +66,14 @@ export default function VerificationPathway({
 
         <div className="flex items-center gap-3 shrink-0">
           <Link
-            to="/quality-compliance"
+            to="/quality-compliance/"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[#dcb782]/30 text-[#dcb782] hover:bg-white/5 text-xs font-mono tracking-wider uppercase transition-all"
           >
             <span>Quality Framework</span>
             <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
           <Link
-            to="/export-process"
+            to="/export-process/"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white text-xs font-mono tracking-wider uppercase transition-all"
           >
             <span>Export Stages</span>

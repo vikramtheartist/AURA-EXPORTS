@@ -72,16 +72,16 @@ export default function ProductDetailPage() {
 
   const breadcrumbs = [
     { name: 'Home', item: 'https://auraexport.co/' },
-    { name: 'Products', item: 'https://auraexport.co/products' },
-    { name: product.category, item: `https://auraexport.co/products/${product.categorySlug}` },
-    { name: product.name, item: `https://auraexport.co/products/${product.categorySlug}/${product.slug}` },
+    { name: 'Products', item: 'https://auraexport.co/products/' },
+    { name: product.category, item: `https://auraexport.co/products/${product.categorySlug}/` },
+    { name: product.name, item: `https://auraexport.co/products/${product.categorySlug}/${product.slug}/` },
   ];
 
   const pageJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemPage',
-    '@id': `https://auraexport.co/products/${product.categorySlug}/${product.slug}#webpage`,
-    url: `https://auraexport.co/products/${product.categorySlug}/${product.slug}`,
+    '@id': `https://auraexport.co/products/${product.categorySlug}/${product.slug}/#webpage`,
+    url: `https://auraexport.co/products/${product.categorySlug}/${product.slug}/`,
     name: `${product.name} — B2B Wholesale Export Sourcing`,
     description: product.description,
     image: product.image.startsWith('http') ? product.image : `https://auraexport.co${product.image}`,
@@ -102,7 +102,7 @@ export default function ProductDetailPage() {
       <SEOHead 
         title={`${product.name} Wholesale Exporter India | ${product.subcategory} | AURA`}
         description={product.description}
-        canonical={`https://auraexport.co/products/${product.categorySlug}/${product.slug}`}
+        canonical={`https://auraexport.co/products/${product.categorySlug}/${product.slug}/`}
         breadcrumbs={breadcrumbs}
         jsonLd={pageJsonLd}
       />
@@ -111,9 +111,9 @@ export default function ProductDetailPage() {
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
-          { label: 'Products', href: '/products' },
-          { label: product.category, href: `/products/${product.categorySlug}` },
-          { label: product.name, href: `/products/${product.categorySlug}/${product.slug}` },
+          { label: 'Products', href: '/products/' },
+          { label: product.category, href: `/products/${product.categorySlug}/` },
+          { label: product.name, href: `/products/${product.categorySlug}/${product.slug}/` },
         ]}
       />
 
@@ -121,7 +121,7 @@ export default function ProductDetailPage() {
         
         {/* Back Link */}
         <Link
-          to={`/products/${product.categorySlug}`}
+          to={`/products/${product.categorySlug}/`}
           className="inline-flex items-center gap-2 text-xs font-mono text-[#dcb782] hover:text-white transition-colors uppercase tracking-wider mb-8"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
@@ -568,7 +568,7 @@ export default function ProductDetailPage() {
                 Request a Quotation for {product.name}
               </button>
               <Link
-                to="/contact"
+                to="/contact/"
                 className="border border-white/15 hover:border-white text-white text-xs font-body font-bold tracking-wider uppercase px-6 py-3.5 rounded-xl hover:bg-white/5 transition-all"
               >
                 Contact Trade Desk

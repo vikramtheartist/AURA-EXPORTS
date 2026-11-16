@@ -92,9 +92,9 @@ export default function KanjivaramSareePage() {
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
-          { label: 'Products', href: '/products' },
-          { label: 'Apparel & Textiles', href: '/products/apparel-textiles' },
-          { label: 'Kanjivaram Silk Saree', href: '/products/apparel-textiles/kanjivaram-silk-saree' },
+          { label: 'Products', href: '/products/' },
+          { label: 'Apparel & Textiles', href: '/products/apparel-textiles/' },
+          { label: 'Kanchipuram Silk Saree', href: '/products/apparel-textiles/kanjivaram-silk-saree/' },
         ]}
       />
 
@@ -102,7 +102,7 @@ export default function KanjivaramSareePage() {
         
         {/* Back navigation */}
         <Link
-          to="/products/apparel-textiles"
+          to="/products/apparel-textiles/"
           className="inline-flex items-center gap-2 text-xs font-mono text-[#dcb782] hover:text-white transition-colors uppercase tracking-wider mb-8"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
@@ -391,7 +391,7 @@ export default function KanjivaramSareePage() {
               </h2>
             </div>
             <Link
-              to="/products/apparel-textiles"
+              to="/products/apparel-textiles/"
               className="text-xs font-mono text-[#dcb782] hover:text-white uppercase tracking-wider flex items-center gap-1"
             >
               <span>View All Textiles</span>
@@ -433,14 +433,14 @@ export default function KanjivaramSareePage() {
 
                 <div className="p-6 pt-0 border-t border-white/5 flex items-center justify-between mt-auto">
                   <Link
-                    to="/products/apparel-textiles"
+                    to="/products/apparel-textiles/"
                     className="text-xs font-mono font-bold uppercase tracking-wider text-[#dcb782] hover:text-white transition-colors"
                   >
                     Explore Category →
                   </Link>
 
                   <Link
-                    to={`/request-quote?product=${encodeURIComponent(item.title)}&category=apparel-textiles`}
+                    to={`/request-quote/?product=${encodeURIComponent(item.title)}&category=apparel-textiles`}
                     className="text-[11px] font-mono text-white/50 hover:text-white transition-colors underline"
                   >
                     Request Quote

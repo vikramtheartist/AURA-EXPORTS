@@ -176,7 +176,7 @@ export default function ExportProcessPage() {
       <SEOHead pageKey="exportProcess" />
 
       {/* Breadcrumb Navigation */}
-      <Breadcrumbs items={[{ label: 'Our Approach', href: '/export-process' }]} />
+      <Breadcrumbs items={[{ label: 'Our Approach', href: '/export-process/' }]} />
 
       {/* Semantic Page Header */}
       <header className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-16">
@@ -363,7 +363,7 @@ export default function ExportProcessPage() {
               </div>
             </div>
             <Link
-              to="/request-quote"
+              to="/request-quote/"
               className="mt-2 w-full text-center bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold text-xs uppercase tracking-wider py-3 rounded-xl hover:opacity-95 transition-all shadow-md"
             >
               Request Port Freight Quote →
@@ -431,10 +431,10 @@ export default function ExportProcessPage() {
             <p className="text-xs text-[#dfd1b9]/70 font-light mt-1">Submit your specifications, volume estimates, and preferred Incoterms for a formal review.</p>
           </div>
           <div className="flex flex-wrap gap-4">
-            <Link to="/quality-compliance" className="text-xs font-mono uppercase tracking-wider text-[#dcb782] hover:underline flex items-center gap-1 self-center">
+            <Link to="/quality-compliance/" className="text-xs font-mono uppercase tracking-wider text-[#dcb782] hover:underline flex items-center gap-1 self-center">
               Review Quality Framework →
             </Link>
-            <Link to="/request-quote" className="bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold text-xs tracking-wider uppercase px-6 py-3 rounded-xl transition-all shadow-md">
+            <Link to="/request-quote/" className="bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold text-xs tracking-wider uppercase px-6 py-3 rounded-xl transition-all shadow-md">
               Initiate RFQ Intake
             </Link>
           </div>

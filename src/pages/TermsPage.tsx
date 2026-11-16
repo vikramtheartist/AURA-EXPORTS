@@ -8,10 +8,10 @@ export default function TermsPage() {
       <SEOHead
         title="Terms of Use | Aura Exports"
         description="Website terms and digital platform governance for Aura Exports."
-        canonical="https://auraexport.co/terms"
+        canonical="https://auraexport.co/terms/"
       />
 
-      <Breadcrumbs items={[{ label: 'Terms of Use', href: '/terms' }]} className="!max-w-4xl !px-6" />
+      <Breadcrumbs items={[{ label: 'Terms of Use', href: '/terms/' }]} className="!max-w-4xl !px-6" />
 
       <main className="max-w-4xl mx-auto px-6">
         <header className="mb-12 border-b border-white/10 pb-8">

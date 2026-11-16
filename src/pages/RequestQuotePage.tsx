@@ -183,7 +183,7 @@ export default function RequestQuotePage() {
       {/* Semantic Breadcrumbs */}
       <Breadcrumbs
         items={[
-          { label: 'Request a Quote', href: '/request-quote' },
+          { label: 'Request a Quote', href: '/request-quote/' },
         ]}
         className="!max-w-5xl !px-4 sm:!px-6 md:!px-8"
       />

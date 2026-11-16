@@ -97,10 +97,10 @@ export default function App() {
                   <Route path="/products/apparel-textiles/kanjivaram-silk-saree" element={<KanjivaramSareePage />} />
                   <Route path="/products/apparel-textiles/:productSlug" element={<ProductDetailPage />} />
                   <Route path="/products/:categorySlug/:productSlug" element={<ProductDetailPage />} />
-                  <Route path="/products/spices" element={<Navigate to="/products/agro-products" replace />} />
+                  <Route path="/products/spices" element={<Navigate to="/products/agro-products/" replace />} />
                   <Route path="/products/spices/turmeric" element={<TurmericFlagshipPage />} />
-                  <Route path="/products/jewelry" element={<Navigate to="/products/fashion-lifestyle" replace />} />
-                  <Route path="/products/textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
+                  <Route path="/products/jewelry" element={<Navigate to="/products/fashion-lifestyle/" replace />} />
+                  <Route path="/products/textiles" element={<Navigate to="/products/apparel-textiles/" replace />} />
                   <Route path="/quality-compliance" element={<QualityPage />} />
                   <Route path="/export-process" element={<ExportProcessPage />} />
                   <Route path="/faqs" element={<FaqsPage />} />
@@ -115,15 +115,15 @@ export default function App() {
                   <Route path="/terms-of-trade" element={<TermsOfTradePage />} />
 
                   {/* Canonical Redirects / Aliases */}
-                  <Route path="/agro-products" element={<Navigate to="/products/agro-products" replace />} />
-                  <Route path="/spices" element={<Navigate to="/products/agro-products" replace />} />
-                  <Route path="/products/turmeric" element={<Navigate to="/products/agro-products/turmeric" replace />} />
-                  <Route path="/turmeric" element={<Navigate to="/products/agro-products/turmeric" replace />} />
-                  <Route path="/fashion-lifestyle" element={<Navigate to="/products/fashion-lifestyle" replace />} />
-                  <Route path="/jewelry" element={<Navigate to="/products/fashion-lifestyle" replace />} />
-                  <Route path="/textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
-                  <Route path="/apparel-textiles" element={<Navigate to="/products/apparel-textiles" replace />} />
-                  <Route path="/quality" element={<Navigate to="/quality-compliance" replace />} />
+                  <Route path="/agro-products" element={<Navigate to="/products/agro-products/" replace />} />
+                  <Route path="/spices" element={<Navigate to="/products/agro-products/" replace />} />
+                  <Route path="/products/turmeric" element={<Navigate to="/products/agro-products/turmeric/" replace />} />
+                  <Route path="/turmeric" element={<Navigate to="/products/agro-products/turmeric/" replace />} />
+                  <Route path="/fashion-lifestyle" element={<Navigate to="/products/fashion-lifestyle/" replace />} />
+                  <Route path="/jewelry" element={<Navigate to="/products/fashion-lifestyle/" replace />} />
+                  <Route path="/textiles" element={<Navigate to="/products/apparel-textiles/" replace />} />
+                  <Route path="/apparel-textiles" element={<Navigate to="/products/apparel-textiles/" replace />} />
+                  <Route path="/quality" element={<Navigate to="/quality-compliance/" replace />} />
 
                   {/* 404 Fallback */}
                   <Route path="*" element={<NotFoundPage />} />

@@ -62,7 +62,7 @@ export default function BuyRetailPage() {
       <SEOHead
         title="Buy Retail Gourmet Spices Online | Aura Exports Luxury Storefront"
         description="Shop pure single-origin Indian spices online. Direct Salem turmeric powder, Alleppey green cardamom, Guntur chillies, and gourmet tins. Pan-India and global doorstep delivery."
-        canonical="https://auraexport.co/buy-retail"
+        canonical="https://auraexport.co/buy-retail/"
         ogType="website"
       />
 
@@ -192,14 +192,14 @@ export default function BuyRetailPage() {
 
             <div className="flex flex-col sm:flex-row gap-4 shrink-0">
               <Link
-                to="/products/agro-products"
+                to="/products/agro-products/"
                 className="bg-[#D4AF78] hover:bg-[#E5C07B] text-[#090909] font-bold text-xs font-mono uppercase px-6 py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer"
               >
                 <span>Institutional Agro Page</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
-                to="/request-quote"
+                to="/request-quote/"
                 className="border border-[#292929] hover:border-[#D4AF78]/50 text-[#F2E9D9] font-bold text-xs font-mono uppercase px-6 py-3.5 rounded-xl flex items-center justify-center gap-2 hover:bg-[#181818] transition-all cursor-pointer"
               >
                 <span>Request B2B RFQ</span>

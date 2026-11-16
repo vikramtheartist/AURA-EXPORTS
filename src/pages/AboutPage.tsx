@@ -10,7 +10,7 @@ export default function AboutPage() {
       <SEOHead pageKey="about" />
 
       {/* Breadcrumbs */}
-      <Breadcrumbs items={[{ label: 'About Us', href: '/about' }]} />
+      <Breadcrumbs items={[{ label: 'About Us', href: '/about/' }]} />
 
       {/* Primary Header: Commercial Identity */}
       <header className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-16">
@@ -142,7 +142,7 @@ export default function AboutPage() {
                 </div>
               </div>
               <Link
-                to="/quality-compliance"
+                to="/quality-compliance/"
                 className="mt-2 text-xs font-mono uppercase tracking-wider text-[#dcb782] hover:text-white flex items-center justify-between pt-2 border-t border-white/10"
               >
                 <span>Review Verification Kit</span>
@@ -224,13 +224,13 @@ export default function AboutPage() {
           </div>
           <div className="flex flex-wrap gap-4">
             <Link
-              to="/quality-compliance"
+              to="/quality-compliance/"
               className="border border-white/10 hover:border-white text-white text-xs font-mono uppercase tracking-wider px-5 py-2.5 rounded-xl transition-all"
             >
               Review Verification Kit →
             </Link>
             <Link
-              to="/request-quote"
+              to="/request-quote/"
               className="bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold text-xs uppercase tracking-wider px-6 py-2.5 rounded-xl shadow-md hover:scale-[1.02] transition-transform"
             >
               Initiate Commercial RFQ

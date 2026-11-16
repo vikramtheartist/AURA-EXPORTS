@@ -59,8 +59,8 @@ export default function TurmericFlagshipPage() {
       {/* Semantic Breadcrumbs */}
       <Breadcrumbs
         items={[
-          { label: 'Agro Products', href: '/products/agro-products' },
-          { label: 'Turmeric', href: '/products/agro-products/turmeric' },
+          { label: 'Agro Products', href: '/products/agro-products/' },
+          { label: 'Turmeric', href: '/products/agro-products/turmeric/' },
         ]}
       />
 

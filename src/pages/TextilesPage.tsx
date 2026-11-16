@@ -17,8 +17,8 @@ export default function TextilesPage() {
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
-          { label: 'Products', href: '/products' },
-          { label: 'Sustainable Textiles & Apparel', href: '/products/textiles' },
+          { label: 'Products', href: '/products/' },
+          { label: 'Sustainable Textiles & Apparel', href: '/products/apparel-textiles/' },
         ]}
       />
 
@@ -49,7 +49,7 @@ export default function TextilesPage() {
             <ArrowRight className="h-4 w-4" />
           </a>
           <Link
-            to="/request-quote?category=textiles"
+            to="/request-quote/?category=textiles"
             className="border border-white/10 hover:border-[#dcb782]/40 text-white font-body font-bold text-xs tracking-wider uppercase px-6 py-3.5 rounded-xl hover:bg-white/5 transition-all"
           >
             Request Textile Sourcing Discussion
@@ -246,13 +246,13 @@ export default function TextilesPage() {
           </p>
           <div className="flex flex-wrap gap-4 mt-2">
             <Link
-              to="/request-quote?category=textiles"
+              to="/request-quote/?category=textiles"
               className="bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold text-xs tracking-wider uppercase px-8 py-3.5 rounded-xl hover:from-white hover:to-[#dcb782] transition-all shadow-xl"
             >
               Request a Quote →
             </Link>
             <Link
-              to="/contact"
+              to="/contact/"
               className="border border-white/10 hover:border-white text-white text-xs font-body font-bold tracking-wider uppercase px-6 py-3.5 rounded-xl hover:bg-white/5 transition-all"
             >
               Contact Textile Desk

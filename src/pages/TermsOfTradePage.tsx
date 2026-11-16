@@ -9,10 +9,10 @@ export default function TermsOfTradePage() {
       <SEOHead
         title="Terms of Trade | Commercial Export Governance | Aura Exports"
         description="Standard international trade terms, Incoterms governance, sampling protocols, and payment mechanisms for Aura Exports."
-        canonical="https://auraexport.co/terms-of-trade"
+        canonical="https://auraexport.co/terms-of-trade/"
       />
 
-      <Breadcrumbs items={[{ label: 'Terms of Trade', href: '/terms-of-trade' }]} className="!max-w-4xl !px-6" />
+      <Breadcrumbs items={[{ label: 'Terms of Trade', href: '/terms-of-trade/' }]} className="!max-w-4xl !px-6" />
 
       <main className="max-w-4xl mx-auto px-6">
         <header className="mb-12 border-b border-white/10 pb-8">
@@ -67,7 +67,7 @@ export default function TermsOfTradePage() {
             </p>
             <div className="mt-4">
               <Link
-                to="/request-quote"
+                to="/request-quote/"
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-xl shadow-md"
               >
                 <span>Request Contract Terms via RFQ</span>

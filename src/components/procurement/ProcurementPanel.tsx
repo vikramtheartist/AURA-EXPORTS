@@ -122,7 +122,7 @@ export default function ProcurementPanel({
       {/* Unified Action Buttons */}
       <div className="flex flex-col sm:flex-row items-center gap-4 pt-6 border-t border-white/10">
         <Link
-          to={`/request-quote?product=${product.slug}&form=${encodeURIComponent(currentVariant.id)}`}
+          to={`/request-quote/?product=${product.slug}&form=${encodeURIComponent(currentVariant.id)}`}
           className="w-full sm:w-auto flex-1 bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold text-xs tracking-wider uppercase px-7 py-4 rounded-xl hover:from-white hover:to-[#dcb782] transition-all flex items-center justify-center gap-2 shadow-lg"
           id="procurement-panel-rfq-btn"
         >
@@ -130,7 +130,7 @@ export default function ProcurementPanel({
           <ArrowUpRight className="h-4 w-4" />
         </Link>
         <Link
-          to="/quality-compliance"
+          to="/quality-compliance/"
           className="w-full sm:w-auto px-6 py-4 rounded-xl border border-white/15 hover:border-white text-white font-body text-xs font-semibold tracking-wider uppercase hover:bg-white/5 transition-all text-center"
         >
           Review Quality Protocol

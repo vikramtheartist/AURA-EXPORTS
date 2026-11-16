@@ -125,7 +125,7 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   about: {
     title: 'About AURA Enterprise Exports | Pure & Ethical Indian Sourcing',
     description: 'Discover AURA Enterprise Exports (OPC) Private Limited: our mission, ethical sourcing governance, export corridors, and commitment to global B2B trade excellence.',
-    canonical: `${SITE_BASE_URL}/about`,
+    canonical: `${SITE_BASE_URL}/about/`,
     keywords: [
       'About AURA Enterprise Exports',
       'Indian Sourcing Partner',
@@ -137,7 +137,7 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
-      { name: 'About AURA Enterprise Exports', item: `${SITE_BASE_URL}/about` },
+      { name: 'About AURA Enterprise Exports', item: `${SITE_BASE_URL}/about/` },
     ],
     jsonLd: organizationJsonLd,
   },
@@ -145,7 +145,7 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   products: {
     title: 'Export Products Catalogue | Agro Commodities, Textiles & Jewellery | AURA',
     description: 'Explore AURA Enterprise Exports\' institutional procurement portfolio: Indian agricultural commodities, South Indian spices, artisanal fashion jewellery, and regional handlooms.',
-    canonical: `${SITE_BASE_URL}/products`,
+    canonical: `${SITE_BASE_URL}/products/`,
     keywords: [
       'Indian Wholesale Suppliers',
       'Indian Export Products',
@@ -156,14 +156,33 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
-      { name: 'Products', item: `${SITE_BASE_URL}/products` },
+      { name: 'Products', item: `${SITE_BASE_URL}/products/` },
+    ],
+  },
+
+  buyRetail: {
+    title: 'Buy Retail Gourmet Spices Online | AURA Enterprise Exports',
+    description: 'Shop pure single-origin Indian spices online. Direct Salem turmeric powder, Alleppey green cardamom, Guntur chillies, and gourmet tins. Pan-India and global doorstep delivery.',
+    canonical: `${SITE_BASE_URL}/buy-retail/`,
+    keywords: [
+      'Buy Indian Spices Online',
+      'Salem Turmeric Powder Retail',
+      'Green Cardamom Online',
+      'Gourmet Spices Delivery',
+    ],
+    ogType: 'website',
+    ogImage: DEFAULT_OG_IMAGE,
+    robots: 'index, follow',
+    breadcrumbs: [
+      { name: 'Home', item: `${SITE_BASE_URL}/` },
+      { name: 'Buy Retail', item: `${SITE_BASE_URL}/buy-retail/` },
     ],
   },
 
   agroProducts: {
     title: 'Indian Agro Products Exporter | Spices, Grains & Commodities | AURA',
     description: 'Direct-from-origin Indian agricultural commodities exporter. Bulk sourcing for Salem turmeric, Alleppey cardamom, Tellicherry pepper, Guntur chillies, and grains.',
-    canonical: `${SITE_BASE_URL}/products/agro-products`,
+    canonical: `${SITE_BASE_URL}/products/agro-products/`,
     keywords: [
       'Indian Agro Products Exporter',
       'Indian Spices Exporter',
@@ -176,57 +195,57 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
-      { name: 'Products', item: `${SITE_BASE_URL}/products` },
-      { name: 'Agro Products', item: `${SITE_BASE_URL}/products/agro-products` },
+      { name: 'Products', item: `${SITE_BASE_URL}/products/` },
+      { name: 'Agro Products', item: `${SITE_BASE_URL}/products/agro-products/` },
     ],
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'ItemList',
       name: 'Indian Agricultural Commodities & Spices',
       description: 'Export agricultural commodities and spices sourced from Tamil Nadu, Kerala, and Indian growing regions.',
-      numberOfItems: 6,
+      numberOfItems: 7,
       itemListElement: [
         {
           '@type': 'ListItem',
           position: 1,
           name: 'Salem Turmeric (Erode & Salem)',
-          url: `${SITE_BASE_URL}/products/agro-products/turmeric`,
+          url: `${SITE_BASE_URL}/products/agro-products/turmeric/`,
         },
         {
           '@type': 'ListItem',
           position: 2,
           name: 'Alleppey Green Cardamom',
-          url: `${SITE_BASE_URL}/products/agro-products/green-cardamom`,
+          url: `${SITE_BASE_URL}/products/agro-products/green-cardamom/`,
         },
         {
           '@type': 'ListItem',
           position: 3,
           name: 'Malabar Black Pepper',
-          url: `${SITE_BASE_URL}/products/agro-products/black-pepper`,
+          url: `${SITE_BASE_URL}/products/agro-products/black-pepper/`,
         },
         {
           '@type': 'ListItem',
           position: 4,
           name: 'Unjha Cumin Seeds',
-          url: `${SITE_BASE_URL}/products/agro-products/cumin-seeds`,
+          url: `${SITE_BASE_URL}/products/agro-products/cumin-seeds/`,
         },
         {
           '@type': 'ListItem',
           position: 5,
           name: 'Guntur & Byadgi Red Chillies',
-          url: `${SITE_BASE_URL}/products/agro-products/dried-red-chillies`,
+          url: `${SITE_BASE_URL}/products/agro-products/dried-red-chillies/`,
         },
         {
           '@type': 'ListItem',
           position: 6,
           name: 'Tamil Nadu Moringa Leaf Powder',
-          url: `${SITE_BASE_URL}/products/agro-products/moringa-leaf-powder`,
+          url: `${SITE_BASE_URL}/products/agro-products/moringa-leaf-powder/`,
         },
         {
           '@type': 'ListItem',
           position: 7,
           name: 'Rice & Specialty Grains (Basmati & Regional Varieties)',
-          url: `${SITE_BASE_URL}/products/agro-products/rice-basmati-non-basmati`,
+          url: `${SITE_BASE_URL}/products/agro-products/rice-basmati-non-basmati/`,
         },
       ],
     },
@@ -235,7 +254,7 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   turmeric: {
     title: 'Salem Turmeric Fingers Exporter India | High Curcumin Bulk Export | AURA',
     description: 'Export-grade Salem double-polished turmeric fingers with 3.5%–4.5% curcumin content. Direct origin sourcing from Tamil Nadu with certified lab parameters.',
-    canonical: `${SITE_BASE_URL}/products/agro-products/turmeric`,
+    canonical: `${SITE_BASE_URL}/products/agro-products/turmeric/`,
     keywords: [
       'Turmeric Exporter from India',
       'Salem Turmeric Exporter',
@@ -247,15 +266,15 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
-      { name: 'Products', item: `${SITE_BASE_URL}/products` },
-      { name: 'Agro Products', item: `${SITE_BASE_URL}/products/agro-products` },
-      { name: 'Salem Turmeric', item: `${SITE_BASE_URL}/products/agro-products/turmeric` },
+      { name: 'Products', item: `${SITE_BASE_URL}/products/` },
+      { name: 'Agro Products', item: `${SITE_BASE_URL}/products/agro-products/` },
+      { name: 'Salem Turmeric', item: `${SITE_BASE_URL}/products/agro-products/turmeric/` },
     ],
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'ItemPage',
-      '@id': `${SITE_BASE_URL}/products/agro-products/turmeric#webpage`,
-      url: `${SITE_BASE_URL}/products/agro-products/turmeric`,
+      '@id': `${SITE_BASE_URL}/products/agro-products/turmeric/#webpage`,
+      url: `${SITE_BASE_URL}/products/agro-products/turmeric/`,
       name: 'Salem Turmeric (Whole Fingers & Powder) — Institutional B2B Export',
       description: 'Export-grade Salem turmeric whole fingers and cold-milled powder sourced from Erode and Salem, Tamil Nadu, India. Sourced for international B2B wholesale buyers via Request for Quotation (RFQ).',
       image: `${SITE_BASE_URL}/images/agro_turmeric_fingers_showcase.jpg`,
@@ -275,7 +294,7 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   fashionLifestyle: {
     title: 'Indian Fashion & Lifestyle Exporter | Artisanal Jewellery & Wellness | AURA',
     description: 'B2B export of Indian artisanal jewellery, temple jewelry, Kundan, contemporary CZ, and wellness products crafted for global luxury markets.',
-    canonical: `${SITE_BASE_URL}/products/fashion-lifestyle`,
+    canonical: `${SITE_BASE_URL}/products/fashion-lifestyle/`,
     keywords: [
       'Indian Fashion Jewellery Exporter',
       'South Indian Temple Jewellery Wholesale',
@@ -287,8 +306,8 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
-      { name: 'Products', item: `${SITE_BASE_URL}/products` },
-      { name: 'Fashion & Lifestyle', item: `${SITE_BASE_URL}/products/fashion-lifestyle` },
+      { name: 'Products', item: `${SITE_BASE_URL}/products/` },
+      { name: 'Fashion & Lifestyle', item: `${SITE_BASE_URL}/products/fashion-lifestyle/` },
     ],
     jsonLd: {
       '@context': 'https://schema.org',
@@ -301,19 +320,19 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
           '@type': 'ListItem',
           position: 1,
           name: 'South Indian Temple & Heritage Jewellery',
-          url: `${SITE_BASE_URL}/products/fashion-lifestyle/traditional-temple-necklace-set`,
+          url: `${SITE_BASE_URL}/products/fashion-lifestyle/traditional-temple-necklace-set/`,
         },
         {
           '@type': 'ListItem',
           position: 2,
           name: 'Jadau Kundan & Meenakari Bridal Sets',
-          url: `${SITE_BASE_URL}/products/fashion-lifestyle/kundan-choker-collection`,
+          url: `${SITE_BASE_URL}/products/fashion-lifestyle/kundan-choker-collection/`,
         },
         {
           '@type': 'ListItem',
           position: 3,
           name: 'Contemporary CZ Fashion Jewellery',
-          url: `${SITE_BASE_URL}/products/fashion-lifestyle/contemporary-statement-necklace`,
+          url: `${SITE_BASE_URL}/products/fashion-lifestyle/contemporary-statement-necklace/`,
         },
       ],
     },
@@ -322,7 +341,7 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   jewelry: {
     title: 'Indian Fashion & Lifestyle Exporter | Artisanal Jewellery & Wellness | AURA',
     description: 'B2B export of Indian artisanal jewellery, temple jewelry, Kundan, contemporary CZ, and wellness products crafted for global luxury markets.',
-    canonical: `${SITE_BASE_URL}/products/fashion-lifestyle`,
+    canonical: `${SITE_BASE_URL}/products/fashion-lifestyle/`,
     keywords: [
       'Indian Fashion Jewellery Exporter',
       'South Indian Temple Jewellery Wholesale',
@@ -333,15 +352,15 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
-      { name: 'Products', item: `${SITE_BASE_URL}/products` },
-      { name: 'Fashion & Lifestyle', item: `${SITE_BASE_URL}/products/fashion-lifestyle` },
+      { name: 'Products', item: `${SITE_BASE_URL}/products/` },
+      { name: 'Fashion & Lifestyle', item: `${SITE_BASE_URL}/products/fashion-lifestyle/` },
     ],
   },
 
   apparelTextiles: {
     title: 'Indian Textile Exporter & Apparel Sourcing | Cotton, Silk & Handloom | AURA',
     description: 'Verified Indian textile exporter and apparel manufacturer sourcing partner. Organic cotton, heritage silk, regional handlooms, and custom private-label garment export.',
-    canonical: `${SITE_BASE_URL}/products/apparel-textiles`,
+    canonical: `${SITE_BASE_URL}/products/apparel-textiles/`,
     keywords: [
       'Indian Textile Exporter',
       'Indian Apparel Manufacturer and Exporter',
@@ -353,8 +372,8 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
-      { name: 'Products', item: `${SITE_BASE_URL}/products` },
-      { name: 'Apparel & Textiles', item: `${SITE_BASE_URL}/products/apparel-textiles` },
+      { name: 'Products', item: `${SITE_BASE_URL}/products/` },
+      { name: 'Apparel & Textiles', item: `${SITE_BASE_URL}/products/apparel-textiles/` },
     ],
     jsonLd: {
       '@context': 'https://schema.org',
@@ -367,19 +386,19 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
           '@type': 'ListItem',
           position: 1,
           name: 'Kanchipuram Silk Sarees',
-          url: `${SITE_BASE_URL}/products/apparel-textiles/kanjivaram-silk-saree`,
+          url: `${SITE_BASE_URL}/products/apparel-textiles/kanjivaram-silk-saree/`,
         },
         {
           '@type': 'ListItem',
           position: 2,
           name: 'Regional Handloom Running Fabrics & Artisan Yardage',
-          url: `${SITE_BASE_URL}/products/apparel-textiles/pochampally-ikat-fabric`,
+          url: `${SITE_BASE_URL}/products/apparel-textiles/pochampally-ikat-fabric/`,
         },
         {
           '@type': 'ListItem',
           position: 3,
           name: 'Cotton & Handloom Linen Fabrics',
-          url: `${SITE_BASE_URL}/products/apparel-textiles/woven-cotton-linen-fabrics`,
+          url: `${SITE_BASE_URL}/products/apparel-textiles/woven-cotton-linen-fabrics/`,
         },
       ],
     },
@@ -388,7 +407,7 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   textiles: {
     title: 'Indian Textile Exporter & Apparel Sourcing | Cotton, Silk & Handloom | AURA',
     description: 'Verified Indian textile exporter and apparel manufacturer sourcing partner. Organic cotton, heritage silk, regional handlooms, and custom private-label garment export.',
-    canonical: `${SITE_BASE_URL}/products/apparel-textiles`,
+    canonical: `${SITE_BASE_URL}/products/apparel-textiles/`,
     keywords: [
       'Indian Textile Exporter',
       'Indian Handloom Fabric Supplier',
@@ -399,15 +418,15 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
-      { name: 'Products', item: `${SITE_BASE_URL}/products` },
-      { name: 'Apparel & Textiles', item: `${SITE_BASE_URL}/products/apparel-textiles` },
+      { name: 'Products', item: `${SITE_BASE_URL}/products/` },
+      { name: 'Apparel & Textiles', item: `${SITE_BASE_URL}/products/apparel-textiles/` },
     ],
   },
 
   kanjivaramSaree: {
     title: 'Kanchipuram Silk Saree Exporter | Handloom Pure Silk Sarees India | AURA',
     description: 'Direct exporter of traditional Kanchipuram silk sarees with three-ply Murukku Pattu yarn, Korvai contrast borders, and heritage motifs sourced from Kanchipuram, Tamil Nadu.',
-    canonical: `${SITE_BASE_URL}/products/apparel-textiles/kanjivaram-silk-saree`,
+    canonical: `${SITE_BASE_URL}/products/apparel-textiles/kanjivaram-silk-saree/`,
     keywords: [
       'Kanchipuram Silk Saree Exporter',
       'Kanjivaram Saree Wholesale India',
@@ -420,15 +439,15 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
-      { name: 'Products', item: `${SITE_BASE_URL}/products` },
-      { name: 'Apparel & Textiles', item: `${SITE_BASE_URL}/products/apparel-textiles` },
-      { name: 'Kanchipuram Silk Saree', item: `${SITE_BASE_URL}/products/apparel-textiles/kanjivaram-silk-saree` },
+      { name: 'Products', item: `${SITE_BASE_URL}/products/` },
+      { name: 'Apparel & Textiles', item: `${SITE_BASE_URL}/products/apparel-textiles/` },
+      { name: 'Kanchipuram Silk Saree', item: `${SITE_BASE_URL}/products/apparel-textiles/kanjivaram-silk-saree/` },
     ],
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'ItemPage',
-      '@id': `${SITE_BASE_URL}/products/apparel-textiles/kanjivaram-silk-saree#webpage`,
-      url: `${SITE_BASE_URL}/products/apparel-textiles/kanjivaram-silk-saree`,
+      '@id': `${SITE_BASE_URL}/products/apparel-textiles/kanjivaram-silk-saree/#webpage`,
+      url: `${SITE_BASE_URL}/products/apparel-textiles/kanjivaram-silk-saree/`,
       name: 'Kanchipuram Silk Saree — Handloom Pure Silk Export',
       description: 'Handloom silk saree featuring Korvai interlock, contrast borders, and traditional temple motifs from Kanchipuram, Tamil Nadu. Wholesale supply for international boutiques and luxury retailers.',
       image: `${SITE_BASE_URL}/images/saree_kanjivaram_hero.jpg`,
@@ -448,7 +467,7 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   quality: {
     title: 'Export Quality Assurance & Laboratory Testing | AURA Enterprise Exports',
     description: 'Stringent export quality verification: NABL-accredited laboratory testing, phytosanitary compliance, multi-tier lot sampling, and container stuffing inspections.',
-    canonical: `${SITE_BASE_URL}/quality-compliance`,
+    canonical: `${SITE_BASE_URL}/quality-compliance/`,
     keywords: [
       'Export Quality Assurance',
       'Indian Export Quality Testing',
@@ -460,14 +479,14 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
-      { name: 'Quality & Compliance', item: `${SITE_BASE_URL}/quality-compliance` },
+      { name: 'Quality & Compliance', item: `${SITE_BASE_URL}/quality-compliance/` },
     ],
   },
 
   exportProcess: {
     title: 'Export Process & Procurement Workflow | AURA Enterprise Exports',
     description: 'Structured international export procedure: from RFQ and sample analysis to LC terms, freight forwarding, customs clearance, and port-to-port logistics.',
-    canonical: `${SITE_BASE_URL}/export-process`,
+    canonical: `${SITE_BASE_URL}/export-process/`,
     keywords: [
       'Export Process India',
       'B2B Procurement Workflow',
@@ -479,14 +498,14 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
-      { name: 'Export Process', item: `${SITE_BASE_URL}/export-process` },
+      { name: 'Export Process', item: `${SITE_BASE_URL}/export-process/` },
     ],
   },
 
   faqs: {
     title: 'B2B Procurement FAQs | Indian Export Trade Desk | AURA Enterprise Exports',
     description: 'Frequently asked questions for international importers: minimum order quantities (MOQ), sample dispatch policies, export documentation, payment terms, and logistics coordination.',
-    canonical: `${SITE_BASE_URL}/faqs`,
+    canonical: `${SITE_BASE_URL}/faqs/`,
     keywords: [
       'Indian Exporter FAQs',
       'Importing from India FAQ',
@@ -498,7 +517,7 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
-      { name: 'FAQs', item: `${SITE_BASE_URL}/faqs` },
+      { name: 'FAQs', item: `${SITE_BASE_URL}/faqs/` },
     ],
     jsonLd: {
       '@context': 'https://schema.org',
@@ -543,7 +562,7 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
   contact: {
     title: 'Contact AURA Enterprise Exports Desk | Chennai Export Office & RFQ Support',
     description: 'Connect directly with AURA Enterprise Exports trade desk in Chennai, Tamil Nadu, India. WhatsApp support (+91 9361990229), direct phone calls, corporate email, or commercial quotation requests.',
-    canonical: `${SITE_BASE_URL}/contact`,
+    canonical: `${SITE_BASE_URL}/contact/`,
     keywords: [
       'Contact Indian Exporter',
       'Chennai Trade Desk',
@@ -555,14 +574,14 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
-      { name: 'Contact Us', item: `${SITE_BASE_URL}/contact` },
+      { name: 'Contact Us', item: `${SITE_BASE_URL}/contact/` },
     ],
   },
 
   requestQuote: {
     title: 'Request B2B Export Quotation | Wholesale Sourcing Intake | AURA Enterprise Exports',
     description: 'Submit an initial B2B export Request for Quote (RFQ) for Indian agricultural commodities, handcrafted jewellery, or handloom fabrics. Receive an itemised commercial quotation based on your target specifications.',
-    canonical: `${SITE_BASE_URL}/request-quote`,
+    canonical: `${SITE_BASE_URL}/request-quote/`,
     keywords: [
       'Request Quote Indian Exporter',
       'B2B Export Quotation India',
@@ -573,14 +592,82 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
-      { name: 'Request Quotation', item: `${SITE_BASE_URL}/request-quote` },
+      { name: 'Request Quotation', item: `${SITE_BASE_URL}/request-quote/` },
+    ],
+  },
+
+  termsOfTrade: {
+    title: 'Terms of Trade & Commercial Export Policy | AURA Enterprise Exports',
+    description: 'Commercial trading terms, Incoterms 2020 definitions (FOB, CIF, CFR), payment structures, quality inspection parameters, and shipment fulfillment policies for international buyers.',
+    canonical: `${SITE_BASE_URL}/terms-of-trade/`,
+    keywords: [
+      'Terms of Trade',
+      'Export IncoTerms 2020',
+      'Commercial Export Policy',
+      'International Sourcing Terms',
+    ],
+    ogType: 'website',
+    ogImage: DEFAULT_OG_IMAGE,
+    robots: 'index, follow',
+    breadcrumbs: [
+      { name: 'Home', item: `${SITE_BASE_URL}/` },
+      { name: 'Terms of Trade', item: `${SITE_BASE_URL}/terms-of-trade/` },
+    ],
+  },
+
+  terms: {
+    title: 'Terms of Service & Website Usage | AURA Enterprise Exports',
+    description: 'Legal terms of service and website usage conditions governing the AURA Enterprise Exports B2B export portal.',
+    canonical: `${SITE_BASE_URL}/terms/`,
+    keywords: [
+      'Terms of Service',
+      'Website Terms',
+      'AURA Export Platform Governance',
+    ],
+    ogType: 'website',
+    ogImage: DEFAULT_OG_IMAGE,
+    robots: 'index, follow',
+    breadcrumbs: [
+      { name: 'Home', item: `${SITE_BASE_URL}/` },
+      { name: 'Terms of Use', item: `${SITE_BASE_URL}/terms/` },
+    ],
+  },
+
+  privacy: {
+    title: 'Privacy Policy & Data Protection | AURA Enterprise Exports',
+    description: 'Privacy policy detailing how AURA Enterprise Exports processes and protects corporate enquiry information and user data in accordance with international data protection standards.',
+    canonical: `${SITE_BASE_URL}/privacy/`,
+    keywords: [
+      'Privacy Policy',
+      'Data Protection',
+      'Client Confidentiality',
+    ],
+    ogType: 'website',
+    ogImage: DEFAULT_OG_IMAGE,
+    robots: 'index, follow',
+    breadcrumbs: [
+      { name: 'Home', item: `${SITE_BASE_URL}/` },
+      { name: 'Privacy Policy', item: `${SITE_BASE_URL}/privacy/` },
+    ],
+  },
+
+  card: {
+    title: 'Vikram — Managing Director | AURA Enterprise Exports Digital Business Card',
+    description: 'Official executive digital business card for Vikram, Managing Director at AURA Enterprise Exports. Save contact details directly to your mobile phone or call our trade desk.',
+    canonical: `${SITE_BASE_URL}/card/`,
+    ogType: 'website',
+    ogImage: DEFAULT_OG_IMAGE,
+    robots: 'noindex, follow',
+    breadcrumbs: [
+      { name: 'Home', item: `${SITE_BASE_URL}/` },
+      { name: 'Digital Business Card', item: `${SITE_BASE_URL}/card/` },
     ],
   },
 
   notFound: {
     title: '404 — Page Not Found | AURA Enterprise Exports',
     description: 'The requested page could not be located in our international trade directory.',
-    canonical: `${SITE_BASE_URL}/404`,
+    canonical: `${SITE_BASE_URL}/404/`,
     robots: 'noindex, nofollow',
   },
 };

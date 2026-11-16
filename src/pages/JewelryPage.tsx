@@ -17,8 +17,8 @@ export default function JewelryPage() {
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
-          { label: 'Products', href: '/products' },
-          { label: 'Contemporary Fashion Jewelry', href: '/products/jewelry' },
+          { label: 'Products', href: '/products/' },
+          { label: 'Contemporary Fashion Jewelry', href: '/products/fashion-lifestyle/' },
         ]}
       />
 
@@ -49,7 +49,7 @@ export default function JewelryPage() {
             <ArrowRight className="h-4 w-4" />
           </a>
           <Link
-            to="/request-quote?category=jewelry"
+            to="/request-quote/?category=jewelry"
             className="border border-white/10 hover:border-[#dcb782]/40 text-white font-body font-bold text-xs tracking-wider uppercase px-6 py-3.5 rounded-xl hover:bg-white/5 transition-all"
           >
             Request Jewelry Sourcing Discussion
@@ -142,14 +142,14 @@ export default function JewelryPage() {
 
                 <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row gap-3">
                   <Link
-                    to={`/request-quote?product=jewelry&form=${encodeURIComponent(fam.name)}`}
+                    to={`/request-quote/?product=jewelry&form=${encodeURIComponent(fam.name)}`}
                     className="flex-1 bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold text-xs tracking-wider uppercase py-3 rounded-xl flex items-center justify-center gap-2 hover:from-white hover:to-[#dcb782] transition-all shadow-lg"
                   >
                     <span>Request Production Quote</span>
                     <ArrowUpRight className="h-4 w-4" />
                   </Link>
                   <Link
-                    to="/contact"
+                    to="/contact/"
                     className="px-4 py-3 rounded-xl border border-white/10 hover:border-white text-white text-xs font-mono uppercase tracking-wider text-center transition-all"
                   >
                     Discuss Design
@@ -253,13 +253,13 @@ export default function JewelryPage() {
           </p>
           <div className="flex flex-wrap gap-4 mt-2">
             <Link
-              to="/request-quote?category=jewelry"
+              to="/request-quote/?category=jewelry"
               className="bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold text-xs tracking-wider uppercase px-8 py-3.5 rounded-xl hover:from-white hover:to-[#dcb782] transition-all shadow-xl"
             >
               Request a Quote →
             </Link>
             <Link
-              to="/contact"
+              to="/contact/"
               className="border border-white/10 hover:border-white text-white text-xs font-body font-bold tracking-wider uppercase px-6 py-3.5 rounded-xl hover:bg-white/5 transition-all"
             >
               Contact Jewelry Desk

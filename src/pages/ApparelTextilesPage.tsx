@@ -171,7 +171,7 @@ export default function ApparelTextilesPage() {
       {/* Semantic Breadcrumbs */}
       <Breadcrumbs
         items={[
-          { label: 'Apparel & Textiles', href: '/products/apparel-textiles' },
+          { label: 'Apparel & Textiles', href: '/products/apparel-textiles/' },
         ]}
       />
 

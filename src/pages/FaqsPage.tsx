@@ -18,7 +18,7 @@ export default function FaqsPage() {
       <SEOHead pageKey="faqs" />
 
       {/* Breadcrumbs */}
-      <Breadcrumbs items={[{ label: 'Trade Desk & FAQs', href: '/faqs' }]} />
+      <Breadcrumbs items={[{ label: 'Trade Desk & FAQs', href: '/faqs/' }]} />
 
       {/* Semantic Header */}
       <header className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mb-6">

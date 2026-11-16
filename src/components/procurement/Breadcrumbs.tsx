@@ -21,8 +21,17 @@ export default function Breadcrumbs({
   let rootLabel = 'AURA EXPORTS';
   let rootHref = '/';
 
+  // Helper to ensure trailing slashes on all canonical internal breadcrumb links
+  const normalizeHref = (href?: string): string | undefined => {
+    if (!href) return href;
+    if (href.endsWith('/') || href.includes('#') || href.includes('?') || /\.[a-z0-9]+$/i.test(href)) {
+      return href;
+    }
+    return `${href}/`;
+  };
+
   if (backLink) {
-    rootHref = backLink.href;
+    rootHref = normalizeHref(backLink.href) || '/';
     const cleanLabel = backLink.label.replace(/^[←\s]+/, '').replace(/\s+HOME$/i, '').trim();
     if (cleanLabel) {
       rootLabel = cleanLabel;
@@ -30,7 +39,10 @@ export default function Breadcrumbs({
   }
 
   // Filter out any redundant 'Home' or 'Aura Exports' from items array
-  const pathItems = items.filter((it) => {
+  const pathItems = items.map((it) => ({
+    ...it,
+    href: normalizeHref(it.href),
+  })).filter((it) => {
     const l = it.label.trim().toLowerCase();
     return l !== 'home' && l !== 'aura exports' && l !== 'aura exports home';
   });
@@ -44,7 +56,7 @@ export default function Breadcrumbs({
         '@type': 'ListItem',
         position: 1,
         name: rootLabel,
-        item: SITE_BASE_URL,
+        item: `${SITE_BASE_URL}/`,
       },
       ...pathItems.map((item, index) => ({
         '@type': 'ListItem',

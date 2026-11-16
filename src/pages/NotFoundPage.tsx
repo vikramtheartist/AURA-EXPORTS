@@ -45,7 +45,7 @@ export default function NotFoundPage() {
           </Link>
 
           <Link
-            to="/products"
+            to="/products/"
             className="border border-white/10 hover:border-white text-white font-body font-bold rounded-xl px-7 py-3.5 text-xs tracking-wider uppercase hover:bg-white/5 transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             <span>Explore Products</span>

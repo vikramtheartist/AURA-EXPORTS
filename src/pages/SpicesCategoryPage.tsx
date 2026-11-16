@@ -18,8 +18,8 @@ export default function SpicesCategoryPage() {
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
-          { label: 'Products', href: '/products' },
-          { label: 'Spices & Botanical Ingredients', href: '/products/spices' },
+          { label: 'Products', href: '/products/' },
+          { label: 'Spices & Botanical Ingredients', href: '/products/agro-products/' },
         ]}
       />
 
@@ -50,7 +50,7 @@ export default function SpicesCategoryPage() {
             <ArrowRight className="h-4 w-4" />
           </a>
           <Link
-            to="/request-quote?category=spices"
+            to="/request-quote/?category=spices"
             className="border border-white/10 hover:border-[#dcb782]/40 text-white font-body font-bold text-xs tracking-wider uppercase px-6 py-3.5 rounded-xl hover:bg-white/5 transition-all"
           >
             Request Sourcing Discussion
@@ -122,7 +122,7 @@ export default function SpicesCategoryPage() {
 
                 <div className="flex flex-wrap gap-4 pt-2">
                   <Link
-                    to="/products/spices/turmeric"
+                    to="/products/agro-products/turmeric/"
                     className="bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold rounded-xl px-6 py-3.5 text-xs tracking-wider uppercase hover:opacity-95 transition-all flex items-center gap-2 shadow-lg"
                   >
                     <span>View Technical Dossier & Specs</span>
@@ -130,7 +130,7 @@ export default function SpicesCategoryPage() {
                   </Link>
 
                   <Link
-                    to="/request-quote?product=turmeric"
+                    to="/request-quote/?product=turmeric"
                     className="border border-white/10 hover:border-[#dcb782] text-white font-body font-bold rounded-xl px-6 py-3.5 text-xs tracking-wider uppercase hover:bg-white/5 transition-all"
                   >
                     Request Turmeric Quote
@@ -257,13 +257,13 @@ export default function SpicesCategoryPage() {
           </p>
           <div className="flex flex-wrap gap-4 mt-2">
             <Link
-              to="/request-quote?category=spices"
+              to="/request-quote/?category=spices"
               className="bg-gradient-to-r from-[#dcb782] to-[#ab8558] text-black font-body font-bold text-xs tracking-wider uppercase px-8 py-3.5 rounded-xl hover:from-white hover:to-[#dcb782] transition-all shadow-xl"
             >
               Request a Quote →
             </Link>
             <Link
-              to="/contact"
+              to="/contact/"
               className="border border-white/10 hover:border-white text-white text-xs font-body font-bold tracking-wider uppercase px-6 py-3.5 rounded-xl hover:bg-white/5 transition-all"
             >
               Contact Trade Desk

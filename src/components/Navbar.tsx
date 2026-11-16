@@ -90,7 +90,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
       id: 'agro',
       title: ['Agro', 'Products'],
       subtitle: 'Agricultural commodities, spices, and natural ingredients.',
-      path: '/products/agro-products',
+      path: '/products/agro-products/',
       image: portfolioAgroImg,
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
@@ -103,7 +103,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
       id: 'fashion',
       title: ['Fashion &', 'Lifestyle'],
       subtitle: 'Indian craftsmanship, wellness, beauty, and lifestyle products for global markets.',
-      path: '/products/fashion-lifestyle',
+      path: '/products/fashion-lifestyle/',
       image: portfolioFashionImg,
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
@@ -117,7 +117,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
       id: 'apparel',
       title: ['Apparel &', 'Textiles'],
       subtitle: 'Indian textiles, fabrics and finished products for global markets.',
-      path: '/products/apparel-textiles',
+      path: '/products/apparel-textiles/',
       image: portfolioApparelImg,
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
@@ -132,12 +132,12 @@ export default function Navbar({ onNavigate }: NavbarProps) {
 
   const navLinks = [
     { label: 'Home', path: '/', id: 'home' },
-    { label: 'About Us', path: '/about', id: 'about' },
-    { label: 'Our Products', path: '/products', id: 'products', hasDropdown: true },
-    { label: 'Buy Retail', path: '/buy-retail', id: 'buy-retail', isRetail: true },
-    { label: 'Our Approach', path: '/export-process', id: 'approach' },
-    { label: 'Quality', path: '/quality-compliance', id: 'quality' },
-    { label: 'Contact', path: '/contact', id: 'contact' },
+    { label: 'About Us', path: '/about/', id: 'about' },
+    { label: 'Our Products', path: '/products/', id: 'products', hasDropdown: true },
+    { label: 'Buy Retail', path: '/buy-retail/', id: 'buy-retail', isRetail: true },
+    { label: 'Our Approach', path: '/export-process/', id: 'approach' },
+    { label: 'Quality', path: '/quality-compliance/', id: 'quality' },
+    { label: 'Contact', path: '/contact/', id: 'contact' },
   ];
 
   const handleLinkClick = (path: string, id: string) => {
@@ -149,13 +149,14 @@ export default function Navbar({ onNavigate }: NavbarProps) {
   };
 
   const isCurrentActive = (link: typeof navLinks[0]) => {
-    if (link.id === 'home') return location.pathname === '/';
-    if (link.id === 'about') return location.pathname === '/about';
-    if (link.id === 'products') return location.pathname.startsWith('/products');
-    if (link.id === 'buy-retail') return location.pathname === '/buy-retail' || location.pathname === '/retail' || location.pathname.startsWith('/buy-retail/');
-    if (link.id === 'approach') return location.pathname === '/export-process';
-    if (link.id === 'quality') return location.pathname === '/quality-compliance';
-    if (link.id === 'contact') return location.pathname === '/contact';
+    const current = location.pathname.endsWith('/') ? location.pathname : `${location.pathname}/`;
+    if (link.id === 'home') return current === '/';
+    if (link.id === 'about') return current === '/about/';
+    if (link.id === 'products') return current.startsWith('/products/');
+    if (link.id === 'buy-retail') return current === '/buy-retail/' || current === '/retail/' || current.startsWith('/buy-retail/');
+    if (link.id === 'approach') return current === '/export-process/';
+    if (link.id === 'quality') return current === '/quality-compliance/';
+    if (link.id === 'contact') return current === '/contact/';
     return false;
   };
 
@@ -327,10 +328,10 @@ export default function Navbar({ onNavigate }: NavbarProps) {
                       {/* Left: Explore Full Catalog Link & Description */}
                       <div className="flex items-center gap-4">
                         <Link
-                          to="/products"
+                          to="/products/"
                           onClick={() => {
                             setIsProductsDropdownOpen(false);
-                            handleLinkClick('/products', 'products');
+                            handleLinkClick('/products/', 'products');
                           }}
                           className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#E2BC86] hover:text-white transition-colors group cursor-pointer"
                         >
@@ -501,7 +502,7 @@ export default function Navbar({ onNavigate }: NavbarProps) {
 
                         <div className="pt-2 border-t border-white/10 flex flex-col gap-2">
                           <Link
-                            to="/products"
+                            to="/products/"
                             onClick={() => setIsOpen(false)}
                             className="text-center font-mono text-xs text-[#E2BC86] font-bold uppercase tracking-wider py-1.5 flex items-center justify-center gap-2"
                           >

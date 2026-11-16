@@ -8,10 +8,10 @@ export default function PrivacyPolicyPage() {
       <SEOHead
         title="Privacy Policy | Aura Exports"
         description="Privacy policy and data protection commitments for international procurement clients of Aura Exports."
-        canonical="https://auraexport.co/privacy"
+        canonical="https://auraexport.co/privacy/"
       />
 
-      <Breadcrumbs items={[{ label: 'Privacy Policy', href: '/privacy-policy' }]} className="!max-w-4xl !px-6" />
+      <Breadcrumbs items={[{ label: 'Privacy Policy', href: '/privacy/' }]} className="!max-w-4xl !px-6" />
 
       <main className="max-w-4xl mx-auto px-6">
         <header className="mb-12 border-b border-white/10 pb-8">

@@ -174,7 +174,7 @@ export default function FeaturedTurmericSection({ onOpenEnquiry }: FeaturedTurme
               {/* Action Buttons */}
               <div className="pt-4 border-t border-white/10 flex flex-wrap items-center gap-4">
                 <Link
-                  to="/products/agro-products/turmeric"
+                  to="/products/agro-products/turmeric/"
                   className="px-7 py-3.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#E5C07B] hover:from-[#c5a02e] hover:to-[#d6b068] text-[#0A0A0B] font-bold text-xs tracking-wider uppercase transition-all shadow-md flex items-center gap-2 cursor-pointer hover:scale-[1.01]"
                 >
                   <span>Explore Bulk Specifications</span>

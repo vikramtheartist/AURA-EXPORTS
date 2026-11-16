@@ -171,7 +171,7 @@ export default function FashionLifestylePage() {
       {/* Semantic Breadcrumbs */}
       <Breadcrumbs
         items={[
-          { label: 'Fashion & Lifestyle', href: '/products/fashion-lifestyle' },
+          { label: 'Fashion & Lifestyle', href: '/products/fashion-lifestyle/' },
         ]}
       />
 

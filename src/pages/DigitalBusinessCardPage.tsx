@@ -43,7 +43,7 @@ export default function DigitalBusinessCardPage() {
       <SEOHead
         title="Vikram — Managing Director | AURA Enterprise Exports Digital Business Card"
         description="Official executive digital business card for Vikram, Managing Director at AURA Enterprise Exports. Save contact details directly to your mobile phone or call our trade desk."
-        canonical="https://auraexport.co/card"
+        canonical="https://auraexport.co/card/"
       />
 
       {/* Atmospheric Ambient Lighting */}
