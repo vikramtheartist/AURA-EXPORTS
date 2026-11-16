@@ -58,6 +58,7 @@ const routes = [
     title: 'Salem Turmeric Fingers Exporter India | High Curcumin Bulk Export | AURA',
     description: 'Export-grade Salem double-polished turmeric fingers with 3.5%–4.5% curcumin content. Direct origin sourcing from Tamil Nadu with certified lab parameters.',
     canonical: 'https://auraexport.co/products/agro-products/turmeric',
+    image: 'https://auraexport.co/images/agro_turmeric_fingers_showcase.jpg',
   },
   {
     path: '/products/agro-products/rice-basmati-non-basmati',
@@ -82,6 +83,7 @@ const routes = [
     title: 'Kanchipuram Silk Saree Exporter | Handloom Pure Silk Sarees India | AURA',
     description: 'Direct exporter of traditional Kanchipuram silk sarees with three-ply Murukku Pattu yarn, Korvai contrast borders, and heritage motifs sourced from Kanchipuram, Tamil Nadu.',
     canonical: 'https://auraexport.co/products/apparel-textiles/kanjivaram-silk-saree',
+    image: 'https://auraexport.co/images/saree_kanjivaram_hero.jpg',
   },
   {
     path: '/request-quote',
@@ -188,6 +190,18 @@ for (const route of routes) {
     /<meta\s+name=["']twitter:description["']\s+content=["'].*?["']\s*\/?>/i,
     `<meta name="twitter:description" content="${route.description}" />`
   );
+
+  // Replace og:image & twitter:image if route-specific image provided
+  if (route.image) {
+    pageHtml = pageHtml.replace(
+      /<meta\s+property=["']og:image["']\s+content=["'].*?["']\s*\/?>/i,
+      `<meta property="og:image" content="${route.image}" />`
+    );
+    pageHtml = pageHtml.replace(
+      /<meta\s+name=["']twitter:image["']\s+content=["'].*?["']\s*\/?>/i,
+      `<meta name="twitter:image" content="${route.image}" />`
+    );
+  }
 
   // 1. Directory entrypoint: /route/index.html (serves https://auraexport.co/route/ with HTTP 200)
   fs.writeFileSync(path.join(targetDir, 'index.html'), pageHtml);

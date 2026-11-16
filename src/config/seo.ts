@@ -25,9 +25,14 @@ export const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': ['Organization', 'Corporation'],
   '@id': `${SITE_BASE_URL}/#organization`,
-  name: BRAND_NAME,
+  name: 'AURA Enterprise Exports',
   legalName: LEGAL_NAME,
-  alternateName: ['AURA Enterprise Exports', 'Aura Enterprise Exports', 'Aura Exports'],
+  alternateName: [
+    'AURA',
+    'Aura Enterprise Exports',
+    'AURA — PURE & ETHICAL SOURCES',
+    'Aura Exports',
+  ],
   url: `${SITE_BASE_URL}/`,
   logo: {
     '@type': 'ImageObject',
@@ -37,9 +42,15 @@ export const organizationJsonLd = {
   },
   image: DEFAULT_OG_IMAGE,
   email: 'contact@auraexport.co',
-  description: 'Indian export, import and premium sourcing enterprise connecting international B2B buyers with certified agro commodities, spices, apparel and textiles.',
+  telephone: '+919361990229',
+  description: 'AURA Enterprise Exports (OPC) Private Limited is an India-based B2B export and sourcing company connecting international buyers with certified Indian suppliers of agro commodities, spices, apparel and textiles.',
+  slogan: BRAND_TAGLINE,
+  identifier: 'U46411TN2026OPC194827',
+  foundingDate: '2026-07-02',
   address: {
     '@type': 'PostalAddress',
+    addressLocality: 'Chennai',
+    addressRegion: 'Tamil Nadu',
     addressCountry: 'IN',
   },
   contactPoint: [
@@ -92,7 +103,7 @@ export const websiteJsonLd = {
  */
 export const seoConfigs: Record<string, PageSEOConfig> = {
   home: {
-    title: 'AURA Enterprise Exports | Indian Export & Sourcing Company',
+    title: 'AURA Enterprise Exports | Indian B2B Export & Sourcing Company',
     description: 'AURA Enterprise Exports (OPC) Private Limited is an India-based export and sourcing company connecting international buyers with trusted Indian suppliers of agro commodities, spices, apparel and textiles.',
     canonical: `${SITE_BASE_URL}/`,
     keywords: [
@@ -231,8 +242,8 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
       'Indian Turmeric Fingers Wholesale',
       'High Curcumin Turmeric India',
     ],
-    ogType: 'product',
-    ogImage: DEFAULT_OG_IMAGE,
+    ogType: 'website',
+    ogImage: `${SITE_BASE_URL}/images/agro_turmeric_fingers_showcase.jpg`,
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
@@ -242,19 +253,21 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
     ],
     jsonLd: {
       '@context': 'https://schema.org',
-      '@type': 'Product',
-      name: 'Salem Turmeric (Whole Fingers & Powder)',
-      image: `${SITE_BASE_URL}/og-image.png`,
-      description: 'Export-grade Salem turmeric whole fingers and cold-milled powder sourced from Erode and Salem, Tamil Nadu, India. Available in customized packaging.',
-      sku: 'AURA-AGRO-TURMERIC-001',
-      category: 'Agricultural Commodities / Spices',
-      brand: {
-        '@type': 'Brand',
-        name: BRAND_NAME,
+      '@type': 'ItemPage',
+      '@id': `${SITE_BASE_URL}/products/agro-products/turmeric#webpage`,
+      url: `${SITE_BASE_URL}/products/agro-products/turmeric`,
+      name: 'Salem Turmeric (Whole Fingers & Powder) — Institutional B2B Export',
+      description: 'Export-grade Salem turmeric whole fingers and cold-milled powder sourced from Erode and Salem, Tamil Nadu, India. Sourced for international B2B wholesale buyers via Request for Quotation (RFQ).',
+      image: `${SITE_BASE_URL}/images/agro_turmeric_fingers_showcase.jpg`,
+      isPartOf: {
+        '@id': `${SITE_BASE_URL}/#website`,
       },
-      countryOfOrigin: {
-        '@type': 'Country',
-        name: 'India',
+      inLanguage: 'en-US',
+      mainEntity: {
+        '@type': 'Thing',
+        name: 'Salem Turmeric (Curcuma Longa)',
+        description: 'Export-grade Salem turmeric whole fingers and cold-milled powder with 3.5%–4.5% curcumin content.',
+        identifier: 'AURA-AGRO-TURMERIC-001',
       },
     },
   },
@@ -402,8 +415,8 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
       'Bridal Silk Sarees Wholesale',
       'Korvai Silk Saree Supplier',
     ],
-    ogType: 'product',
-    ogImage: DEFAULT_OG_IMAGE,
+    ogType: 'website',
+    ogImage: `${SITE_BASE_URL}/images/saree_kanjivaram_hero.jpg`,
     robots: 'index, follow',
     breadcrumbs: [
       { name: 'Home', item: `${SITE_BASE_URL}/` },
@@ -413,19 +426,21 @@ export const seoConfigs: Record<string, PageSEOConfig> = {
     ],
     jsonLd: {
       '@context': 'https://schema.org',
-      '@type': 'Product',
-      name: 'Kanchipuram Silk Saree',
-      image: `${SITE_BASE_URL}/og-image.png`,
-      description: 'Handloom silk saree featuring Korvai interlock, contrast borders, and traditional temple motifs from Kanchipuram, Tamil Nadu.',
-      sku: 'AURA-TEXTILE-KANJI-001',
-      category: 'Apparel & Textiles / Silk Sarees',
-      brand: {
-        '@type': 'Brand',
-        name: BRAND_NAME,
+      '@type': 'ItemPage',
+      '@id': `${SITE_BASE_URL}/products/apparel-textiles/kanjivaram-silk-saree#webpage`,
+      url: `${SITE_BASE_URL}/products/apparel-textiles/kanjivaram-silk-saree`,
+      name: 'Kanchipuram Silk Saree — Handloom Pure Silk Export',
+      description: 'Handloom silk saree featuring Korvai interlock, contrast borders, and traditional temple motifs from Kanchipuram, Tamil Nadu. Wholesale supply for international boutiques and luxury retailers.',
+      image: `${SITE_BASE_URL}/images/saree_kanjivaram_hero.jpg`,
+      isPartOf: {
+        '@id': `${SITE_BASE_URL}/#website`,
       },
-      countryOfOrigin: {
-        '@type': 'Country',
-        name: 'India',
+      inLanguage: 'en-US',
+      mainEntity: {
+        '@type': 'Thing',
+        name: 'Kanchipuram Silk Saree (Pure Mulberry Silk)',
+        description: 'Traditional Kanchipuram pure silk saree with Korvai contrast borders and pure zari motifs.',
+        identifier: 'AURA-TEXTILE-KANJI-001',
       },
     },
   },

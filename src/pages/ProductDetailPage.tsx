@@ -77,32 +77,34 @@ export default function ProductDetailPage() {
     { name: product.name, item: `https://auraexport.co/products/${product.categorySlug}/${product.slug}` },
   ];
 
-  const productJsonLd = {
+  const pageJsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: product.name,
-    image: product.image.startsWith('http') ? product.image : `https://auraexport.co${product.image}`,
+    '@type': 'ItemPage',
+    '@id': `https://auraexport.co/products/${product.categorySlug}/${product.slug}#webpage`,
+    url: `https://auraexport.co/products/${product.categorySlug}/${product.slug}`,
+    name: `${product.name} — B2B Wholesale Export Sourcing`,
     description: product.description,
-    sku: `AURA-${product.categorySlug.toUpperCase()}-${product.id}`,
-    category: `${product.category} / ${product.subcategory}`,
-    brand: {
-      '@type': 'Brand',
-      name: 'Aura Exports',
+    image: product.image.startsWith('http') ? product.image : `https://auraexport.co${product.image}`,
+    isPartOf: {
+      '@id': 'https://auraexport.co/#website',
     },
-    countryOfOrigin: {
-      '@type': 'Country',
-      name: 'India',
+    inLanguage: 'en-US',
+    mainEntity: {
+      '@type': 'Thing',
+      name: product.name,
+      description: product.description,
+      identifier: `AURA-${product.categorySlug.toUpperCase()}-${product.id}`,
     },
   };
 
   return (
     <div className="w-full pt-28 pb-24" id="product-detail-view">
       <SEOHead 
-        title={`${product.name} Wholesale Exporter India | ${product.subcategory} | Aura Exports`}
+        title={`${product.name} Wholesale Exporter India | ${product.subcategory} | AURA`}
         description={product.description}
         canonical={`https://auraexport.co/products/${product.categorySlug}/${product.slug}`}
         breadcrumbs={breadcrumbs}
-        jsonLd={productJsonLd}
+        jsonLd={pageJsonLd}
       />
 
       {/* Semantic Breadcrumbs */}
