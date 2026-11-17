@@ -270,28 +270,26 @@ export default function Hero({ onNavigate }: HeroProps) {
       >
         {/* Hero Central Content */}
         <div 
-          className="relative w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-16 flex-1 flex flex-col justify-center items-start text-left gap-5 mt-16 md:mt-24 pointer-events-auto"
+          className="relative w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-16 flex-1 flex flex-col justify-center items-start text-left gap-6 mt-16 md:mt-24 pointer-events-auto"
           style={{ transform: 'translateY(-90px)' }}
         >
-          {/* Supporting Positioning Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E2BC86]/10 border border-[#E2BC86]/30 text-[#E2BC86] text-[11px] md:text-xs font-mono tracking-widest uppercase font-medium">
-            <span>Premium Indian Sourcing, Export &amp; Import Enterprise</span>
-          </div>
+          {/* Heading: BlurText Component */}
+          <BlurText
+            text="Empowering exports, enriching lives."
+            delay={50}
+            stagger={40}
+            className="text-4xl md:text-5xl lg:text-6xl xl:text-[4rem] font-display italic text-[#E3C591] leading-[1.05] max-w-2xl tracking-[-2px] text-left justify-start font-bold"
+          />
 
-          {/* Primary SEO H1 */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-[4.25rem] font-heading text-white font-normal tracking-tight leading-[1.05] max-w-3xl">
-            AURA Enterprise Exports
-          </h1>
-
-          {/* Subtext Paragraph & Motto */}
+          {/* Subtext Paragraph */}
           <motion.p
             initial={{ opacity: 0.9, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className="max-w-xl font-body font-light leading-relaxed text-left text-base md:text-lg text-[#D5C8B7]"
+            className="max-w-xl font-body font-light leading-relaxed text-left text-lg md:text-xl text-[#D5C8B7]"
             id="hero-subtext"
           >
-            AURA Enterprise Exports is an Indian B2B export and sourcing company connecting international buyers with verified Indian suppliers across agro commodities, spices, apparel, textiles and fashion accessories.
+            Through quality sourcing and global partnerships, we deliver more than products — we deliver value.
           </motion.p>
 
           {/* Hero CTA */}
